@@ -97,24 +97,65 @@ export default function Home() {
         
         // Lógica para el modo diario
         if (currentMode === 'daily') {
-          // Si hay un juego diario guardado y es de hoy
-          if (savedGame && savedGame.currentDate === today && savedGame.gameMode === 'daily') {
-            setGameState(savedGame);
-            setGuessResults(savedGame.guesses.map((yokai: Yokai) => {
-              // Normaliza el campo favoriteFood si viene en snake_case
-              const normalizedYokai = {
-                ...yokai,
-                favoriteFood: yokai.favoriteFood || (yokai as any).favorite_food || 'None'
-              };
-              return {
-                yokai: normalizedYokai,
-                result: compareYokai(savedGame.dailyYokai as Yokai, normalizedYokai)
-              };
-            }));
-            
-            // Mostrar la ventana de fin de juego si el juego no está en progreso
-            if (savedGame.gameStatus !== 'playing') {
-              setShowGameOver(true);
+          // Si hay un juego diario guardado
+          if (savedGame && savedGame.gameMode === 'daily') {
+            // Comprobamos si el juego guardado es del día de hoy o de un día anterior
+            if (savedGame.currentDate === today) {
+              // Si es del mismo día, continuamos el juego normalmente
+              setGameState(savedGame);
+              setGuessResults(savedGame.guesses.map((yokai: Yokai) => {
+                // Normaliza el campo favoriteFood si viene en snake_case
+                const normalizedYokai = {
+                  ...yokai,
+                  favoriteFood: yokai.favoriteFood || (yokai as any).favorite_food || 'None'
+                };
+                return {
+                  yokai: normalizedYokai,
+                  result: compareYokai(savedGame.dailyYokai as Yokai, normalizedYokai)
+                };
+              }));
+              
+              // Mostrar la ventana de fin de juego si el juego no está en progreso
+              if (savedGame.gameStatus !== 'playing') {
+                setShowGameOver(true);
+              }
+            } else {
+              // Si es de un día anterior, obtenemos el nuevo Yo-kai diario y reiniciamos el juego
+              // pero conservamos las estadísticas
+              const dailyYokai = await getDailyYokai(today);
+              
+              if (dailyYokai) {
+                console.log('Nuevo día detectado. Reiniciando juego diario con nuevo Yo-kai:', dailyYokai.name);
+                // Crear nuevo estado para modo diario pero mantener estadísticas
+                const newGameState: GameState = {
+                  currentDate: today,
+                  dailyYokai,
+                  infiniteYokai: null,
+                  guesses: [], // Reiniciar intentos
+                  maxGuesses: MAX_GUESSES,
+                  gameStatus: 'playing', // Reiniciar estado a jugando
+                  lastPlayedDate: null,
+                  gameMode: 'daily',
+                  streak: savedGame.dailyStats?.streak || 0,
+                  maxStreak: savedGame.dailyStats?.maxStreak || 0,
+                  totalPlayed: savedGame.dailyStats?.totalPlayed || 0,
+                  totalWins: savedGame.dailyStats?.totalWins || 0,
+                  dailyStats: {
+                    streak: savedGame.dailyStats?.streak || 0,
+                    maxStreak: savedGame.dailyStats?.maxStreak || 0,
+                    totalPlayed: savedGame.dailyStats?.totalPlayed || 0,
+                    totalWins: savedGame.dailyStats?.totalWins || 0
+                  },
+                  infiniteStats: savedGame.infiniteStats || {
+                    totalPlayed: 0,
+                    totalWins: 0
+                  }
+                };
+                
+                setGameState(newGameState);
+                setGuessResults([]);
+                saveGameToLocalStorage(newGameState);
+              }
             }
           } else {
             // Obtener un nuevo Yo-kai diario
