@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "previousVersions": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2025-05-10",
+      "title": "Creación de Yo-kaidle.",
+      "features": [
+        {
+          "category": "Yo-kais de 3DS",
+          "color": "blue",
+          "items": [
+            "Se han añadido todos los Yo-kais de la serie de juegos de 3DS"
+          ]
+        },
+        {
+          "category": "Sistema Diario e Infinito",
+          "color": "indigo",
+          "items": [
+            "Se ha introduccido el modo de Wordle diario y el modo de Wordle infinito."
+          ]
+        }
+      ]
+    }
+  ]
+}

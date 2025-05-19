@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const GameRules: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showClarifications, setShowClarifications] = useState(false);
 
   return (
     <div className="game-rules mb-6">
@@ -40,6 +41,34 @@ const GameRules: React.FC = () => {
           <div className="mt-4 text-sm text-center p-2 rounded-lg" style={{ background: 'rgba(66, 196, 255, 0.2)' }}>
             <p style={{ color: 'rgba(255, 255, 255, 0.9)' }}>¡Nuevo Yo-kai cada día! Regresa mañana para un nuevo desafío.</p>
           </div>
+          
+          <div className="mt-3 flex justify-center">
+            <button 
+              onClick={() => setShowClarifications(!showClarifications)}
+              className="text-sm px-3 py-1 rounded-md transition-all duration-200 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              style={{ 
+                background: 'linear-gradient(135deg, var(--gold-accent), var(--gold-accent-dark))',
+                color: '#1a365d',
+                fontWeight: '500',
+                border: 'none',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+              }}
+            >
+              {showClarifications ? 'Ocultar aclaraciones' : 'Ver aclaraciones'}
+            </button>
+          </div>
+          
+          {showClarifications && (
+            <div className="mt-3 p-3 rounded-lg animate-fadeIn" 
+                 style={{ background: 'rgba(0, 0, 0, 0.25)', border: '1px solid var(--gold-accent)' }}>
+              <h4 className="font-bold text-sm mb-2" style={{ color: 'var(--gold-accent)' }}>Aclaraciones importantes:</h4>
+              <ul className="list-disc pl-5 space-y-1 text-xs">
+                <li>La sección juego se refiere al juego en el que debutó el Yo-kai como <strong>obtenible</strong>.</li>
+                <li>Los Yo-kais usan las características del primer juego en el que aparecen.</li>
+                <li>Los bosses no aparecen como sus versiones jugables y todos los bosses son considerados como rango S.</li>
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
