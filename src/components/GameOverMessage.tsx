@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Yokai, tribeIcons, elementColors, elementIcons, rankIcons, gameLogos, GameMode, tribeTranslations, elementTranslations, foodTranslations, foodIcons } from '@/types/yokai';
+import NextYokaiTimer from './NextYokaiTimer';
 
 interface GameOverMessageProps {
   dailyYokai: Yokai;
@@ -10,6 +11,7 @@ interface GameOverMessageProps {
   onClose?: () => void; // Prop para cerrar la ventana
   showStats?: () => void; // Prop para mostrar estadísticas
   playAgain?: () => void; // Nueva prop para jugar de nuevo (solo para modo infinito)
+  gameStatus?: 'playing' | 'won' | 'lost'; // Estado actual del juego
 }
 
 const GameOverMessage: React.FC<GameOverMessageProps> = ({ 
@@ -18,7 +20,8 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   gameMode, 
   onClose, 
   showStats,
-  playAgain 
+  playAgain,
+  gameStatus = won ? 'won' : 'lost' // Por defecto, usar won para determinar el estado
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -208,6 +211,13 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
               </div>
             </div>
           </div>
+          
+          {/* Timer para el próximo Yo-kai (solo en modo diario y cuando el juego ha terminado) */}
+          {gameMode === 'daily' && (gameStatus === 'won' || gameStatus === 'lost') && (
+            <div className="mt-6">
+              <NextYokaiTimer gameStatus={won ? 'won' : 'lost'} gameMode={gameMode} />
+            </div>
+          )}
           
           {/* Botones */}
           <div className="flex flex-col space-y-3">

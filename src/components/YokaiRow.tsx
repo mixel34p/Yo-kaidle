@@ -10,6 +10,7 @@ interface YokaiRowProps {
   result?: GuessResult;
   guessIndex?: number;
   foodIconTimestamp?: number;
+  isNewRow?: boolean; // Indica si es la última fila añadida (para animación)
 }
 
 // Normaliza y valida la clave de comida favorita para acceder a los iconos y traducciones de forma type-safe
@@ -38,7 +39,7 @@ function getYokaiImageUrl(yokai: Yokai): string {
   return cleanWikiImageUrl(url);
 }
 
-const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIconTimestamp = Date.now() }) => {
+const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIconTimestamp = Date.now(), isNewRow = false }) => {
   // Imprimir valores para diagnosticar el problema con la comida favorita
   // Mostrar esta información cuando sea una fila del Wordle (con resultado)
   if (result) {
@@ -115,14 +116,17 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
     );
   }
 
+  // Modificado: quitamos la opacidad inicial que causa el problema
   return (
-    <div className="yokai-row">
+    <div className={`yokai-row ${isNewRow ? 'animate-row-appear' : ''}`}>
+      
       {/* Nombre del Yo-kai - correcto si acertó completamente */}
       <YokaiCell 
         value={yokai.name} 
         status={result.isCorrect ? 'correct' : 'incorrect'} 
         iconUrl={getYokaiImageUrl(yokai)} 
         isYokai={true}
+        animationDelay={isNewRow ? 0 : undefined}
       />
       
       {/* Tribu del Yo-kai */}
@@ -131,6 +135,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
         status={result.tribe === 'correct' ? 'correct' : 'incorrect'} 
         iconUrl={tribeIcons[yokai.tribe]}
         isTribe={true}
+        animationDelay={isNewRow ? 1 : undefined}
       />
       
       {/* Rango del Yo-kai */}
@@ -140,6 +145,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
         hint={result.rank}
         iconUrl={rankIcons[yokai.rank]}
         isRank={true}
+        animationDelay={isNewRow ? 2 : undefined}
       />
       
       {/* Elemento del Yo-kai */}
@@ -147,6 +153,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
         value={elementTranslations[yokai.element]} 
         status={result.element === 'correct' ? 'correct' : 'incorrect'}
         iconUrl={elementIcons[yokai.element]}
+        animationDelay={isNewRow ? 3 : undefined}
       />
 
       {/* Comida Favorita del Yo-kai */}
@@ -159,6 +166,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
             status={result.favoriteFood === 'correct' ? 'correct' : 'incorrect'}
             iconUrl={foodIcons[normalizedFood] ? `${foodIcons[normalizedFood]}?t=${foodIconTimestamp}` : undefined}
             isFood={true}
+            animationDelay={isNewRow ? 4 : undefined}
           />
         );
       })()}
@@ -170,6 +178,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
         status={result.game === 'correct' ? 'correct' : 'incorrect'}
         iconUrl={gameLogos[yokai.game]}
         isGame={true}
+        animationDelay={isNewRow ? 5 : undefined}
       />
     </div>
   );

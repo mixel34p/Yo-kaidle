@@ -17,6 +17,7 @@ interface YokaiCellProps {
   isFood?: boolean;
   isYokai?: boolean;
   guessIndex?: number;
+  animationDelay?: number; // Retraso para la animación secuencial
 }
 
 const YokaiCell: React.FC<YokaiCellProps> = ({ 
@@ -30,18 +31,37 @@ const YokaiCell: React.FC<YokaiCellProps> = ({
   isFood = false,
   isYokai = false,
   elementColor,
-  guessIndex
+  guessIndex,
+  animationDelay
 }) => {
   // Imprimir en consola para depuración
   // Imprimir información relevante para depuración
-  console.log(`Rendering YokaiCell: value=${value}, showImage=${Boolean(iconUrl)}, isTribe=${isTribe}, isGame=${isGame}, isRank=${isRank}, isFood=${isFood}, isYokai=${isYokai}`);
-  const cellClasses = {
+  // Imprimir en consola sólo para depuración si es necesario
+  if (isFood) { // Limitar logs para reducir spam en consola
+    console.log(`Rendering YokaiCell: value=${value}, showImage=${Boolean(iconUrl)}, isFood=${isFood}, animationDelay=${animationDelay}`);
+  }
+  // Clases base para cada estado de la celda
+  const baseClasses = {
     default: 'yokai-cell',
     correct: 'yokai-cell yokai-cell-correct',
     partial: 'yokai-cell yokai-cell-partial',
     incorrect: 'yokai-cell yokai-cell-incorrect',
     higher: 'yokai-cell yokai-cell-partial',
     lower: 'yokai-cell yokai-cell-partial',
+  };
+  
+  // Añadir animación solo si hay retraso especificado y no es un estado por defecto
+  const shouldAnimate = animationDelay !== undefined && status !== 'default';
+  const animationClass = shouldAnimate ? `animate-reveal delay-cell-${animationDelay}` : '';
+  
+  // Combinar clases base con animación
+  const cellClasses = {
+    default: baseClasses.default,
+    correct: `${baseClasses.correct} ${animationClass}`,
+    partial: `${baseClasses.partial} ${animationClass}`,
+    incorrect: `${baseClasses.incorrect} ${animationClass}`,
+    higher: `${baseClasses.higher} ${animationClass}`,
+    lower: `${baseClasses.lower} ${animationClass}`,
   };
 
   // Determinar si debemos mostrar imagen o texto

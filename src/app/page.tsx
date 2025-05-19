@@ -280,8 +280,9 @@ export default function Home() {
       }
       
       setMessage('');
-      // Mostrar mensaje de victoria después de un breve retraso
-      setTimeout(() => setShowGameOver(true), 1000);
+      // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas
+      const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
+      setTimeout(() => setShowGameOver(true), animationDuration);
     } else if (newGuesses.length >= MAX_GUESSES) {
       newGameStatus = 'lost';
       
@@ -297,8 +298,9 @@ export default function Home() {
       }
       
       setMessage('');
-      // Mostrar mensaje de derrota después de un breve retraso
-      setTimeout(() => setShowGameOver(true), 1000);
+      // Retrasar la pantalla de derrota para permitir que se complete la animación de todas las celdas
+      const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
+      setTimeout(() => setShowGameOver(true), animationDuration);
     }
     
     // Actualizar el estado del juego
@@ -353,9 +355,10 @@ return (
         dailyYokai={(gameState.gameMode === 'daily' ? gameState.dailyYokai : gameState.infiniteYokai) as Yokai}
         won={gameState.gameStatus === 'won'}
         gameMode={gameState.gameMode}
+        gameStatus={gameState.gameStatus}
         onClose={() => setShowGameOver(false)}
         showStats={() => setShowStats(true)}
-        playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : () => window.location.reload()}
+        playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : undefined}
       />
     ))}
 
@@ -399,9 +402,8 @@ return (
     </div>
 
     {/* MENSAJE DE FINAL DE PARTIDA Y BOTÓN DE ESTADÍSTICAS */}
-    {gameState.gameStatus !== 'playing' && (
-      <div className="text-center mt-6 p-4 bg-white bg-opacity-80 rounded-lg shadow-md">
-        {/* <p className="mb-4 font-medium">Próximo Yo-kaidle en <span className="text-primary font-bold">{getTimeUntilTomorrow()}</span></p> */}
+    {gameState.gameStatus !== 'playing' && !showGameOver && (
+      <div className="text-center mt-6 p-4 bg-gradient-to-r from-blue-600/80 to-blue-800/80 rounded-lg shadow-md border border-blue-300/30 backdrop-blur-sm text-white">
         <button 
           className="btn-primary transform hover:scale-105 transition-transform"
           onClick={() => setShowStats(true)}

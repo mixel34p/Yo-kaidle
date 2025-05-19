@@ -27,6 +27,7 @@ const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTime
           result={guess.result} 
           guessIndex={index}
           foodIconTimestamp={foodIconTimestamp}
+          isNewRow={index === guesses.length - 1} // Marcar la última fila como nueva para animación
         />
       ))}
       

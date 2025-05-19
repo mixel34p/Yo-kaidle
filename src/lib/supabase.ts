@@ -81,68 +81,92 @@ export function cleanWikiImageUrl(url: string): string {
 }
 
 export async function getDailyYokai(date: string): Promise<Yokai | null> {
-  // Selecciona un Yo-kai determinístico basado en la fecha
-  const dateObj = new Date(date);
-  const dateNumber = dateObj.getDate() + dateObj.getMonth() * 31;
-  
-  const { data, error } = await supabase
-    .from('yokai')
-    .select('*');
-  
-  if (error || !data || data.length === 0) {
-    console.error('Error fetching daily Yo-kai:', error);
+  try {
+    // Algoritmo mejorado para seleccionar un Yo-kai determinístico basado en la fecha
+    const dateObj = new Date(date);
+    // Crear un número único para cada día del año usando la fecha, mes y año
+    const day = dateObj.getDate();
+    const month = dateObj.getMonth() + 1; // Los meses en JS son 0-11
+    const year = dateObj.getFullYear();
+    
+    // Crear un número hash único para cada día
+    // Multiplicamos por números primos para mejorar la distribución
+    const dailyHash = day + (month * 31) + (year * 372);
+    
+    // Obtener todos los Yo-kai de la base de datos
+    const { data, error } = await supabase
+      .from('yokai')
+      .select('*');
+    
+    if (error) {
+      console.error('Error fetching Yo-kai from Supabase:', error.message);
+      return null;
+    }
+    
+    if (!data || data.length === 0) {
+      console.error('No Yo-kai found in the database');
+      return null;
+    }
+    
+    // Seleccionar el Yo-kai del día usando el hash
+    const index = Math.abs(dailyHash % data.length);
+    let rawYokai = data[index]; // Usar let en lugar de const para poder reasignar
+    
+    if (!rawYokai) {
+      console.error('Failed to select a daily Yo-kai');
+      return null;
+    }
+    
+    // Validar que el Yo-kai tenga los campos requeridos
+    if (!rawYokai.name || !rawYokai.tribe || !rawYokai.rank) {
+      console.error('Selected Yo-kai is missing required fields:', rawYokai);
+      // En caso de error, seleccionar otro Yo-kai como respaldo
+      const backupIndex = (index + 1) % data.length;
+      rawYokai = data[backupIndex];
+      
+      if (!rawYokai || !rawYokai.name) {
+        console.error('Backup Yo-kai also invalid');
+        return null;
+      }
+    }
+    
+    // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
+    // y validación para cada campo
+    const yokai: Yokai = {
+      id: rawYokai.id || 0,
+      name: rawYokai.name || 'Unknown Yo-kai',
+      tribe: rawYokai.tribe || 'Mysterious',
+      rank: rawYokai.rank || 'E',
+      element: rawYokai.element || 'None',
+      game: rawYokai.game || 'Yo-kai Watch 1',
+      weight: rawYokai.weight || 0,
+      medalNumber: rawYokai.medalnumber || rawYokai.medal_number || 0,
+      favoriteFood: rawYokai.favorite_food || 'None',
+      imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image || ''
+    };
+    
+    // Si la imagen viene de wikia, limpiarla
+    if (yokai.imageurl) {
+      yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
+    }
+    if (yokai.image_url) {
+      yokai.image_url = cleanWikiImageUrl(yokai.image_url);
+    }
+    if (yokai.img) {
+      yokai.img = cleanWikiImageUrl(yokai.img);
+    }
+    if (yokai.image) {
+      yokai.image = cleanWikiImageUrl(yokai.image);
+    }
+    
+    // Registro para depuración (solo en desarrollo)
+    console.log(`Daily Yo-kai selected for ${date}: ${yokai.name} (ID: ${yokai.id})`);
+    
+    return yokai as Yokai;
+  } catch (error) {
+    console.error('Unexpected error in getDailyYokai:', error);
     return null;
   }
-  
-  // Diagnosticar la estructura exacta que viene de Supabase
-  console.log('CAMPOS DISPONIBLES EN YOKAI:', Object.keys(data[0]));
-  console.log('VALOR DE IMAGEN:', data[0].image_url || data[0].imageurl || data[0].img || data[0].image);
-  
-  // Diagnóstico detallado de la comida favorita
-  console.log('ANALISIS DE COLUMNA DE COMIDA FAVORITA:');
-  console.log('- favorite_food:', data[0].favorite_food);
-  console.log('- favoriteFood:', data[0].favoriteFood);
-  console.log('- favorite food:', data[0]['favorite food']);
-  
-  // Mostrar el objeto completo para buscar pistas
-  console.log('OBJETO COMPLETO DE SUPABASE:', data[0]);
-  
-  // Usar la fecha para seleccionar un Yo-kai determinístico para ese día
-  const index = dateNumber % data.length;
-  
-  // IMPORTANTE: En lugar de usar directamente el objeto devuelto por Supabase,
-  // creamos un nuevo objeto conformando estrictamente a la interfaz Yokai
-  const rawYokai = data[index];
-  
-  // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
-  const yokai: Yokai = {
-    id: rawYokai.id,
-    name: rawYokai.name,
-    tribe: rawYokai.tribe,
-    rank: rawYokai.rank,
-    element: rawYokai.element,
-    game: rawYokai.game,
-    weight: rawYokai.weight,
-    medalNumber: rawYokai.medalnumber || rawYokai.medal_number,
-    favoriteFood: rawYokai.favorite_food, // Mapeo explícito de favorite_food a favoriteFood
-    imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image
-  };
-  
-  // Si la imagen viene de wikia, limpiarla
-  if (yokai.imageurl) {
-    yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
-  }
-  if (yokai.image_url) {
-    yokai.image_url = cleanWikiImageUrl(yokai.image_url);
-  }
-  if (yokai.img) {
-    yokai.img = cleanWikiImageUrl(yokai.img);
-  }
-  if (yokai.image) {
-    yokai.image = cleanWikiImageUrl(yokai.image);
-  }
-  
-  return yokai as Yokai;
 }
 
 export async function getRandomYokai(): Promise<Yokai | null> {
