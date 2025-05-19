@@ -6,17 +6,18 @@ import YokaiSearch from '@/components/YokaiSearch';
 import Confetti from '@/components/Confetti';
 import GameOverMessage from '@/components/GameOverMessage';
 import MotivationalHint from '@/components/MotivationalHint';
-import SocialLinks from '@/components/SocialLinks';
 import GameRules from '@/components/GameRules';
 import { Yokai, GameState, GameMode } from '@/types/yokai';
 import { normalizeYokai } from '@/utils/gameLogic';
 import { getDailyYokai, getRandomYokai } from '@/lib/supabase';
 import { compareYokai, getTodayDateString, formatDateForDisplay, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
 import GameModeSelector from '@/components/GameModeSelector';
+// El Footer y UpdatesPopup ahora están en el layout global
 
 const MAX_GUESSES = 6;
 
 export default function Home() {
+  // El popup de actualizaciones ahora se gestiona en el layout global
   // Reiniciar partida infinita: nuevo yokai y limpiar intentos
   const handleNewInfiniteGame = async () => {
     setLoading(true);
@@ -324,17 +325,23 @@ export default function Home() {
 
 return (
   <div className="app-container">
+
     {/* CABECERA */}
-    <header className="mb-6 mt-2 text-center">
-      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text drop-shadow-lg animate-gradient">Yo-kaidle</h1>
-      <p className="mt-2 text-gray-600 font-medium">¡Adivina el Yo-kai del día o juega en modo infinito!</p>
+    <header className="mb-6 text-center">
+      <div className="flex justify-center mb-4 px-1">
+        <img 
+          src="/images/logo/logo.png" 
+          alt="Yo-kaidle Logo" 
+          className="w-full object-contain drop-shadow-2xl" 
+          style={{ maxHeight: 'calc(30vh)' }}
+        />
+      </div>
+      <p className="mt-2 text-gray-600 font-medium">Un wordle de Yo-kai Watch.</p>
     </header>
+
 
     {/* REGLAS DEL JUEGO */}
     <GameRules />
-
-    {/* ENLACES SOCIALES */}
-    <SocialLinks />
 
     {/* MENSAJE DE MOTIVACIÓN */}
     <MotivationalHint guessCount={guessResults.length} maxGuesses={gameState.maxGuesses} />
@@ -529,6 +536,7 @@ return (
     )}
 
 
+    {/* El pie de página ahora está en el layout */}
   </div>
 )
 }

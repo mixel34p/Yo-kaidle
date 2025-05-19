@@ -70,6 +70,22 @@ body {
   }
 }
 
+/* Animación para el popup de actualizaciones */
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
 @keyframes revealCell {
   0% {
     opacity: 0;

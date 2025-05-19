@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
-import FloatingDiscordButton from '@/components/FloatingDiscordButton'
+import Footer from '@/components/Footer'
+import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
 import type { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <main className="container mx-auto px-4 py-8 max-w-md">
+        {/* Componente cliente para el popup de actualizaciones */}
+        <ClientUpdatesWrapper />
+        <main className="container mx-auto px-4 py-8 pb-24 max-w-md">
           {children}
         </main>
-        <FloatingDiscordButton />
+        <Footer />
       </body>
     </html>
   )
