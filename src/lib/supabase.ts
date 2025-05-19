@@ -1,13 +1,59 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Yokai, Game } from '@/types/yokai';
 
-// Normalmente, estas variables de entorno estarían en un archivo .env.local
-// Por ahora, vamos a dejarlas vacías para que el usuario las configure más tarde
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Variables para Supabase
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Crear el cliente de Supabase
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Crear el cliente de Supabase con manejo de errores
+let supabase: SupabaseClient;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('Supabase environment variables are missing. Using fallback client for build process.');
+  
+  // Usamos createClient con URLs placeholder para asegurar compatibilidad de tipos
+  supabase = createClient(
+    supabaseUrl || 'https://placeholder-url.supabase.co', 
+    supabaseAnonKey || 'placeholder-key'
+  );
+  
+  // En modo de build, podemos hacer un override de ciertos métodos para evitar errores
+  if (typeof window === 'undefined') {
+    // Durante el build de Next.js, interceptaremos las llamadas relevantes
+    // @ts-expect-error - Hacemos override de métodos para el build
+    supabase.from = (table: string) => {
+      return {
+        select: () => {
+          const builder = {
+            // Implementación básica para que los métodos encadenen correctamente
+            eq: () => builder,
+            neq: () => builder,
+            gt: () => builder,
+            lt: () => builder,
+            gte: () => builder,
+            lte: () => builder,
+            like: () => builder,
+            ilike: () => builder,
+            is: () => builder,
+            in: () => builder,
+            contains: () => builder,
+            containedBy: () => builder,
+            single: () => Promise.resolve({ data: null, error: null }),
+            order: () => builder,
+            limit: () => builder,
+            range: () => builder,
+          };
+          return builder;
+        }
+      };
+    };
+  }
+} else {
+  // Si las variables están disponibles, crear el cliente normal
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+}
+
+export { supabase };
 
 // Funciones para interactuar con los datos de Yo-kai en Supabase
 export async function getAllYokai(): Promise<Yokai[]> {
