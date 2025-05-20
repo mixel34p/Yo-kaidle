@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { elementColors, elementIcons } from '@/types/yokai';
+import WikiaImage from './WikiaImage';
 
 type CellStatus = 'correct' | 'partial' | 'incorrect' | 'default' | 'higher' | 'lower';
 
@@ -103,7 +104,17 @@ const YokaiCell: React.FC<YokaiCellProps> = ({
               </span>
             </div>
           )}
-          {isTribe ? (
+          {/* Utilizar WikiaImage para URLs de Wikia */}
+          {iconUrl && (iconUrl.includes('wikia.nocookie.net') || iconUrl.includes('static.wikia.nocookie.net')) ? (
+            <WikiaImage 
+              src={iconUrl}
+              alt={`${value}`}
+              width={isYokai ? 40 : (isGame ? 48 : 32)}
+              height={isYokai ? 40 : (isGame ? 48 : 32)}
+              className="object-contain"
+              style={{ width: isYokai ? '40px' : (isGame ? '48px' : '32px'), height: isYokai ? '40px' : (isGame ? '48px' : '32px') }}
+            />
+          ) : isTribe ? (
             <img 
               src={iconUrl} 
               alt={`${value} icon`}
