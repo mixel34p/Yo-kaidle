@@ -108,12 +108,27 @@ export function cleanWikiImageUrl(url: string): string {
     // Quitar los parámetros de consulta (?cb=...)
     let cleanUrl = url.split('?')[0];
     
-    // Si tiene /revision/ en la URL, quedarnos solo con la parte principal
+    // Manejar el formato específico de URLs de Wikia
     if (cleanUrl.includes('/revision/')) {
-      // Obtener solo la parte hasta .png o .jpg
-      const match = cleanUrl.match(/(.+\.(png|jpg|jpeg|gif))/i);
-      if (match) {
-        cleanUrl = match[0];
+      // Detectar el formato específico con /youkai-watch/images/X/XX/Nombre.png/revision/latest
+      const pathRegex = /\/[\w-]+\/images\/[\w]\/[\w]{2}\/([\w-]+\.(png|jpg|jpeg|gif))\/revision/i;
+      const pathMatch = cleanUrl.match(pathRegex);
+      
+      if (pathMatch && pathMatch[1]) {
+        // Reconstruir la URL sin la parte /revision/latest
+        const basePath = cleanUrl.split('/images/')[0];
+        const imagePath = cleanUrl.split('/images/')[1];
+        const imageFile = pathMatch[1];
+        
+        // Reconstruir como: base/images/X/XX/Nombre.png
+        const imagePathParts = imagePath.split('/');
+        cleanUrl = `${basePath}/images/${imagePathParts[0]}/${imagePathParts[1]}/${imageFile}`;
+      } else {
+        // Si no coincide con el formato específico, usar el método anterior
+        const match = cleanUrl.match(/(.+\.(png|jpg|jpeg|gif))/i);
+        if (match) {
+          cleanUrl = match[0];
+        }
       }
     }
     
