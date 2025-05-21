@@ -115,6 +115,47 @@ export default function Home() {
     }
   }, [gameState.gameStatus, loading]);
 
+  // Función para verificar si hay un nuevo día y recargar el Yo-kai diario
+  const checkForNewDay = async () => {
+    const today = getTodayDateString();
+    // Si estamos en modo diario y la fecha guardada es diferente a la actual
+    if (gameState.gameMode === 'daily' && gameState.currentDate !== today) {
+      console.log('Detectado nuevo día, recargando Yo-kai diario...');
+      try {
+        const dailyYokai = await getDailyYokai(today);
+        if (dailyYokai) {
+          // Crear nuevo estado para modo diario pero mantener estadísticas
+          const newGameState: GameState = {
+            ...gameState,
+            currentDate: today,
+            dailyYokai,
+            guesses: [], // Reiniciar intentos
+            gameStatus: 'playing', // Reiniciar estado a jugando
+          };
+          
+          setGameState(newGameState);
+          setGuessResults([]);
+          setShowGameOver(false);
+          saveGameToLocalStorage(newGameState);
+          console.log('Nuevo Yo-kai diario cargado:', dailyYokai.name);
+        }
+      } catch (error) {
+        console.error('Error al verificar nuevo día:', error);
+      }
+    }
+  };
+
+  // Verificar fecha actual periódicamente
+  useEffect(() => {
+    // Verificar al montar el componente
+    checkForNewDay();
+    
+    // Verificar cada minuto por si cambia el día mientras la app está abierta
+    const intervalId = setInterval(checkForNewDay, 60000);
+    
+    return () => clearInterval(intervalId);
+  }, [gameState.gameMode, gameState.currentDate]);
+
   // Cargar el juego guardado o iniciar uno nuevo basándonos en el modo
   useEffect(() => {
     // Evitar recargar si estamos cambiando de modo
