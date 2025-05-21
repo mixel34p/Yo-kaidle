@@ -34,6 +34,39 @@ export default function Home() {
     }
     setLoading(false);
   };
+  
+  // Función para recargar el Yo-kai diario cuando llega medianoche
+  const handleMidnightReached = async () => {
+    console.log('Medianoche alcanzada - cargando nuevo Yo-kai diario');
+    if (gameState.gameMode !== 'daily') return;
+    
+    try {
+      setLoading(true);
+      const today = getTodayDateString();
+      const dailyYokai = await getDailyYokai(today);
+      
+      if (dailyYokai) {
+        // Crear nuevo estado para modo diario pero mantener estadísticas
+        const newGameState: GameState = {
+          ...gameState,
+          currentDate: today,
+          dailyYokai,
+          guesses: [], // Reiniciar intentos
+          gameStatus: 'playing', // Reiniciar estado a jugando
+        };
+        
+        setGameState(newGameState);
+        setGuessResults([]);
+        setShowGameOver(false);
+        saveGameToLocalStorage(newGameState);
+        console.log('Nuevo Yo-kai diario cargado automáticamente:', dailyYokai.name);
+      }
+    } catch (error) {
+      console.error('Error al cargar el nuevo Yo-kai diario:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Timestamp para forzar recarga de iconos
   const [foodIconTimestamp, setFoodIconTimestamp] = useState<number>(Date.now());
@@ -407,6 +440,7 @@ return (
         onClose={() => setShowGameOver(false)}
         showStats={() => setShowStats(true)}
         playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : undefined}
+        onMidnightReached={handleMidnightReached}
       />
     ))}
 

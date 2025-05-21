@@ -12,6 +12,7 @@ interface GameOverMessageProps {
   showStats?: () => void; // Prop para mostrar estadísticas
   playAgain?: () => void; // Nueva prop para jugar de nuevo (solo para modo infinito)
   gameStatus?: 'playing' | 'won' | 'lost'; // Estado actual del juego
+  onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
 }
 
 const GameOverMessage: React.FC<GameOverMessageProps> = ({ 
@@ -21,7 +22,8 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   onClose, 
   showStats,
   playAgain,
-  gameStatus = won ? 'won' : 'lost' // Por defecto, usar won para determinar el estado
+  gameStatus = won ? 'won' : 'lost', // Por defecto, usar won para determinar el estado
+  onMidnightReached
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -215,7 +217,11 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
           {/* Timer para el próximo Yo-kai (solo en modo diario y cuando el juego ha terminado) */}
           {gameMode === 'daily' && (gameStatus === 'won' || gameStatus === 'lost') && (
             <div className="mt-6">
-              <NextYokaiTimer gameStatus={won ? 'won' : 'lost'} gameMode={gameMode} />
+              <NextYokaiTimer 
+                gameStatus={won ? 'won' : 'lost'} 
+                gameMode={gameMode} 
+                onMidnightReached={onMidnightReached} 
+              />
             </div>
           )}
           

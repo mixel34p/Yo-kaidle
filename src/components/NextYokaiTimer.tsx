@@ -3,9 +3,14 @@ import React, { useState, useEffect } from 'react';
 interface NextYokaiTimerProps {
   gameStatus: 'playing' | 'won' | 'lost';
   gameMode: 'daily' | 'infinite';
+  onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
 }
 
-const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ gameStatus, gameMode }) => {
+const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ 
+  gameStatus, 
+  gameMode, 
+  onMidnightReached 
+}) => {
   const [timeRemaining, setTimeRemaining] = useState<{
     hours: number;
     minutes: number;
@@ -15,6 +20,8 @@ const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ gameStatus, gameMode })
     minutes: 0,
     seconds: 0
   });
+  
+  const [isMidnightReached, setIsMidnightReached] = useState(false);
 
   useEffect(() => {
     // Solo calcular el tiempo si estamos en modo diario y el juego ha terminado
@@ -36,6 +43,15 @@ const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ gameStatus, gameMode })
         minutes: diffMinutes,
         seconds: diffSeconds
       });
+      
+      // Verificar si ya llegamos a medianoche
+      if (diffMs <= 0 && !isMidnightReached) {
+        setIsMidnightReached(true);
+        // Llamar al callback para actualizar el juego cuando sea medianoche
+        if (onMidnightReached) {
+          onMidnightReached();
+        }
+      }
     };
 
     // Calcular el tiempo inicial
@@ -45,7 +61,7 @@ const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ gameStatus, gameMode })
     const timer = setInterval(calculateTimeRemaining, 1000);
 
     return () => clearInterval(timer);
-  }, [gameMode, gameStatus]);
+  }, [gameMode, gameStatus, onMidnightReached, isMidnightReached]);
 
   // No mostrar nada si no es modo diario o el juego sigue en progreso
   if (gameMode !== 'daily' || gameStatus === 'playing') {
@@ -71,6 +87,11 @@ const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ gameStatus, gameMode })
           <span className="text-xs mt-1 text-blue-200">segundos</span>
         </div>
       </div>
+      
+      {/* Mensaje adicional para clarificar que se actualizará automáticamente a medianoche */}
+      <p className="text-xs mt-3 text-blue-200">
+        El nuevo Yo-kai estará disponible automáticamente a medianoche.
+      </p>
     </div>
   );
 };
