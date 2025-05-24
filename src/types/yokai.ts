@@ -9,7 +9,8 @@ export type Tribe =
   | 'Wicked' 
   | 'Boss' 
   | 'Enma'
-  | 'Brave';
+  | 'Brave'
+  | 'Wandroid';
 
 export const tribeTranslations: Record<Tribe, string> = {
   'Charming': 'Guapo',
@@ -22,7 +23,8 @@ export const tribeTranslations: Record<Tribe, string> = {
   'Wicked': 'Maléfico',
   'Boss': 'Jefe',
   'Enma': 'Enma',
-  'Brave': 'Valiente'
+  'Brave': 'Valiente',
+  'Wandroid': 'Androide'
 };
 
 export const tribeIcons: Record<Tribe, string> = {
@@ -36,7 +38,8 @@ export const tribeIcons: Record<Tribe, string> = {
   'Wicked': '/images/tribes/wicked.png',
   'Boss': '/images/tribes/boss.png',
   'Enma': '/images/tribes/enma.png',
-  'Brave': '/images/tribes/Brave.PNG'
+  'Brave': '/images/tribes/Brave.PNG',
+  'Wandroid': '/images/tribes/Wandroid.PNG'
 };
 
 export type Game = 
@@ -45,7 +48,8 @@ export type Game =
   | 'Yo-kai Watch 3' 
   | 'Yo-kai Watch 4' 
   | 'Yo-kai Watch Blasters' 
-  | 'Yo-kai Watch Busters 2';
+  | 'Yo-kai Watch Busters 2'
+  | 'Yo-kai Watch Sangokushi';
 
 export const gameLogos: Record<Game, string> = {
   'Yo-kai Watch 1': '/images/games/yw1.png',
@@ -53,7 +57,8 @@ export const gameLogos: Record<Game, string> = {
   'Yo-kai Watch 3': '/images/games/yw3.png',
   'Yo-kai Watch 4': '/images/games/yw4.png',
   'Yo-kai Watch Blasters': '/images/games/ywb.png',
-  'Yo-kai Watch Busters 2': '/images/games/ywb2.png'
+  'Yo-kai Watch Busters 2': '/images/games/ywb2.png',
+  'Yo-kai Watch Sangokushi': '/images/games/ykws.png'
 };
 
 export type Rank = 
@@ -126,7 +131,8 @@ export type FavoriteFood =
   | 'Pasta' 
   | 'Tempura' 
   | 'Sushi-Tempura' 
-  | 'Sukiyaki' 
+  | 'Sukiyaki'
+  | 'Mega Tasty Bars' 
   | 'None';
 
 export const elementTranslations: Record<Element, string> = {
@@ -169,6 +175,7 @@ export const foodTranslations: Record<FavoriteFood, string> = {
   'Tempura': 'Tempura',
   'Sushi-Tempura': 'Sushi-Tempura',
   'Sukiyaki': 'Sukiyaki',
+  'Mega Tasty Bars': 'Chocodelicias',
   'None': 'Ninguno'
 };
 
@@ -200,6 +207,7 @@ export const foodIcons: Record<FavoriteFood, string> = {
   'Tempura': '/images/foods/tempura.png',
   'Sushi-Tempura': '/images/foods/sushi-tempura.png',
   'Sukiyaki': '/images/foods/sukiyaki.png',
+  'Mega Tasty Bars': '/images/foods/megatastybars.png',
   'None': '/images/foods/none.png'
 };
 
