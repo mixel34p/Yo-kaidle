@@ -39,7 +39,7 @@ export const tribeIcons: Record<Tribe, string> = {
   'Boss': '/images/tribes/boss.png',
   'Enma': '/images/tribes/enma.png',
   'Brave': '/images/tribes/Brave.PNG',
-  'Wandroid': '/images/tribes/Wandroid.PNG'
+  'Wandroid': '/images/tribes/Wandroid.png'
 };
 
 export type Game = 
