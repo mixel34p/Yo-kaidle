@@ -11,7 +11,19 @@ const GameRules: React.FC = () => {
         className="text-white rounded-lg px-4 py-2 w-full flex justify-between items-center shadow-md font-medium transition-all duration-300"
         style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}
       >
-        <span>Cómo jugar</span>
+        <div className="flex items-center">
+          <img 
+            src="/icons/rules/how-to-play.png" 
+            alt="Reglas" 
+            className="w-6 h-6 mr-2 object-contain" 
+            onError={(e) => {
+              // Fallback al emoji si la imagen no se encuentra
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement!.innerHTML = '<span className="mr-2 text-xl">📋</span>' + e.currentTarget.parentElement!.innerHTML;
+            }}
+          />
+          <span>Cómo jugar</span>
+        </div>
         <span className="text-xl">{isOpen ? '▼' : '▶'}</span>
       </button>
       
@@ -65,7 +77,8 @@ const GameRules: React.FC = () => {
               <ul className="list-disc pl-5 space-y-1 text-xs">
                 <li>La sección juego se refiere al juego en el que debutó el Yo-kai como <strong>obtenible</strong>.</li>
                 <li>Los Yo-kais usan las características del primer juego en el que aparecen.</li>
-                <li>Los bosses no aparecen como sus versiones jugables y todos los bosses son considerados como rango S.</li>
+                <li>No se toma en cuenta a la versión obtenible de los bosses y los bosses que no tienen ningún rango oficial son Rango S.</li>
+                <li>El juego está aún en fase de desarrollo y puede contener errores. Puedes reportarlos en el <a href="https://discord.gg/Mv4HpkCz3w" target="_blank" rel="noopener noreferrer">discord</a>.</li>
               </ul>
             </div>
           )}

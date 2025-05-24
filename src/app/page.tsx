@@ -325,18 +325,137 @@ export default function Home() {
     if (newMode === gameState.gameMode) return;
     
     setChangingMode(true);
+    setLoading(true);
     
-    // Guardar el estado actual antes de cambiar
-    saveGameToLocalStorage(gameState);
-    
-    // Actualizar el estado con el nuevo modo
-    setGameState(prev => ({
-      ...prev,
-      gameMode: newMode
-    }));
+    try {
+      // Guardar el estado actual antes de cambiar
+      saveGameToLocalStorage(gameState);
+      
+      const today = getTodayDateString();
+      
+      // Si estamos cambiando al modo diario, verificar si ya existe un juego diario guardado
+      if (newMode === 'daily') {
+        // Intentar cargar el estado específico del modo diario
+        const savedDailyGame = localStorage.getItem('yokaidle_daily_state');
+        
+        if (savedDailyGame) {
+          const parsedDailyGame = JSON.parse(savedDailyGame) as GameState;
+          
+          // Verificar si ya existe un juego para el día actual o si necesitamos uno nuevo
+          if (parsedDailyGame.currentDate === today) {
+            // Si ya existe un juego para hoy, usarlo tal cual
+            console.log('Cambiando a modo diario: juego existente para hoy encontrado');
+            setGameState(parsedDailyGame);
+            setGuessResults(parsedDailyGame.guesses.map((yokai: Yokai) => {
+              const normalizedYokai = normalizeYokai(yokai);
+              return {
+                yokai: normalizedYokai,
+                result: compareYokai(parsedDailyGame.dailyYokai as Yokai, normalizedYokai)
+              };
+            }));
+            
+            if (parsedDailyGame.gameStatus !== 'playing') {
+              setShowGameOver(true);
+            } else {
+              setShowGameOver(false);
+            }
+            
+            // Desactivar modo de cambio
+            setTimeout(() => {
+              setChangingMode(false);
+              setLoading(false);
+            }, 100);
+            return;
+          } else {
+            // Si no existe un juego para hoy pero hay uno de días anteriores
+            // Obtener un nuevo Yo-kai diario manteniendo las estadísticas
+            console.log('Cambiando a modo diario: necesita un nuevo Yo-kai para hoy');
+            const dailyYokai = await getDailyYokai(today);
+            
+            if (dailyYokai) {
+              const newGameState: GameState = {
+                currentDate: today,
+                dailyYokai,
+                infiniteYokai: null,
+                guesses: [],
+                maxGuesses: MAX_GUESSES,
+                gameStatus: 'playing',
+                lastPlayedDate: null,
+                gameMode: 'daily',
+                streak: parsedDailyGame.dailyStats?.streak || 0,
+                maxStreak: parsedDailyGame.dailyStats?.maxStreak || 0,
+                totalPlayed: parsedDailyGame.dailyStats?.totalPlayed || 0,
+                totalWins: parsedDailyGame.dailyStats?.totalWins || 0,
+                dailyStats: parsedDailyGame.dailyStats || {
+                  streak: 0,
+                  maxStreak: 0,
+                  totalPlayed: 0,
+                  totalWins: 0
+                },
+                infiniteStats: parsedDailyGame.infiniteStats || {
+                  totalPlayed: 0,
+                  totalWins: 0
+                }
+              };
+              
+              setGameState(newGameState);
+              setGuessResults([]);
+              saveGameToLocalStorage(newGameState);
+            }
+          }
+        } else {
+          // No hay juego diario guardado, crear uno nuevo
+          console.log('Cambiando a modo diario: no hay juego diario guardado');
+          const dailyYokai = await getDailyYokai(today);
+          
+          if (dailyYokai) {
+            // Crear un nuevo estado para el modo diario
+            const newGameState: GameState = {
+              currentDate: today,
+              dailyYokai,
+              infiniteYokai: null,
+              guesses: [],
+              maxGuesses: MAX_GUESSES,
+              gameStatus: 'playing',
+              lastPlayedDate: null,
+              gameMode: 'daily',
+              streak: gameState.dailyStats?.streak || 0,
+              maxStreak: gameState.dailyStats?.maxStreak || 0,
+              totalPlayed: gameState.dailyStats?.totalPlayed || 0,
+              totalWins: gameState.dailyStats?.totalWins || 0,
+              dailyStats: gameState.dailyStats || {
+                streak: 0,
+                maxStreak: 0,
+                totalPlayed: 0,
+                totalWins: 0
+              },
+              infiniteStats: gameState.infiniteStats || {
+                totalPlayed: 0,
+                totalWins: 0
+              }
+            };
+            
+            setGameState(newGameState);
+            setGuessResults([]);
+            saveGameToLocalStorage(newGameState);
+          }
+        }
+      } else if (newMode === 'infinite') {
+        // Cambio a modo infinito - simplemente actualizar el modo y permitir que el useEffect maneje la carga
+        setGameState(prev => ({
+          ...prev,
+          gameMode: 'infinite'
+        }));
+      }
+    } catch (error) {
+      console.error('Error cambiando de modo de juego:', error);
+    }
     
     // Desactivar modo de cambio para permitir la carga
-    setTimeout(() => setChangingMode(false), 100);
+    setTimeout(() => {
+      setChangingMode(false);
+      setLoading(false);
+    }, 100);
   };
 
   // Manejar una nueva adivinanza
@@ -549,10 +668,77 @@ return (
           <div className="p-6">
             {/* Selector de modo para estadísticas */}
             <div className="mb-6">
-              <GameModeSelector 
-                currentMode={gameState.gameMode} 
-                onModeChange={handleModeChange} 
-              />
+              <div className="flex p-1 rounded-lg shadow-inner" style={{ background: 'rgba(15, 82, 152, 0.3)', backdropFilter: 'blur(4px)' }}>
+                <button
+                  onClick={() => handleModeChange('daily')}
+                  className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${
+                    gameState.gameMode === 'daily' 
+                      ? 'text-white shadow-md transform scale-105' 
+                      : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
+                  }`}
+                  style={gameState.gameMode === 'daily' ? { background: 'linear-gradient(135deg, var(--primary-color), #FF6384)' } : {}}
+                >
+                  <div className="flex items-center justify-center">
+                    <img 
+                      src="/icons/game-modes/daily-mode.png" 
+                      alt="Modo diario" 
+                      className="w-6 h-6 mr-2 object-contain" 
+                      onError={(e) => {
+                        // Fallback al icono SVG si la imagen no se encuentra
+                        e.currentTarget.style.display = 'none';
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'w-6 h-6 mr-2');
+                        svg.setAttribute('fill', 'none');
+                        svg.setAttribute('stroke', 'currentColor');
+                        svg.setAttribute('viewBox', '0 0 24 24');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('strokeLinecap', 'round');
+                        path.setAttribute('strokeLinejoin', 'round');
+                        path.setAttribute('strokeWidth', '2');
+                        path.setAttribute('d', 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z');
+                        svg.appendChild(path);
+                        e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
+                      }}
+                    />
+                    <span>Diario</span>
+                  </div>
+                </button>
+                
+                <button
+                  onClick={() => handleModeChange('infinite')}
+                  className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${
+                    gameState.gameMode === 'infinite' 
+                      ? 'text-white shadow-md transform scale-105' 
+                      : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
+                  }`}
+                  style={gameState.gameMode === 'infinite' ? { background: 'linear-gradient(135deg, var(--secondary-color), #1E75D3)' } : {}}
+                >
+                  <div className="flex items-center justify-center">
+                    <img 
+                      src="/icons/game-modes/infinite-mode.png" 
+                      alt="Modo infinito" 
+                      className="w-6 h-6 mr-2 object-contain" 
+                      onError={(e) => {
+                        // Fallback al icono SVG si la imagen no se encuentra
+                        e.currentTarget.style.display = 'none';
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'w-6 h-6 mr-2');
+                        svg.setAttribute('fill', 'none');
+                        svg.setAttribute('stroke', 'currentColor');
+                        svg.setAttribute('viewBox', '0 0 24 24');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('strokeLinecap', 'round');
+                        path.setAttribute('strokeLinejoin', 'round');
+                        path.setAttribute('strokeWidth', '2');
+                        path.setAttribute('d', 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4');
+                        svg.appendChild(path);
+                        e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
+                      }}
+                    />
+                    <span>Infinito</span>
+                  </div>
+                </button>
+              </div>
             </div>
             <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>
               {gameState.gameMode === 'daily' ? 'Estadísticas del Modo Diario' : 'Estadísticas del Modo Infinito'}
@@ -561,10 +747,24 @@ return (
             <div className="grid grid-cols-2 gap-4 mb-6">
               {/* Juegos jugados */}
               <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center rounded-full" style={{ background: 'rgba(66, 196, 255, 0.3)', color: 'white' }}>
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                  </svg>
+                <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                  <img 
+                    src="/icons/stats/games-played.png" 
+                    alt="Partidas" 
+                    className="w-8 h-8 object-contain" 
+                    onError={(e) => {
+                      // Fallback al icono SVG si la imagen no se encuentra
+                      e.currentTarget.style.display = 'none';
+                      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                      svg.setAttribute('class', 'w-6 h-6');
+                      svg.setAttribute('fill', 'currentColor');
+                      svg.setAttribute('viewBox', '0 0 20 20');
+                      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                      path.setAttribute('d', 'M9 2a1 1 0 000 2h2a1 1 0 100-2H9z');
+                      svg.appendChild(path);
+                      e.currentTarget.parentElement!.appendChild(svg);
+                    }}
+                  />
                 </div>
                 <div>
                   <p className="stat-value font-bold text-xl">
@@ -577,10 +777,26 @@ return (
               </div>
               {/* Porcentaje de victorias */}
               <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center rounded-full" style={{ background: 'rgba(39, 199, 90, 0.3)', color: 'white' }}>
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
+                <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                  <img 
+                    src="/icons/stats/victories.png" 
+                    alt="Victorias" 
+                    className="w-8 h-8 object-contain" 
+                    onError={(e) => {
+                      // Fallback al icono SVG si la imagen no se encuentra
+                      e.currentTarget.style.display = 'none';
+                      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                      svg.setAttribute('class', 'w-6 h-6');
+                      svg.setAttribute('fill', 'currentColor');
+                      svg.setAttribute('viewBox', '0 0 20 20');
+                      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                      path.setAttribute('fillRule', 'evenodd');
+                      path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
+                      path.setAttribute('clipRule', 'evenodd');
+                      svg.appendChild(path);
+                      e.currentTarget.parentElement!.appendChild(svg);
+                    }}
+                  />
                 </div>
                 <div>
                   <p className="stat-value font-bold text-xl">
@@ -599,10 +815,26 @@ return (
               {/* Racha actual (solo en modo diario) */}
               {gameState.gameMode === 'daily' && (
                 <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                  <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center rounded-full" style={{ background: 'rgba(255, 149, 0, 0.3)', color: 'white' }}>
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
+                  <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                    <img 
+                      src="/icons/stats/current-streak.png" 
+                      alt="Racha Actual" 
+                      className="w-8 h-8 object-contain" 
+                      onError={(e) => {
+                        // Fallback al icono SVG si la imagen no se encuentra
+                        e.currentTarget.style.display = 'none';
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'w-6 h-6');
+                        svg.setAttribute('fill', 'currentColor');
+                        svg.setAttribute('viewBox', '0 0 20 20');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('fillRule', 'evenodd');
+                        path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
+                        path.setAttribute('clipRule', 'evenodd');
+                        svg.appendChild(path);
+                        e.currentTarget.parentElement!.appendChild(svg);
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.dailyStats.streak}</p>
@@ -613,10 +845,24 @@ return (
               {/* Mejor racha (solo en modo diario) */}
               {gameState.gameMode === 'daily' && (
                 <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                  <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center rounded-full" style={{ background: 'rgba(175, 82, 222, 0.3)', color: 'white' }}>
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                    </svg>
+                  <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                    <img 
+                      src="/icons/stats/best-streak.png" 
+                      alt="Mejor Racha" 
+                      className="w-8 h-8 object-contain" 
+                      onError={(e) => {
+                        // Fallback al icono SVG si la imagen no se encuentra
+                        e.currentTarget.style.display = 'none';
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'w-6 h-6');
+                        svg.setAttribute('fill', 'currentColor');
+                        svg.setAttribute('viewBox', '0 0 20 20');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', 'M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z');
+                        svg.appendChild(path);
+                        e.currentTarget.parentElement!.appendChild(svg);
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.dailyStats.maxStreak}</p>
@@ -627,10 +873,26 @@ return (
               {/* Juegos ganados (solo en modo infinito) */}
               {gameState.gameMode === 'infinite' && (
                 <div className="p-3 rounded-lg shadow-sm flex items-center col-span-2" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                  <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center rounded-full" style={{ background: 'rgba(255, 205, 41, 0.3)', color: 'white' }}>
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd" />
-                    </svg>
+                  <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                    <img 
+                      src="/icons/stats/infinite-wins.png" 
+                      alt="Total Victorias Infinito" 
+                      className="w-8 h-8 object-contain" 
+                      onError={(e) => {
+                        // Fallback al icono SVG si la imagen no se encuentra
+                        e.currentTarget.style.display = 'none';
+                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        svg.setAttribute('class', 'w-6 h-6');
+                        svg.setAttribute('fill', 'currentColor');
+                        svg.setAttribute('viewBox', '0 0 20 20');
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('fillRule', 'evenodd');
+                        path.setAttribute('d', 'M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z');
+                        path.setAttribute('clipRule', 'evenodd');
+                        svg.appendChild(path);
+                        e.currentTarget.parentElement!.appendChild(svg);
+                      }}
+                    />
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.infiniteStats.totalWins}</p>

@@ -81,7 +81,16 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
             onClick={() => setIsDropdownOpen(prev => !prev)}
             disabled={disabled}
           >
-            <span className="text-xl">🔍</span>
+            <img 
+              src="/icons/search/yokai-search.png" 
+              alt="Buscar" 
+              className="w-8 h-8 object-contain" 
+              onError={(e) => {
+                // Fallback al emoji si la imagen no se encuentra
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.innerHTML = '<span className="text-xl">🔍</span>';
+              }}
+            />
           </button>
         </div>
         {disabled && (
@@ -98,7 +107,7 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
       {error && <div className="mt-2 text-red-500">{error}</div>}
       
       {isDropdownOpen && filteredYokai.length > 0 && (
-        <div className="absolute z-10 w-full mt-2 rounded-lg shadow-xl overflow-hidden animate-fadeIn" 
+        <div className="absolute z-10 w-full bottom-full mb-2 rounded-lg shadow-xl overflow-hidden animate-fadeIn" 
              style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(8px)', border: '1px solid var(--accent-color)' }}>
           <div className="p-2 text-white text-sm font-medium" 
                style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}>
@@ -144,7 +153,7 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
       )}
       
       {isDropdownOpen && searchQuery.trim() !== '' && filteredYokai.length === 0 && (
-        <div className="absolute z-10 w-full mt-1 rounded shadow-lg p-4 text-center animate-fadeIn" 
+        <div className="absolute z-10 w-full bottom-full mb-1 rounded shadow-lg p-4 text-center animate-fadeIn" 
              style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(8px)', border: '1px solid var(--accent-color)', color: 'white' }}>
           No se encontraron Yo-kai con ese nombre.
         </div>
