@@ -1,0 +1,6 @@
+name = "yokaidle"
+compatibility_date = "2025-05-25"
+
+[site]
+bucket = ".next"
+entry-point = "."
