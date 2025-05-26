@@ -431,10 +431,10 @@ export async function updateRoomActivity(
  */
 export async function syncOnlineDuelState(
   roomCode: string,
-  currentTurn: string,
+  currentTurn: DuelTurn,
   player1Guesses: Yokai[],
   player2Guesses: Yokai[],
-  gameStatus: string,
+  gameStatus: 'playing' | 'player1_won' | 'player2_won' | 'draw',
   lastAction: string
 ): Promise<boolean> {
   try {
