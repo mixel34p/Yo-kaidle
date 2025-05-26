@@ -53,6 +53,8 @@ export default function Home() {
           dailyYokai,
           guesses: [], // Reiniciar intentos
           gameStatus: 'playing', // Reiniciar estado a jugando
+          duelYokai: null,
+          duelStats: gameState.duelStats || { totalPlayed: 0, totalWins: 0, totalLosses: 0 },
         };
         
         setGameState(newGameState);
@@ -76,6 +78,7 @@ export default function Home() {
     currentDate: getTodayDateString(),
     dailyYokai: null,
     infiniteYokai: null, // Añadir el campo para separar el Yo-kai diario del infinito
+    duelYokai: null, // Añadido para cumplir con GameState
     guesses: [],
     maxGuesses: MAX_GUESSES,
     gameStatus: 'playing',
@@ -94,6 +97,11 @@ export default function Home() {
     infiniteStats: {
       totalPlayed: 0,
       totalWins: 0
+    },
+    duelStats: {
+      totalPlayed: 0,
+      totalWins: 0,
+      totalLosses: 0,
     }
   });
 
@@ -123,6 +131,7 @@ export default function Home() {
       console.log('Detectado nuevo día, recargando Yo-kai diario...');
       try {
         const dailyYokai = await getDailyYokai(today);
+        
         if (dailyYokai) {
           // Crear nuevo estado para modo diario pero mantener estadísticas
           const newGameState: GameState = {
@@ -131,6 +140,8 @@ export default function Home() {
             dailyYokai,
             guesses: [], // Reiniciar intentos
             gameStatus: 'playing', // Reiniciar estado a jugando
+            duelYokai: null,
+            duelStats: gameState.duelStats || { totalPlayed: 0, totalWins: 0, totalLosses: 0 },
           };
           
           setGameState(newGameState);
@@ -223,6 +234,12 @@ export default function Home() {
                   infiniteStats: savedGame.infiniteStats || {
                     totalPlayed: 0,
                     totalWins: 0
+                  },
+                  duelYokai: null,
+                  duelStats: savedGame.duelStats || {
+                    totalPlayed: 0,
+                    totalWins: 0,
+                    totalLosses: 0
                   }
                 };
                 
@@ -241,24 +258,30 @@ export default function Home() {
                 currentDate: today,
                 dailyYokai,
                 infiniteYokai: null, // Campo necesario después de actualizar GameState
+                duelYokai: null,
                 guesses: [],
                 maxGuesses: MAX_GUESSES,
                 gameStatus: 'playing',
                 lastPlayedDate: null,
                 gameMode: 'daily',
-                streak: savedGame?.dailyStats?.streak || 0,
-                maxStreak: savedGame?.dailyStats?.maxStreak || 0,
-                totalPlayed: savedGame?.dailyStats?.totalPlayed || 0,
-                totalWins: savedGame?.dailyStats?.totalWins || 0,
-                dailyStats: {
-                  streak: savedGame?.dailyStats?.streak || 0,
-                  maxStreak: savedGame?.dailyStats?.maxStreak || 0,
-                  totalPlayed: savedGame?.dailyStats?.totalPlayed || 0,
-                  totalWins: savedGame?.dailyStats?.totalWins || 0
-                },
-                infiniteStats: savedGame?.infiniteStats || {
+                streak: gameState.dailyStats?.streak || 0,
+                maxStreak: gameState.dailyStats?.maxStreak || 0,
+                totalPlayed: gameState.dailyStats?.totalPlayed || 0,
+                totalWins: gameState.dailyStats?.totalWins || 0,
+                dailyStats: gameState.dailyStats || {
+                  streak: 0,
+                  maxStreak: 0,
                   totalPlayed: 0,
                   totalWins: 0
+                },
+                infiniteStats: gameState.infiniteStats || {
+                  totalPlayed: 0,
+                  totalWins: 0
+                },
+                duelStats: gameState.duelStats || {
+                  totalPlayed: 0,
+                  totalWins: 0,
+                  totalLosses: 0
                 }
               };
               
@@ -395,6 +418,12 @@ export default function Home() {
                 infiniteStats: parsedDailyGame.infiniteStats || {
                   totalPlayed: 0,
                   totalWins: 0
+                },
+                duelYokai: null,
+                duelStats: parsedDailyGame.duelStats || {
+                  totalPlayed: 0,
+                  totalWins: 0,
+                  totalLosses: 0
                 }
               };
               
@@ -414,6 +443,7 @@ export default function Home() {
               currentDate: today,
               dailyYokai,
               infiniteYokai: null,
+              duelYokai: null,
               guesses: [],
               maxGuesses: MAX_GUESSES,
               gameStatus: 'playing',
@@ -432,6 +462,11 @@ export default function Home() {
               infiniteStats: gameState.infiniteStats || {
                 totalPlayed: 0,
                 totalWins: 0
+              },
+              duelStats: gameState.duelStats || {
+                totalPlayed: 0,
+                totalWins: 0,
+                totalLosses: 0
               }
             };
             
@@ -548,6 +583,8 @@ export default function Home() {
       dailyStats: newDailyStats,
       infiniteStats: newInfiniteStats,
       lastPlayedDate: newGameStatus !== 'playing' ? getTodayDateString() : gameState.lastPlayedDate,
+      duelYokai: gameState.duelYokai ?? null,
+      duelStats: gameState.duelStats ?? { totalPlayed: 0, totalWins: 0, totalLosses: 0 },
     };
 
     setGameState(newGameState);
