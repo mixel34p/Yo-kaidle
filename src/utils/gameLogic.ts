@@ -127,6 +127,7 @@ export function createNewInfiniteGame(currentDate: string, randomYokai: any, sav
       currentDate,
       dailyYokai: savedState.dailyYokai, // Mantener el Yo-kai diario separado
       infiniteYokai: randomYokai, // Asignar el nuevo Yo-kai aleatorio al campo infiniteYokai
+      duelYokai: null, // Inicializar como null para el modo infinito
       guesses: [],
       maxGuesses: 6,
       gameStatus: 'playing',
@@ -145,6 +146,11 @@ export function createNewInfiniteGame(currentDate: string, randomYokai: any, sav
       infiniteStats: savedState.infiniteStats || {
         totalPlayed: savedState.gameMode === 'infinite' ? savedState.totalPlayed : 0,
         totalWins: savedState.gameMode === 'infinite' ? savedState.totalWins : 0
+      },
+      duelStats: savedState.duelStats || {
+        totalPlayed: 0,
+        totalWins: 0,
+        totalLosses: 0
       }
     };
   }
@@ -154,6 +160,7 @@ export function createNewInfiniteGame(currentDate: string, randomYokai: any, sav
     currentDate,
     dailyYokai: null, // No tocar el dailyYokai en modo infinito
     infiniteYokai: randomYokai, // Usar el campo dedicado para el infinito
+    duelYokai: null, // Inicializar como null para el modo infinito
     guesses: [],
     maxGuesses: 6,
     gameStatus: 'playing',
@@ -172,6 +179,11 @@ export function createNewInfiniteGame(currentDate: string, randomYokai: any, sav
     infiniteStats: {
       totalPlayed: 0,
       totalWins: 0
+    },
+    duelStats: {
+      totalPlayed: 0,
+      totalWins: 0,
+      totalLosses: 0
     }
   };
 }
