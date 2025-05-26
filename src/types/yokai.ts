@@ -317,3 +317,15 @@ export interface DuelResult {
   duration: number; // en segundos
   targetYokai: Yokai;
 }
+
+// Resultado de una adivinanza en Wordle
+export type GuessResult = {
+  isCorrect: boolean;
+  tribe: 'correct' | 'incorrect';
+  rank: 'correct' | 'higher' | 'lower' | 'incorrect';
+  element: 'correct' | 'incorrect';
+  game: 'correct' | 'incorrect';
+  weight: 'correct' | 'higher' | 'lower';
+  medalNumber: 'correct' | 'higher' | 'lower';
+  favoriteFood: 'correct' | 'incorrect';
+};
