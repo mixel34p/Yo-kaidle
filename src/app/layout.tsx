@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* Componente cliente para el popup de actualizaciones */}
         <ClientUpdatesWrapper />
-        <main className="container mx-auto px-4 py-8 pb-24 max-w-md">
+        <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
           {children}
         </main>
         <Footer />

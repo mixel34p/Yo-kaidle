@@ -251,12 +251,13 @@ export interface Yokai {
   image?: string; // Otra alternativa para URL de imagen
 }
 
-export type GameMode = 'daily' | 'infinite';
+export type GameMode = 'daily' | 'infinite' | 'duel';
 
 export interface GameState {
   currentDate: string;
   dailyYokai: Yokai | null;
   infiniteYokai: Yokai | null; // Campo para el Yo-kai del modo infinito
+  duelYokai: Yokai | null; // Campo para el Yo-kai del modo duelo
   guesses: Yokai[];
   maxGuesses: number;
   gameStatus: 'playing' | 'won' | 'lost';
@@ -277,15 +278,42 @@ export interface GameState {
     totalPlayed: number;
     totalWins: number;
   };
+  duelStats: {
+    totalPlayed: number;
+    totalWins: number;
+    totalLosses: number;
+  };
 }
 
-export interface GuessResult {
-  isCorrect: boolean;
-  tribe: 'correct' | 'incorrect';
-  rank: 'correct' | 'higher' | 'lower' | 'incorrect';
-  element: 'correct' | 'incorrect';
-  game: 'correct' | 'incorrect';
-  weight: 'correct' | 'higher' | 'lower';
-  medalNumber: 'correct' | 'higher' | 'lower';
-  favoriteFood: 'correct' | 'incorrect';
+// Tipos para el sistema de duelos
+export type AIDifficulty = 'easy' | 'normal' | 'hard';
+
+export type DuelOpponent = 'ai' | 'player' | 'online';
+
+export type DuelTurn = 'player1' | 'player2';
+
+export interface DuelState {
+  id: string;
+  createdAt: string;
+  targetYokai: Yokai;
+  opponentType: DuelOpponent;
+  currentTurn: DuelTurn;
+  player1Guesses: Yokai[];
+  player2Guesses: Yokai[];
+  maxGuesses: number;
+  gameStatus: 'playing' | 'player1_won' | 'player2_won' | 'draw';
+  player1Name: string;
+  player2Name: string;
+  lastAction: string;
+  aiDifficulty?: AIDifficulty;
+  roomCode?: string;
+  isHost?: boolean;
+  lastUpdated?: string;
+}
+
+export interface DuelResult {
+  winner: 'player1' | 'player2' | 'draw';
+  guessCount: number;
+  duration: number; // en segundos
+  targetYokai: Yokai;
 }
