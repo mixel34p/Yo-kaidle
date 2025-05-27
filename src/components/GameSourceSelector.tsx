@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Game } from '@/types/yokai';
+import { Game, gameLogos } from '@/types/yokai';
 
 interface GameSourceSelectorProps {
   onSourcesChange: (selectedSources: Game[]) => void;
@@ -73,29 +73,43 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {availableGames.map((game) => (
           <button
             key={game}
             onClick={() => handleToggleGame(game)}
-            className={`flex items-center p-2 rounded-lg transition-all duration-200 ${
+            className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-300 ${
               selectedGames.includes(game)
-                ? 'bg-blue-500 text-white shadow-md transform scale-105'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg transform scale-105'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
+            title={game}
           >
-            <div className="flex items-center">
-              <div className={`w-5 h-5 mr-2 rounded-full flex items-center justify-center ${
-                selectedGames.includes(game) ? 'bg-white' : 'bg-gray-300'
-              }`}>
-                {selectedGames.includes(game) && (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <span className="text-sm truncate">{game}</span>
+            {/* Icono del juego */}
+            <div className="w-12 h-12 mb-2 rounded-full bg-white p-1 shadow-inner overflow-hidden flex items-center justify-center">
+              <img 
+                src={gameLogos[game]} 
+                alt={game} 
+                className="w-10 h-10 object-contain"
+                onError={(e) => {
+                  e.currentTarget.src = '/images/games/placeholder.png';
+                }}
+              />
             </div>
+            
+            {/* Indicador de selección */}
+            {selectedGames.includes(game) && (
+              <div className="absolute top-1 right-1 bg-white rounded-full w-5 h-5 flex items-center justify-center shadow">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            )}
+            
+            {/* Nombre del juego (truncado y pequeño) */}
+            <span className="text-xs font-medium text-center truncate w-full">
+              {game.replace('Yo-kai Watch ', 'YW')}
+            </span>
           </button>
         ))}
       </div>
