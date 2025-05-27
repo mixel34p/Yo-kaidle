@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Yokai, Tribe, Game, tribeTranslations } from '@/types/yokai';
+import { Yokai, Tribe, Game, tribeTranslations, tribeIcons, gameLogos } from '@/types/yokai';
 import { 
   loadMedallium, 
   getUnlockedYokaiArray, 
