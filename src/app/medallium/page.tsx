@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Yokai, Tribe, Game, tribeTranslations, tribeIcons, gameLogos, rankIcons, foodIcons, elementTranslations } from '@/types/yokai';
+import { Yokai, Tribe, Game, tribeTranslations, tribeIcons, gameLogos, rankIcons, foodIcons, elementIcons, elementTranslations } from '@/types/yokai';
 import { 
   loadMedallium, 
   getUnlockedYokaiArray, 
@@ -366,11 +366,27 @@ export default function Medallium() {
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">Elemento</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    {/* Como no hay iconos definidos para elementos, creamos un div decorativo con el nombre */}
-                    <div className="w-8 h-8 flex items-center justify-center bg-blue-700 text-white rounded-full shadow-md">
-                      <span className="text-xs font-bold">{selectedYokai.element.charAt(0)}</span>
-                    </div>
-                    <span className="sr-only">{elementTranslations[selectedYokai.element] || selectedYokai.element}</span>
+                    <img 
+                      src={elementIcons[selectedYokai.element]} 
+                      alt={elementTranslations[selectedYokai.element] || selectedYokai.element}
+                      className="w-full h-full object-contain drop-shadow-md"
+                      onError={(e) => {
+                        // Fallback a un icono genérico
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          const div = document.createElement('div');
+                          div.className = 'w-8 h-8 flex items-center justify-center bg-blue-700 text-white rounded-full shadow-md';
+                          const span = document.createElement('span');
+                          span.className = 'text-xs font-bold';
+                          span.textContent = selectedYokai.element.charAt(0);
+                          div.appendChild(span);
+                          parent.appendChild(div);
+                        }
+                      }}
+                    />
                   </div>
                 </div>
                 

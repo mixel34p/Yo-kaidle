@@ -24,6 +24,11 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
   }, [availableGames, initialSelectedGames]);
 
   const handleToggleGame = (game: Game) => {
+    // No permitir seleccionar Yo-kai Watch 4
+    if (game === 'Yo-kai Watch 4') {
+      return;
+    }
+    
     // Si es el único juego seleccionado, no permitir deseleccionarlo
     if (selectedGames.length === 1 && selectedGames.includes(game)) {
       return;
@@ -78,12 +83,15 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
           <button
             key={game}
             onClick={() => handleToggleGame(game)}
+            disabled={game === 'Yo-kai Watch 4'}
             className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-300 ${
-              selectedGames.includes(game)
+              game === 'Yo-kai Watch 4'
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60 border border-gray-300'
+              : selectedGames.includes(game)
                 ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg transform scale-105'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
-            title={game}
+            title={game === 'Yo-kai Watch 4' ? 'Próximamente' : game}
           >
             {/* Icono del juego */}
             <div className="w-12 h-12 mb-2 rounded-full bg-white p-1 shadow-inner overflow-hidden flex items-center justify-center">
@@ -109,6 +117,9 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
             {/* Nombre del juego (truncado y pequeño) */}
             <span className="text-xs font-medium text-center truncate w-full">
               {game.replace('Yo-kai Watch ', 'YW')}
+              {game === 'Yo-kai Watch 4' && (
+                <span className="block text-xs text-red-500 font-bold">Próximamente</span>
+              )}
             </span>
           </button>
         ))}
