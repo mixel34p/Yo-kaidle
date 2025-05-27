@@ -7,22 +7,50 @@ import Confetti from '@/components/Confetti';
 import GameOverMessage from '@/components/GameOverMessage';
 import MotivationalHint from '@/components/MotivationalHint';
 import GameRules from '@/components/GameRules';
-import { Yokai, GameState, GameMode } from '@/types/yokai';
+import { Yokai, GameState, GameMode, Game } from '@/types/yokai';
 import { normalizeYokai } from '@/utils/gameLogic';
 import { getDailyYokai, getRandomYokai } from '@/lib/supabase';
 import { compareYokai, getTodayDateString, formatDateForDisplay, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
 import GameModeSelector from '@/components/GameModeSelector';
-// El Footer y UpdatesPopup ahora están en el layout global
+import GameSourceSelector from '@/components/GameSourceSelector';
+import { saveGameSources, loadGameSources } from '@/utils/gameSourcePreferences';
+import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
 
 const MAX_GUESSES = 6;
 
+// Lista de todos los juegos disponibles obtenidos de los tipos
+const AVAILABLE_GAMES: Game[] = [
+  'Yo-kai Watch 1',
+  'Yo-kai Watch 2', 
+  'Yo-kai Watch 3', 
+  'Yo-kai Watch 4', 
+  'Yo-kai Watch Blasters', 
+  'Yo-kai Watch Busters 2',
+  'Yo-kai Watch Sangokushi'
+];
+
 export default function Home() {
+  // Estado para la configuración de juegos
+  const [selectedGameSources, setSelectedGameSources] = useState<Game[]>([]);
+  const [showGameConfig, setShowGameConfig] = useState(false);
+  
+  // Cargar configuración de juegos guardada
+  useEffect(() => {
+    const savedSources = loadGameSources();
+    if (savedSources && savedSources.length > 0) {
+      setSelectedGameSources(savedSources);
+    } else {
+      // Si no hay nada guardado, seleccionar todos los juegos por defecto
+      setSelectedGameSources([...AVAILABLE_GAMES]);
+    }
+  }, []);
+  
   // El popup de actualizaciones ahora se gestiona en el layout global
   // Reiniciar partida infinita: nuevo yokai y limpiar intentos
   const handleNewInfiniteGame = async () => {
     setLoading(true);
     const today = getTodayDateString();
-    const randomYokai = await getRandomYokai();
+    const randomYokai = await getRandomYokai(selectedGameSources);
     if (randomYokai) {
       const newGameState = createNewInfiniteGame(today, randomYokai, gameState);
       setGameState(newGameState);
@@ -33,6 +61,12 @@ export default function Home() {
       saveGameToLocalStorage(newGameState);
     }
     setLoading(false);
+  };
+  
+  // Manejar cambios en la selección de juegos
+  const handleGameSourcesChange = (sources: Game[]) => {
+    setSelectedGameSources(sources);
+    saveGameSources(sources);
   };
   
   // Función para recargar el Yo-kai diario cuando llega medianoche
@@ -549,6 +583,10 @@ export default function Home() {
         // No hay rachas en modo infinito
       }
       
+      // Añadir el Yo-kai al Medallium si es acertado
+      const medallium = loadMedallium();
+      unlockYokai(medallium, targetYokai);
+      
       setMessage('');
       // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas
       const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
@@ -645,21 +683,54 @@ return (
     <div className="mb-4">
       <GameModeSelector currentMode={gameState.gameMode} onModeChange={handleModeChange} />
       {gameState.gameMode === 'infinite' && (
-        <button
-          className="mt-3 w-full py-2 rounded-lg font-semibold text-base shadow bg-gray-200 text-gray-700 flex items-center justify-center gap-2 hover:bg-gray-300 active:bg-gray-400 transition-colors duration-150"
-          onClick={handleNewInfiniteGame}
-          
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <rect x="3" y="3" width="18" height="18" rx="4" fill="white" fillOpacity="0.12" />
-            <circle cx="8" cy="8" r="1.5" fill="white" />
-            <circle cx="16" cy="8" r="1.5" fill="white" />
-            <circle cx="12" cy="12" r="1.5" fill="white" />
-            <circle cx="8" cy="16" r="1.5" fill="white" />
-            <circle cx="16" cy="16" r="1.5" fill="white" />
-          </svg>
-          Nuevo Yo-kai
-        </button>
+        <div className="mt-4 flex flex-col items-center">
+          {showGameConfig ? (
+            <div className="w-full max-w-md mb-4 animate-fadeIn">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-bold text-primary-600">Configuración</h3>
+                <button 
+                  onClick={() => setShowGameConfig(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <GameSourceSelector 
+                availableGames={AVAILABLE_GAMES}
+                initialSelectedGames={selectedGameSources}
+                onSourcesChange={handleGameSourcesChange}
+              />
+              <div className="mt-4 flex justify-center">
+                <button
+                  onClick={() => {
+                    setShowGameConfig(false);
+                    handleNewInfiniteGame();
+                  }}
+                  disabled={loading || selectedGameSources.length === 0}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Jugar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowGameConfig(true)}
+              disabled={loading}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Nuevo Yo-kai
+            </button>
+          )}
+        </div>
       )}
     </div>
 

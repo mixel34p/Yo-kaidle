@@ -230,11 +230,18 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
   }
 }
 
-export async function getRandomYokai(): Promise<Yokai | null> {
-  // Obtiene un Yo-kai completamente aleatorio para el modo infinito
-  const { data, error } = await supabase
+export async function getRandomYokai(gameSources?: Game[]): Promise<Yokai | null> {
+  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos
+  let query = supabase
     .from('yokai')
     .select('*');
+  
+  // Si hay filtro de juegos, aplicarlo
+  if (gameSources && gameSources.length > 0) {
+    query = query.in('game', gameSources);
+  }
+  
+  const { data, error } = await query;
   
   if (error || !data || data.length === 0) {
     console.error('Error fetching random Yo-kai:', error);
