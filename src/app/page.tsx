@@ -696,19 +696,18 @@ return (
     {gameState.gameStatus === 'won' && <Confetti active={true} />}
 
     {/* GAME OVER MESSAGE */}
-    {showGameOver && gameState.gameStatus !== 'playing' && (
-      <GameOverMessage 
-        dailyYokai={gameState.gameMode === 'daily' ? gameState.dailyYokai : (gameState.infiniteYokai || gameState.dailyYokai)}
-        won={gameState.gameStatus === 'won'} 
+    {showGameOver && ((gameState.gameMode === 'daily' ? gameState.dailyYokai : gameState.infiniteYokai) && (
+      <GameOverMessage
+        dailyYokai={(gameState.gameMode === 'daily' ? gameState.dailyYokai : gameState.infiniteYokai) as Yokai}
+        won={gameState.gameStatus === 'won'}
         gameMode={gameState.gameMode}
+        gameStatus={gameState.gameStatus}
         onClose={() => setShowGameOver(false)}
         showStats={() => setShowStats(true)}
-        playAgain={handleNewInfiniteGame}
-        gameStatus={gameState.gameStatus}
+        playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : undefined}
         onMidnightReached={handleMidnightReached}
-        gameState={gameState} // Pasar el estado completo del juego para compartir resultados
       />
-    )}
+    ))}
 
     {/* SELECCIÓN DE MODO DE JUEGO */}
     <div className="mb-4">

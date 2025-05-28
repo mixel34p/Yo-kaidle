@@ -37,9 +37,8 @@ Un juego de adivinanzas diarias basado en el universo de Yo-kai Watch, inspirado
    - tribe (text)
    - rank (text)
    - element (text)
-   - height (float)
-   - weight (float)
    - medalNumber (int)
+   - game (text)
    - imageUrl (text)
 5. Inicia el servidor de desarrollo:
    ```
