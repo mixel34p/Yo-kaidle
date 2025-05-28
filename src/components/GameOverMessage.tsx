@@ -2,17 +2,26 @@
 
 import React, { useState, useEffect } from 'react';
 import { Yokai, tribeIcons, elementColors, elementIcons, rankIcons, gameLogos, GameMode, tribeTranslations, elementTranslations, foodTranslations, foodIcons } from '@/types/yokai';
+import { Share2, X, Repeat } from 'lucide-react';
 import NextYokaiTimer from './NextYokaiTimer';
+import ShareResults from './ShareResults';
+import { GameState } from '../types/gameTypes';
+
+// Import dayjs for date handling
+import * as dayjs from 'dayjs';
+import * as dayOfYear from 'dayjs/plugin/dayOfYear';
+dayjs.extend(dayOfYear);
 
 interface GameOverMessageProps {
   dailyYokai: Yokai;
   won: boolean;
-  gameMode: GameMode; // Agregar el modo de juego
-  onClose?: () => void; // Prop para cerrar la ventana
-  showStats?: () => void; // Prop para mostrar estadísticas
-  playAgain?: () => void; // Nueva prop para jugar de nuevo (solo para modo infinito)
-  gameStatus?: 'playing' | 'won' | 'lost'; // Estado actual del juego
-  onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
+  gameMode: GameMode; 
+  onClose?: () => void;
+  showStats?: () => void;
+  playAgain?: () => void;
+  gameStatus?: 'playing' | 'won' | 'lost';
+  onMidnightReached?: () => void;
+  gameState?: GameState; // Estado completo del juego para compartir
 }
 
 const GameOverMessage: React.FC<GameOverMessageProps> = ({ 
@@ -23,10 +32,12 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   showStats,
   playAgain,
   gameStatus = won ? 'won' : 'lost', // Por defecto, usar won para determinar el estado
-  onMidnightReached
+  onMidnightReached,
+  gameState
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showShareSection, setShowShareSection] = useState(false);
   
   // Usar los iconos de elementos importados arriba
 
@@ -225,6 +236,14 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
             </div>
           )}
           
+          {/* Sección de compartir resultados */}
+          {showShareSection && gameState && (
+            <div className="mt-6 mb-6 p-4 rounded-lg animate-fade-in" style={{ background: 'rgba(255, 255, 255, 0.1)' }}>
+              <h3 className="text-lg font-bold mb-3 text-center text-white">Comparte tu resultado</h3>
+              <ShareResults gameState={gameState} />
+            </div>
+          )}
+
           {/* Botones */}
           <div className="flex flex-col space-y-3">
             {/* Primer fila de botones */}
@@ -251,15 +270,25 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 </button>
               )}
             </div>
-            
-            {/* Segunda fila para el botón de cerrar */}
-            <button
-              onClick={handleCloseClick}
-              className="py-2 rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
-              style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)', color: 'white' }}
-            >
-              Cerrar
-            </button>
+
+            {/* Segunda fila para compartir/cerrar */}
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowShareSection(!showShareSection)}
+                className="flex-1 py-3 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
+                style={{ background: 'linear-gradient(135deg, var(--secondary-color), #0A84FF)' }}
+              >
+                {showShareSection ? 'Ocultar opciones' : 'Compartir resultado'}
+              </button>
+              
+              <button
+                onClick={handleCloseClick}
+                className="flex-1 py-2 rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
+                style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)', color: 'white' }}
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
         </div>
       </div>
