@@ -177,7 +177,7 @@ body {
   .yokai-cell-incorrect {
     @apply text-white;
     background: linear-gradient(135deg, #835959, #b45555);
-    border-color: #334155;
+    border-color: #553333;
   }
 
   .game-title {
