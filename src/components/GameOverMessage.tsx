@@ -13,6 +13,8 @@ interface GameOverMessageProps {
   playAgain?: () => void; // Nueva prop para jugar de nuevo (solo para modo infinito)
   gameStatus?: 'playing' | 'won' | 'lost'; // Estado actual del juego
   onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
+  guesses?: Yokai[]; // Intentos realizados por el jugador (array de Yokais)
+  maxGuesses?: number; // Número máximo de intentos permitidos
 }
 
 const GameOverMessage: React.FC<GameOverMessageProps> = ({ 
@@ -23,10 +25,15 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   showStats,
   playAgain,
   gameStatus = won ? 'won' : 'lost', // Por defecto, usar won para determinar el estado
-  onMidnightReached
+  onMidnightReached,
+  guesses = [],
+  maxGuesses = 6
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+  const [showShareScreen, setShowShareScreen] = useState(false);
+  const [isSharing, setIsSharing] = useState(false); // Para evitar múltiples operaciones de compartir simultáneas
   
   // Usar los iconos de elementos importados arriba
 
@@ -93,10 +100,322 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
     }
   };
 
+  // Generar la línea de emojis para representar los intentos
+  const generateEmojiResults = () => {
+    if (!guesses || guesses.length === 0) return '';
+    
+    const resultText = guesses.map(yokai => {
+      // Comparar el Yokai adivinado con el Yokai diario para obtener el resultado
+      const normalizedYokai = yokai;
+      const result = compareYokai(dailyYokai, normalizedYokai);
+      
+      // Crear una línea de emojis para cada atributo
+      const tribeEmoji = result.tribe === 'correct' ? '🟩' : '🟥';
+      const rankEmoji = result.rank === 'correct' ? '🟩' : (result.rank === 'higher' || result.rank === 'lower' ? '🟨' : '🟥');
+      const elementEmoji = result.element === 'correct' ? '🟩' : '🟥';
+      const foodEmoji = result.favoriteFood === 'correct' ? '🟩' : '🟥';
+      const gameEmoji = result.game === 'correct' ? '🟩' : '🟥';
+      
+      return `${tribeEmoji}${rankEmoji}${elementEmoji}${foodEmoji}${gameEmoji}`;
+    }).join('\n');
+    
+    return resultText;
+  };
+  
+
+  
+  // Función para comparar dos Yokais y determinar el resultado
+  const compareYokai = (targetYokai: Yokai, guessedYokai: Yokai) => {
+    const result: any = {
+      isCorrect: targetYokai.id === guessedYokai.id
+    };
+    
+    // Verificar tribu
+    result.tribe = targetYokai.tribe === guessedYokai.tribe ? 'correct' : 'incorrect';
+    
+    // Verificar rango (A, B, C, etc.)
+    if (targetYokai.rank === guessedYokai.rank) {
+      result.rank = 'correct';
+    } else {
+      // Convertir rango a valor numérico para comparar
+      const rankValues: { [key: string]: number } = {
+        'S': 6, 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1
+      };
+      
+      const targetRankValue = rankValues[targetYokai.rank] || 0;
+      const guessedRankValue = rankValues[guessedYokai.rank] || 0;
+      
+      if (guessedRankValue > targetRankValue) {
+        result.rank = 'lower'; // El rango adivinado es mayor (S es mayor que A)
+      } else {
+        result.rank = 'higher'; // El rango adivinado es menor
+      }
+    }
+    
+    // Verificar elemento
+    result.element = targetYokai.element === guessedYokai.element ? 'correct' : 'incorrect';
+    
+    // Verificar comida favorita
+    result.favoriteFood = targetYokai.favoriteFood === guessedYokai.favoriteFood ? 'correct' : 'incorrect';
+    
+    // Verificar juego
+    result.game = targetYokai.game === guessedYokai.game ? 'correct' : 'incorrect';
+    
+    return result;
+  };
+
+  // Crear el mensaje a compartir
+  const createShareMessage = () => {
+    // Determinar si mostrar el nombre del Yo-kai (solo en modo infinito)
+    const showYokaiName = gameMode === 'infinite';
+    
+    // Traducir el modo de juego al español
+    const modoJuego = gameMode === 'daily' ? 'diario' : 'infinito';
+    
+    // Encabezado con el modo y los intentos
+    let message = `¡He adivinado el Yokaidle en modo ${modoJuego}\n!`;
+    message += `Intentos: ${guesses.length}/${maxGuesses}\n\n`;
+    
+    // Añadir línea de emojis para cada intento
+    message += generateEmojiResults();
+    
+    // Añadir información del Yo-kai
+    message += `\n\n`;
+    // Mostrar el nombre del Yo-kai solo en modo infinito
+    if (showYokaiName) {
+      message += `Yo-kai: ${dailyYokai.name}\n`;
+      message += `Tribu: ${tribeTranslations[dailyYokai.tribe]}`;
+      message += `\nJuego: ${dailyYokai.game}`;
+    }
+    
+    
+    // Añadir enlace al juego
+    message += `\n\nPruebalo tu mismo: https://yokaidle.vercel.app`;
+    
+    return message;
+  };
+
+  // Abrir la pantalla de compartir
+  const openShareScreen = () => {
+    setShowShareScreen(true);
+  };
+
+  // Cerrar la pantalla de compartir
+  const closeShareScreen = () => {
+    setShowShareScreen(false);
+  };
+
+  // Función para compartir usando Web Share API
+  const handleShare = async () => {
+    // Evitar múltiples operaciones de compartir simultáneas
+    if (isSharing) return;
+    
+    setIsSharing(true);
+    const shareMessage = createShareMessage();
+    
+    try {
+      if (navigator.share) {
+        // Usar Web Share API si está disponible
+        await navigator.share({
+          title: 'Yo-kaidle - Resultado',
+          text: shareMessage
+        });
+      } else {
+        // Fallback a copiar al portapapeles
+        await navigator.clipboard.writeText(shareMessage);
+        setShareStatus('copied');
+        // Resetear el estado después de 3 segundos
+        setTimeout(() => {
+          setShareStatus('idle');
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Error al compartir:', error);
+      setShareStatus('error');
+      // Resetear el estado después de 3 segundos
+      setTimeout(() => {
+        setShareStatus('idle');
+      }, 3000);
+    } finally {
+      // Importante: resetear el estado de compartir para permitir nuevos intentos
+      setTimeout(() => {
+        setIsSharing(false);
+      }, 1000);
+    }
+  };
+
+  // Función para compartir en Twitter
+  const handleTwitterShare = () => {
+    const shareMessage = createShareMessage();
+    const encodedMessage = encodeURIComponent(shareMessage);
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedMessage}`;
+    window.open(twitterUrl, '_blank');
+  };
+  
+  // Función para compartir en Facebook
+  const handleFacebookShare = () => {
+    const shareUrl = 'https://yokaidle.vercel.app';
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(facebookUrl, '_blank');
+  };
+  
+  // Función para compartir por WhatsApp
+  const handleWhatsAppShare = () => {
+    const shareMessage = createShareMessage();
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+  
+  // Función para compartir por correo electrónico
+  const handleEmailShare = () => {
+    const shareMessage = createShareMessage();
+    const emailSubject = 'Yo-kaidle - Mi resultado';
+    const emailBody = shareMessage;
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    window.open(mailtoUrl);
+  };
+  
+  // Función para copiar al portapapeles
+  const handleCopyToClipboard = async () => {
+    try {
+      const shareMessage = createShareMessage();
+      await navigator.clipboard.writeText(shareMessage);
+      setShareStatus('copied');
+      // Resetear el estado después de 3 segundos
+      setTimeout(() => {
+        setShareStatus('idle');
+      }, 3000);
+    } catch (error) {
+      console.error('Error al copiar al portapapeles:', error);
+      setShareStatus('error');
+    }
+  };
+
   return (
-    <div className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-      {/* Fondo oscuro con desenfoque */}
-      <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onClick={handleCloseClick}></div>
+    <>
+      {/* Pantalla de compartir */}
+      {showShareScreen && (
+        <div className="fixed inset-0 flex items-center justify-center z-[60] transition-opacity duration-300">
+          {/* Fondo oscuro con desenfoque */}
+          <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onClick={closeShareScreen}></div>
+          
+          {/* Ventana modal de compartir */}
+          <div 
+            className="relative max-w-md w-11/12 rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-100"
+            style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(10px)', color: 'white', border: '1px solid rgba(66, 196, 255, 0.4)' }}
+          >
+            {/* Cabecera */}
+            <div className="p-4 text-center bg-gradient-to-r from-[#22AD55] to-[#0F5298]">
+              <h2 className="text-2xl font-bold text-white drop-shadow-md">
+                Compartir Resultado
+              </h2>
+            </div>
+            
+            {/* Contenido */}
+            <div className="p-6">
+              {/* Vista previa del mensaje */}
+              <div className="mb-6 p-4 bg-white bg-opacity-10 rounded-lg">
+                <h3 className="text-lg font-bold mb-2">Vista previa:</h3>
+                <pre className="whitespace-pre-wrap text-sm font-mono bg-opacity-20 bg-black p-2 rounded">
+                  {createShareMessage()}
+                </pre>
+              </div>
+
+
+              
+              {/* Opciones de compartir */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {/* Copiar al portapapeles */}
+                <button
+                  onClick={handleCopyToClipboard}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                  </svg>
+                  <span>{shareStatus === 'copied' ? '¡Copiado!' : 'Copiar al portapapeles'}</span>
+                </button>
+                
+                {/* Web Share API (si está disponible) */}
+                <button
+                  onClick={handleShare}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                  disabled={isSharing}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>Compartir</span>
+                </button>
+                
+                {/* Twitter */}
+                <button
+                  onClick={handleTwitterShare}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#1da1f2" className="mb-2">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                  </svg>
+                  <span>Twitter</span>
+                </button>
+                
+                {/* WhatsApp */}
+                <button
+                  onClick={handleWhatsAppShare}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#25D366" className="mb-2">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                  </svg>
+                  <span>WhatsApp</span>
+                </button>
+                
+                {/* Facebook */}
+                <button
+                  onClick={handleFacebookShare}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#1877F2" className="mb-2">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                  </svg>
+                  <span>Facebook</span>
+                </button>
+                
+                {/* Email */}
+                <button
+                  onClick={handleEmailShare}
+                  className="p-3 rounded-lg shadow-md flex flex-col items-center justify-center transition-all hover:scale-105"
+                  style={{ background: 'rgba(234, 242, 255, 0.15)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <span>Email</span>
+                </button>
+              </div>
+              
+              {/* Botón de cerrar */}
+              <button
+                onClick={closeShareScreen}
+                className="w-full py-2 rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
+                style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)', color: 'white' }}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      <div className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Fondo oscuro con desenfoque */}
+        <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm" onClick={handleCloseClick}></div>
       
       {/* Ventana modal */}
       <div 
@@ -251,6 +570,23 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 </button>
               )}
             </div>
+
+            {/* Botón de compartir (solo mostrar cuando se ha ganado) */}
+            {won && (
+              <div className="flex space-x-3">
+                {/* Botón principal de compartir que abre la pantalla de compartir */}
+                <button
+                  onClick={openShareScreen}
+                  className="flex-1 py-3 px-4 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105 flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  Compartir Resultado
+                </button>
+              </div>
+            )}
             
             {/* Segunda fila para el botón de cerrar */}
             <button
@@ -264,6 +600,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 

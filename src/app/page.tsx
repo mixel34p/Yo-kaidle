@@ -706,6 +706,8 @@ return (
         showStats={() => setShowStats(true)}
         playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : undefined}
         onMidnightReached={handleMidnightReached}
+        guesses={gameState.guesses}
+        maxGuesses={gameState.maxGuesses}
       />
     ))}
 
