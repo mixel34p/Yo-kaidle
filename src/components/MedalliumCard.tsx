@@ -1,80 +1,187 @@
 'use client';
 
-import React from 'react';
-import { Yokai, tribeIcons, gameLogos } from '@/types/yokai';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Yokai, tribeIcons, elementIcons, rankIcons, foodIcons, gameLogos } from '@/types/yokai';
+import { Info, Maximize2, Heart, Clock, Medal } from 'lucide-react';
 
 interface MedalliumCardProps {
   yokai: Yokai;
-  onClick?: (yokai: Yokai) => void;
+  onClick: (yokai: Yokai) => void;
+  view: 'grid' | 'list';
+  isLocked?: boolean;
+  unlockedDate?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: (yokaiId: number) => void;
 }
 
-const MedalliumCard: React.FC<MedalliumCardProps> = ({ yokai, onClick }) => {
+const MedalliumCard: React.FC<MedalliumCardProps> = ({
+  yokai,
+  onClick,
+  view = 'grid',
+  isLocked = false,
+  unlockedDate = '',
+  isFavorite = false,
+  onToggleFavorite
+}) => {
+  const [isHovering, setIsHovering] = useState(false);
+  
   const handleClick = () => {
-    if (onClick) {
+    if (!isLocked) {
       onClick(yokai);
     }
   };
-
+  
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onToggleFavorite && !isLocked) {
+      onToggleFavorite(yokai.id);
+    }
+  };
+  
   // Asegurar que tenemos una URL de imagen
-  const imageUrl = yokai.imageurl || yokai.image_url || yokai.img || yokai.image || '/images/yokai-placeholder.png';
+  const imageUrl = yokai.imageurl || yokai.image || '/images/yokai-placeholder.png';
+
+  // Animaciones para las tarjetas
+  const cardVariants = {
+    hover: { 
+      y: -5,
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+    },
+    tap: { scale: 0.98 }
+  };
   
   return (
-    <div 
-      className="medallium-card bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:rotate-1"
+    <motion.div
+      className={`medallium-card relative ${
+        view === 'grid' 
+          ? 'w-full rounded-lg overflow-hidden min-w-[140px]' 
+          : 'flex items-center p-2 rounded-md'
+      } ${
+        isLocked 
+          ? 'bg-gray-200 grayscale opacity-60' 
+          : 'bg-gradient-to-br from-white to-gray-100 shadow-md'
+      } transition-all duration-300`}
+      whileHover={!isLocked ? "hover" : undefined}
+      whileTap={!isLocked ? "tap" : undefined}
+      variants={cardVariants}
       onClick={handleClick}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
-      <div className="relative">
-        {/* Fondo para la imagen con un patrón sutil */}
-        <div className="relative h-32 overflow-hidden" 
-          style={{ 
-            background: `radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(240,249,255,1) 100%)`,
-            backgroundSize: '8px 8px'
-          }}>
-          <img 
-            src={imageUrl} 
-            alt={yokai.name}
-            className="w-full h-full object-contain p-1 drop-shadow-md"
-            onError={(e) => {
-              // Fallback a imagen por defecto si hay error
-              e.currentTarget.src = '/images/yokai-placeholder.png';
-            }}
-          />
+      {/* Eliminamos el indicador de fecha de desbloqueo */}
+      
+      {/* Icono de favorito */}
+      {!isLocked && onToggleFavorite && (
+        <button 
+          onClick={handleFavoriteClick}
+          className={`absolute top-1 left-1 p-1 rounded-full z-10 transition-colors ${
+            isFavorite 
+              ? 'bg-red-100 text-red-500' 
+              : 'bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-300'
+          }`}
+        >
+          <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
+        </button>
+      )}
+      
+      {/* Imagen y contenido principal */}
+      <div className={view === 'grid' ? 'p-3 flex flex-col items-center' : 'flex items-center'}>
+        {/* Imagen del Yo-kai */}
+        <div className={`relative ${view === 'grid' ? 'w-24 h-24' : 'w-16 h-16'} flex-shrink-0`}>
+          {isLocked ? (
+            <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center">
+              <span className="text-gray-500 text-xs">???</span>
+            </div>
+          ) : (
+            <img 
+              src={imageUrl} 
+              alt={yokai.name}
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.currentTarget.src = '/images/yokai-placeholder.png';
+              }}
+            />
+          )}
+          
+          {/* Medalla numerada */}
+          {!isLocked && (
+            <div className="absolute -bottom-2 -right-2 bg-yellow-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">
+              {yokai.medalNumber}
+            </div>
+          )}
         </div>
         
-        {/* Icono de tribu con efecto visual mejorado */}
-        <div className="absolute top-2 left-2 bg-white rounded-full p-1 shadow-md transform hover:scale-110 transition-transform">
-          <img 
-            src={tribeIcons[yokai.tribe]} 
-            alt={yokai.tribe} 
-            className="w-6 h-6"
-            title={yokai.tribe}
-          />
-        </div>
-        
-        {/* Icono de juego con efecto visual mejorado */}
-        <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md transform hover:scale-110 transition-transform">
-          <img 
-            src={gameLogos[yokai.game]} 
-            alt={yokai.game} 
-            className="w-6 h-6"
-            title={yokai.game}
-          />
-        </div>
-        
-        {/* Gradiente más suave y etiqueta más bonita */}
-        <div className="absolute bottom-0 left-0 bg-gradient-to-t from-blue-900 via-blue-900/80 to-transparent w-full p-2 pt-8">
-          <div className="flex items-center">
-            <span className="text-xs font-bold text-white bg-blue-600 rounded-md px-1.5 py-0.5 mr-1.5 shadow-inner">
-              #{yokai.medalNumber}
-            </span>
-            <h3 className="text-sm font-bold text-white truncate drop-shadow-sm">
-              {yokai.name}
-            </h3>
-          </div>
+        {/* Información del Yo-kai */}
+        <div className={view === 'grid' ? 'mt-3 text-center w-full' : 'ml-3 flex-grow'}>
+          <h3 className={`font-bold ${view === 'grid' ? 'text-md' : 'text-lg'} truncate`}>
+            {isLocked ? '???' : yokai.name}
+          </h3>
+          
+          {/* Atributos visibles */}
+          {!isLocked && (
+            <div className={`flex ${view === 'grid' ? 'justify-center' : ''} items-center space-x-2 mt-1`}>
+              <img src={tribeIcons[yokai.tribe]} alt={yokai.tribe} className="w-5 h-5" title={yokai.tribe} />
+              <img src={elementIcons[yokai.element]} alt={yokai.element} className="w-5 h-5" title={yokai.element} />
+              <img src={rankIcons[yokai.rank]} alt={yokai.rank} className="w-5 h-5" title={yokai.rank} />
+              {view === 'list' && yokai.game && (
+                <div className="ml-1 flex-shrink-0">
+                  {/* Intentamos encontrar el logo por el nombre exacto del juego */}
+                  <img 
+                    src={gameLogos[yokai.game as keyof typeof gameLogos] || ''}
+                    alt={yokai.game} 
+                    title={yokai.game}
+                    className="w-10 h-5 object-contain" 
+                    onError={(e) => {
+                      // Si falla la carga de la imagen, mostrar el texto abreviado
+                      const target = e.currentTarget.parentElement;
+                      if (target) {
+                        // Convertir 'Yo-kai Watch X' a 'YWX'
+                        const shortName = yokai.game
+                          .replace(/Yo-kai Watch/i, 'YW')
+                          .replace(/Blasters/i, 'B')
+                          .replace(/Busters/i, 'B')
+                          .replace(/Sangokushi/i, 'S');
+                        target.innerHTML = `<span class="text-xs text-gray-500">${shortName}</span>`;
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+      
+      {/* Indicador para expandir vista detallada */}
+      {!isLocked && (
+        <div className={`expand-indicator ${
+          view === 'grid' ? 'mt-1 text-center' : 'ml-auto'
+        } opacity-60 hover:opacity-100`}>
+          <Maximize2 size={16} className="text-blue-500" />
+        </div>
+      )}
+      
+      {/* Overlay de información en hover (solo en vista grid) */}
+      {view === 'grid' && !isLocked && isHovering && (
+        <motion.div 
+          className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center text-white p-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="text-center">
+            <div className="flex justify-center space-x-3 mb-2">
+              <img src={tribeIcons[yokai.tribe]} alt={yokai.tribe} className="w-6 h-6" />
+              <img src={elementIcons[yokai.element]} alt={yokai.element} className="w-6 h-6" />
+              <img src={rankIcons[yokai.rank]} alt={yokai.rank} className="w-6 h-6" />
+            </div>
+            <p className="text-xs opacity-80">Juego: {yokai.game.replace('Yo-kai Watch', 'YW')}</p>
+            <p className="mt-1 text-xs font-semibold">¡Pulsa para ver detalles!</p>
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Yokai, Tribe, Game, tribeTranslations, tribeIcons, gameLogos, rankIcons, foodIcons, elementIcons, elementTranslations } from '@/types/yokai';
 import { 
   loadMedallium, 
@@ -14,12 +15,21 @@ import {
   calculateMedalliumStats 
 } from '@/utils/medalliumManager';
 import MedalliumCard from '@/components/MedalliumCard';
+import MedalliumDetail from '@/components/MedalliumDetail';
 import { getAllYokai } from '@/lib/supabase';
+import { Search, Grid, List, Heart, Filter, SlidersHorizontal, ArrowDownAZ, Hash, ChevronDown, X, RefreshCw } from 'lucide-react';
 
+// Tipos para la ordenación y filtros
 type SortOption = 'number' | 'name' | 'tribe';
 type FilterOption = string | null;
+type ViewMode = 'grid' | 'list';
+type UnlockDates = Record<string, string>; // Mapeo de ID de Yo-kai a fecha de desbloqueo
+
+// Importamos MedalliumData desde medalliumManager
+import { MedalliumData } from '@/utils/medalliumManager';
 
 export default function Medallium() {
+  // Estados para Yo-kai y filtrado
   const [unlockedYokai, setUnlockedYokai] = useState<Yokai[]>([]);
   const [filteredYokai, setFilteredYokai] = useState<Yokai[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,10 +37,49 @@ export default function Medallium() {
   const [sortBy, setSortBy] = useState<SortOption>('number');
   const [tribeFilter, setTribeFilter] = useState<FilterOption>(null);
   const [gameFilter, setGameFilter] = useState<FilterOption>(null);
+  const [rankFilter, setRankFilter] = useState<FilterOption>(null);
+  const [elementFilter, setElementFilter] = useState<FilterOption>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [tribes, setTribes] = useState<Tribe[]>([]);
   const [games, setGames] = useState<Game[]>([]);
   const [selectedYokai, setSelectedYokai] = useState<Yokai | null>(null);
   const [stats, setStats] = useState({ totalUnlocked: 0, totalYokai: 0, percentage: 0 });
+  
+  // Estados para UI y preferencias de usuario
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [showFilters, setShowFilters] = useState(false);
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const [unlockDates, setUnlockDates] = useState<UnlockDates>({});
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
+
+  // Cargar preferencias del usuario desde localStorage
+  useEffect(() => {
+    const loadUserPreferences = () => {
+      try {
+        // Acceder al localStorage para obtener favoritos y modo de vista
+        const storedFavorites = localStorage.getItem('medalliumFavorites');
+        if (storedFavorites) {
+          setFavorites(JSON.parse(storedFavorites));
+        }
+        
+        const storedViewMode = localStorage.getItem('medalliumViewMode') as ViewMode | null;
+        if (storedViewMode && (storedViewMode === 'grid' || storedViewMode === 'list')) {
+          setViewMode(storedViewMode);
+        }
+        
+        const storedUnlockDates = localStorage.getItem('medalliumUnlockDates');
+        if (storedUnlockDates) {
+          setUnlockDates(JSON.parse(storedUnlockDates));
+        }
+      } catch (error) {
+        console.error('Error cargando preferencias del usuario:', error);
+      }
+    };
+    
+    loadUserPreferences();
+  }, []);
 
   // Cargar datos del medallium al montar el componente
   useEffect(() => {
@@ -44,6 +93,18 @@ export default function Medallium() {
         // Cargar los Yo-kai desbloqueados del medallium
         const medallium = loadMedallium();
         const unlocked = getUnlockedYokaiArray(medallium);
+        
+        // Guardar fechas de desbloqueo si no existen ya
+        const dates: UnlockDates = { ...unlockDates };
+        unlocked.forEach(yokai => {
+          const yokaiIdStr = yokai.id.toString();
+          if (!dates[yokaiIdStr] && medallium.unlockedYokai[yokai.id]) {
+            // Si está desbloqueado pero no tenemos fecha guardada, usamos la fecha actual
+            dates[yokaiIdStr] = new Date().toLocaleDateString();
+          }
+        });
+        setUnlockDates(dates);
+        localStorage.setItem('medalliumUnlockDates', JSON.stringify(dates));
         
         // Extraer todas las tribus y juegos disponibles para los filtros
         const uniqueTribes = Array.from(new Set(allYokai.map(y => y.tribe))) as Tribe[];
@@ -66,13 +127,19 @@ export default function Medallium() {
     };
     
     loadData();
-  }, []);
+  }, []); // Solo ejecutar al montar el componente
 
   // Aplicar filtros y ordenación cuando cambien los criterios
   useEffect(() => {
     // Primero aplicar los filtros
     let filtered = unlockedYokai;
     
+    // Filtrar por favoritos si está activado
+    if (showFavoritesOnly) {
+      filtered = filtered.filter(yokai => favorites.includes(yokai.id));
+    }
+    
+    // Aplicar filtros de categoría
     if (tribeFilter) {
       filtered = filterByTribe(filtered, tribeFilter);
     }
@@ -81,7 +148,27 @@ export default function Medallium() {
       filtered = filterByGame(filtered, gameFilter);
     }
     
-    // Luego aplicar la ordenación
+    if (rankFilter) {
+      filtered = filtered.filter(yokai => yokai.rank === rankFilter);
+    }
+    
+    if (elementFilter) {
+      filtered = filtered.filter(yokai => yokai.element === elementFilter);
+    }
+    
+    // Aplicar búsqueda por texto
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(yokai => 
+        yokai.name.toLowerCase().includes(query) || 
+        yokai.tribe.toLowerCase().includes(query) ||
+        yokai.element.toLowerCase().includes(query) ||
+        yokai.rank.toLowerCase().includes(query) ||
+        (yokai.game && yokai.game.toLowerCase().includes(query))
+      );
+    }
+    
+    // Aplicar ordenación
     switch (sortBy) {
       case 'number':
         filtered = sortByMedalNumber(filtered);
@@ -95,7 +182,27 @@ export default function Medallium() {
     }
     
     setFilteredYokai(filtered);
-  }, [unlockedYokai, sortBy, tribeFilter, gameFilter]);
+  }, [
+    unlockedYokai, 
+    sortBy, 
+    tribeFilter, 
+    gameFilter, 
+    rankFilter, 
+    elementFilter, 
+    searchQuery, 
+    showFavoritesOnly, 
+    favorites
+  ]);
+
+  // Guardar favoritos en localStorage cuando cambien
+  useEffect(() => {
+    localStorage.setItem('medalliumFavorites', JSON.stringify(favorites));
+  }, [favorites]);
+  
+  // Guardar preferencia de vista en localStorage cuando cambie
+  useEffect(() => {
+    localStorage.setItem('medalliumViewMode', viewMode);
+  }, [viewMode]);
 
   // Manejar la selección de un Yo-kai
   const handleYokaiClick = (yokai: Yokai) => {
@@ -106,9 +213,59 @@ export default function Medallium() {
   const closeDetail = () => {
     setSelectedYokai(null);
   };
+  
+  // Alternar favorito
+  const toggleFavorite = (yokaiId: number) => {
+    setFavorites(prev => {
+      if (prev.includes(yokaiId)) {
+        return prev.filter(id => id !== yokaiId);
+      } else {
+        return [...prev, yokaiId];
+      }
+    });
+  };
+  
+  // Cambiar modo de vista
+  const toggleViewMode = () => {
+    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+  };
+  
+  // Limpiar todos los filtros
+  const clearAllFilters = () => {
+    setTribeFilter(null);
+    setGameFilter(null);
+    setRankFilter(null);
+    setElementFilter(null);
+    setSearchQuery('');
+    setShowFavoritesOnly(false);
+    setSortBy('number');
+  };
+  
+  // Comprobar si hay algún filtro activo
+  const hasActiveFilters = () => {
+    return tribeFilter !== null || 
+           gameFilter !== null || 
+           rankFilter !== null || 
+           elementFilter !== null || 
+           searchQuery.trim() !== '' || 
+           showFavoritesOnly || 
+           sortBy !== 'number';
+  };
+  
+  // Función para obtener la fecha de desbloqueo formateada
+  const getUnlockDate = (yokaiNumber: number): string | undefined => {
+    const unlockDateObj = unlockDates ? unlockDates[yokaiNumber.toString()] : undefined;
+    if (!unlockDateObj) return undefined;
+    
+    return new Date(unlockDateObj).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
 
   return (
-    <div className="medallium-container pb-20">
+    <div className="medallium-container pb-20 px-4 md:px-6 max-w-7xl mx-auto">
       {/* Cabecera con título y botón de volver mejorado */}
       <header className="mb-6">
         <div className="relative flex items-center justify-center py-3">
@@ -123,10 +280,22 @@ export default function Medallium() {
           </Link>
           
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
-              Mi Medallium
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">Colección de Yo-kai desbloqueados</p>
+            <div className="relative inline-block">
+              <h1 className="text-4xl font-extrabold text-center text-gray-800 relative z-10">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-700">
+                  Mi Medallium
+                </span>
+              </h1>
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"></div>
+            </div>
+            <p className="mt-2 text-sm font-medium text-gray-600">
+              <span className="inline-flex items-center bg-blue-50/70 px-3 py-1 rounded-full border border-blue-100">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Colección de Yo-kai desbloqueados
+              </span>
+            </p>
           </div>
         </div>
       </header>
@@ -164,90 +333,236 @@ export default function Medallium() {
         </div>
       </div>
 
-      {/* Filtros y ordenación mejorados */}
-      <div className="mb-6 px-4">
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 shadow-md border border-blue-200">
-          <h3 className="text-base font-semibold text-blue-800 mb-3 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
-            </svg>
-            Filtros y Ordenación
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* Ordenar por - con iconos */}
-            <div className="">
-              <label className="block text-sm font-medium text-blue-700 mb-1">Ordenar por</label>
-              <div className="relative">
-                <select 
-                  className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                >
-                  <option value="number">Número</option>
-                  <option value="name">Nombre</option>
-                  <option value="tribe">Tribu</option>
-                </select>
-                <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-                  </svg>
-                </div>
-              </div>
+      {/* Barra de búsqueda y herramientas */}
+      <div className="mb-4 sticky top-0 z-30 bg-white bg-opacity-95 backdrop-blur-sm py-3 px-2 border-b border-gray-100 shadow-sm">
+        <div className="flex flex-wrap gap-2 items-center">
+          {/* Barra de búsqueda */}
+          <div className="flex-grow min-w-[200px] relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={16} className="text-gray-400" />
             </div>
-            
-            {/* Filtrar por tribu - con iconos */}
-            <div className="">
-              <label className="block text-sm font-medium text-blue-700 mb-1">Tribu</label>
-              <div className="relative">
-                <select 
-                  className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
-                  value={tribeFilter || ''}
-                  onChange={(e) => setTribeFilter(e.target.value || null)}
-                >
-                  <option value="">Todas las tribus</option>
-                  {tribes.map((tribe) => (
-                    <option key={tribe} value={tribe}>
-                      {tribeTranslations[tribe] || tribe}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                  </svg>
+            <input
+              type="text"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"
+              placeholder="Buscar Yo-kai..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                onClick={() => setSearchQuery('')}
+              >
+                <X size={16} className="text-gray-400 hover:text-gray-600" />
+              </button>
+            )}
+          </div>
+
+          {/* Botones de acciones */}
+          <div className="flex gap-1 sm:gap-2">
+            {/* Botón de vista (grid/lista) */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={toggleViewMode}
+              title={viewMode === 'grid' ? 'Cambiar a vista de lista' : 'Cambiar a vista de cuadrícula'}
+            >
+              {viewMode === 'grid' ? <List size={18} /> : <Grid size={18} />}
+            </button>
+
+            {/* Botón de favoritos */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${showFavoritesOnly ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              title={showFavoritesOnly ? 'Mostrar todos' : 'Mostrar sólo favoritos'}
+            >
+              <Heart size={18} fill={showFavoritesOnly ? 'currentColor' : 'none'} />
+            </button>
+
+            {/* Botón de filtros */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${showFilters ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setShowFilters(!showFilters)}
+              title="Filtros avanzados"
+            >
+              <Filter size={18} />
+            </button>
+
+            {/* Menú desplegable de ordenación */}
+            <div className="relative">
+              <button
+                className="flex items-center justify-center gap-1 p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
+                title="Ordenar por"
+              >
+                {sortBy === 'number' ? <Hash size={18} /> : <ArrowDownAZ size={18} />}
+                <ChevronDown size={14} />
+              </button>
+
+              {/* Menú desplegable de ordenación */}
+              {isSortMenuOpen && (
+                <div className="absolute right-0 mt-1 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1" role="menu" aria-orientation="vertical">
+                    <button
+                      className={`${sortBy === 'number' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'} flex w-full items-center px-4 py-2 text-sm hover:bg-gray-100`}
+                      onClick={() => { setSortBy('number'); setIsSortMenuOpen(false); }}
+                    >
+                      <Hash size={16} className="mr-2" />
+                      Número
+                    </button>
+                    <button
+                      className={`${sortBy === 'name' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'} flex w-full items-center px-4 py-2 text-sm hover:bg-gray-100`}
+                      onClick={() => { setSortBy('name'); setIsSortMenuOpen(false); }}
+                    >
+                      <ArrowDownAZ size={16} className="mr-2" />
+                      Nombre
+                    </button>
+                    <button
+                      className={`${sortBy === 'tribe' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'} flex w-full items-center px-4 py-2 text-sm hover:bg-gray-100`}
+                      onClick={() => { setSortBy('tribe'); setIsSortMenuOpen(false); }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      Tribu
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-            
-            {/* Filtrar por juego - con iconos */}
-            <div className="">
-              <label className="block text-sm font-medium text-blue-700 mb-1">Juego</label>
-              <div className="relative">
-                <select 
-                  className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
-                  value={gameFilter || ''}
-                  onChange={(e) => setGameFilter(e.target.value || null)}
-                >
-                  <option value="">Todos los juegos</option>
-                  {games.map((game) => (
-                    <option key={game} value={game}>
-                      {game.replace('Yo-kai Watch ', 'YW ')}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+
+            {/* Botón para limpiar filtros, visible solo si hay filtros activos */}
+            {hasActiveFilters() && (
+              <button
+                className="flex items-center justify-center p-2 rounded-lg bg-amber-100 text-amber-600 hover:bg-amber-200 transition-colors"
+                onClick={clearAllFilters}
+                title="Limpiar filtros"
+              >
+                <RefreshCw size={18} />
+              </button>
+            )}
           </div>
         </div>
+
+        {/* Panel de filtros avanzados (desplegable) */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden mt-3"
+            >
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 shadow-sm border border-blue-200">
+                <h3 className="text-base font-semibold text-blue-800 mb-3 flex items-center">
+                  <SlidersHorizontal size={18} className="mr-2" />
+                  Filtros avanzados
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                  {/* Filtrar por tribu */}
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-1">Tribu</label>
+                    <div className="relative">
+                      <select 
+                        className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
+                        value={tribeFilter || ''}
+                        onChange={(e) => setTribeFilter(e.target.value || null)}
+                      >
+                        <option value="">Todas las tribus</option>
+                        {tribes.map((tribe) => (
+                          <option key={tribe} value={tribe}>
+                            {tribeTranslations[tribe] || tribe}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Filtrar por elemento */}
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-1">Elemento</label>
+                    <div className="relative">
+                      <select 
+                        className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
+                        value={elementFilter || ''}
+                        onChange={(e) => setElementFilter(e.target.value || null)}
+                      >
+                        <option value="">Todos los elementos</option>
+                        {Object.keys(elementIcons).map((element) => (
+                          <option key={element} value={element}>
+                            {element in elementTranslations ? elementTranslations[element as keyof typeof elementTranslations] : element}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Filtrar por rango */}
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-1">Rango</label>
+                    <div className="relative">
+                      <select 
+                        className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
+                        value={rankFilter || ''}
+                        onChange={(e) => setRankFilter(e.target.value || null)}
+                      >
+                        <option value="">Todos los rangos</option>
+                        {Object.keys(rankIcons).map((rank) => (
+                          <option key={rank} value={rank}>
+                            {rank.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Filtrar por juego */}
+                  <div>
+                    <label className="block text-sm font-medium text-blue-700 mb-1">Juego</label>
+                    <div className="relative">
+                      <select 
+                        className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
+                        value={gameFilter || ''}
+                        onChange={(e) => setGameFilter(e.target.value || null)}
+                      >
+                        <option value="">Todos los juegos</option>
+                        {games.map((game) => (
+                          <option key={game} value={game}>
+                            {game.replace('Yo-kai Watch ', 'YW ')}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Cuadrícula de Yo-kai mejorada */}
+      {/* Cuadrícula o lista de Yo-kai */}
       {loading ? (
         <div className="flex flex-col justify-center items-center h-60">
           <div className="relative w-16 h-16">
@@ -269,15 +584,39 @@ export default function Medallium() {
             )}
           </div>
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {filteredYokai.map((yokai) => (
-              <MedalliumCard 
-                key={yokai.id} 
-                yokai={yokai} 
-                onClick={handleYokaiClick}
-              />
-            ))}
-          </div>
+          {/* Modo cuadrícula */}
+          {viewMode === 'grid' && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {filteredYokai.map((yokai) => (
+                <MedalliumCard 
+                  key={yokai.id} 
+                  yokai={yokai} 
+                  view={viewMode}
+                  onClick={handleYokaiClick}
+                  isFavorite={favorites?.includes(yokai.id)}
+                  onToggleFavorite={toggleFavorite}
+                  unlockedDate={getUnlockDate(yokai.id)}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Modo lista */}
+          {viewMode === 'list' && (
+            <div className="flex flex-col space-y-2">
+              {filteredYokai.map((yokai) => (
+                <MedalliumCard 
+                  key={yokai.id} 
+                  yokai={yokai} 
+                  view={viewMode}
+                  onClick={handleYokaiClick}
+                  isFavorite={favorites?.includes(yokai.id)}
+                  onToggleFavorite={toggleFavorite}
+                  unlockedDate={getUnlockDate(yokai.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div className="text-center p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl mx-4 shadow-inner border border-blue-100">
