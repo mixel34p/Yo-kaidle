@@ -23,14 +23,14 @@ const withPWA = require('next-pwa')({
     }
   ],
   cacheOnFrontEndNav: true,
-  reloadOnOnline: false,
-  swcMinify: true
+  reloadOnOnline: false
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
+  swcMinify: true,
   images: {
     domains: ['supabase.co', 'yokaiwatch.fandom.com', 'static.wikia.nocookie.net'],
   }
