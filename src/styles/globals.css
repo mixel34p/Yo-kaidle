@@ -78,9 +78,16 @@ body {
 
 @media (max-width: 640px) {
   .yokai-cell {
-    padding: 0.25rem;
-    min-height: 2.5rem;
-    font-size: 0.7rem;
+    padding: 0.2rem;
+    min-height: 2.25rem;
+    font-size: 0.65rem;
+  }
+  
+  /* Encabezados más pequeños */
+  .yokai-row:first-child .yokai-cell {
+    font-size: 0.6rem;
+    min-height: 2rem;
+    padding: 0.15rem;
   }
 }
 
