@@ -19,14 +19,9 @@ export async function signInWithDiscord() {
 }
 
 export async function signOut() {
-  try {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    // Forzar recarga de la página para limpiar el estado
-    window.location.href = '/';
-  } catch (error) {
-    console.error('Error signing out:', error);
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error('Error signing out:', error.message);
     throw error;
   }
 }
