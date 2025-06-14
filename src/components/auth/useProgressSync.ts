@@ -5,13 +5,40 @@ import { useAuth } from './AuthProvider';
 import { syncProgress, getCurrentUser, supabase } from '@/lib/auth';
 import SyncDialog from './SyncDialog';
 
+interface GameState {
+  gameState: any | null;
+  dailyState: any | null;
+  infiniteState: any | null;
+  medallium: any[] | null;
+  medalliumFavorites: string[];
+  medalliumUnlockDates: Record<string, string>;
+}
+
+interface CloudState {
+  game_state: any | null;
+  daily_state: any | null;
+  infinite_state: any | null;
+  medallium: any[] | null;
+  medallium_favorites: string[];
+  medallium_unlock_dates: Record<string, string>;
+}
+
+const DEFAULT_GAME_STATE: GameState = {
+  gameState: null,
+  dailyState: null,
+  infiniteState: null,
+  medallium: [],
+  medalliumFavorites: [],
+  medalliumUnlockDates: {}
+};
+
 export const useProgressSync = () => {
   const { user } = useAuth();
   const [isSyncing, setIsSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [showSyncDialog, setShowSyncDialog] = useState(false);
-  const [cloudData, setCloudData] = useState<any>(null);
-  const [localData, setLocalData] = useState<any>(null);
+  const [cloudData, setCloudData] = useState<CloudState | null>(null);
+  const [localData, setLocalData] = useState<GameState | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -19,30 +46,45 @@ export const useProgressSync = () => {
     }
   }, [user]);
 
-  const getLocalProgress = () => {
+  const getLocalProgress = (): GameState => {
     try {
-      // Get Medallium data
-      const medalliumData = localStorage.getItem('medallium');
-      const medallium = medalliumData ? JSON.parse(medalliumData).yokais || [] : [];
+      const keys = [
+        'yokaidleGameState',
+        'yokaidle_daily_state',
+        'yokaidle_infinite_state',
+        'yokaidle_medallium',
+        'medalliumFavorites',
+        'medalliumUnlockDates'
+      ];
 
-      // Get Stats data
-      const statsData = localStorage.getItem('stats');
-      const stats = statsData ? JSON.parse(statsData) : {
-        gamesPlayed: 0,
-        victories: 0,
-        bestStreak: 0,
-        currentStreak: 0,
-        infiniteWins: 0
+      const localData: Record<string, any> = {};
+      keys.forEach(key => {
+        const data = localStorage.getItem(key);
+        if (data) {
+          try {
+            localData[key] = JSON.parse(data);
+          } catch (e) {
+            console.error(`Error parsing ${key}:`, e);
+            localData[key] = null;
+          }
+        }
+      });
+
+      return {
+        gameState: localData.yokaidleGameState || null,
+        dailyState: localData.yokaidle_daily_state || null,
+        infiniteState: localData.yokaidle_infinite_state || null,
+        medallium: localData.yokaidle_medallium || null,
+        medalliumFavorites: localData.medalliumFavorites || [],
+        medalliumUnlockDates: localData.medalliumUnlockDates || {}
       };
-
-      return { medallium, stats };
     } catch (error) {
       console.error('Error reading local progress:', error);
-      return null;
+      return DEFAULT_GAME_STATE;
     }
   };
 
-  const getCloudProgress = async () => {
+  const getCloudProgress = async (): Promise<CloudState | null> => {
     if (!user) return null;
     
     const { data, error } = await supabase
@@ -56,7 +98,16 @@ export const useProgressSync = () => {
       return null;
     }
 
-    return data;
+    if (!data) return null;
+
+    return {
+      game_state: data.game_state || null,
+      daily_state: data.daily_state || null,
+      infinite_state: data.infinite_state || null,
+      medallium: data.medallium || [],
+      medallium_favorites: data.medallium_favorites || [],
+      medallium_unlock_dates: data.medallium_unlock_dates || {}
+    };
   };
 
   const handleInitialSync = async () => {
@@ -82,32 +133,62 @@ export const useProgressSync = () => {
     } finally {
       setIsSyncing(false);
     }
+  };  const cloudStateToGameState = (cloudData: CloudState): GameState => {
+    return {
+      gameState: cloudData.game_state,
+      dailyState: cloudData.daily_state,
+      infiniteState: cloudData.infinite_state,
+      medallium: cloudData.medallium,
+      medalliumFavorites: cloudData.medallium_favorites,
+      medalliumUnlockDates: cloudData.medallium_unlock_dates
+    };
   };
 
-  const syncUserProgress = async (progress: any, useCloud: boolean) => {
+  const gameStateToCloudState = (localData: GameState): CloudState => {
+    return {
+      game_state: localData.gameState,
+      daily_state: localData.dailyState,
+      infinite_state: localData.infiniteState,
+      medallium: Array.from(new Set(localData.medallium || [])),
+      medallium_favorites: Array.from(new Set(localData.medalliumFavorites || [])),
+      medallium_unlock_dates: localData.medalliumUnlockDates || {}
+    };
+  };
+
+  const syncUserProgress = async (localData: GameState, useCloud: boolean) => {
     if (isSyncing || !user) return;
     
     setIsSyncing(true);
     try {
-      let finalProgress;
       if (useCloud && cloudData) {
-        finalProgress = cloudData;
-        // Actualizar localStorage con datos de la nube
-        localStorage.setItem('medallium', JSON.stringify({ yokais: cloudData.medallium }));
-        localStorage.setItem('stats', JSON.stringify(cloudData.statistics));
+        // Usar y sincronizar datos de la nube
+        const state = cloudStateToGameState(cloudData);
+        
+        // Actualizar localStorage
+        localStorage.setItem('yokaidleGameState', JSON.stringify(state.gameState));
+        localStorage.setItem('yokaidle_daily_state', JSON.stringify(state.dailyState));
+        localStorage.setItem('yokaidle_infinite_state', JSON.stringify(state.infiniteState));
+        localStorage.setItem('yokaidle_medallium', JSON.stringify(state.medallium));
+        localStorage.setItem('medalliumFavorites', JSON.stringify(state.medalliumFavorites));
+        localStorage.setItem('medalliumUnlockDates', JSON.stringify(state.medalliumUnlockDates));
+
+        await syncProgress(cloudData);
+        setLocalData(state);
       } else {
-        finalProgress = {
-          id: user.id,
-          medallium: progress.medallium,
-          statistics: progress.stats,
-          updated_at: new Date().toISOString()
-        };
-        // Los datos locales ya están en localStorage
+        // Usar y sincronizar datos locales
+        const state = gameStateToCloudState(localData);
+        await syncProgress(state);        setCloudData(state);
       }
 
-      await syncProgress(finalProgress);
+      // Actualizar el estado local
       setLastSyncTime(new Date());
       setShowSyncDialog(false);
+
+      // Forzar una recarga de la página para asegurar que todos los componentes
+      // se actualicen con los nuevos datos
+      window.location.reload();
+      // se actualicen con los nuevos datos
+      window.location.reload();
     } catch (error) {
       console.error('Error syncing progress:', error);
     } finally {
@@ -116,7 +197,9 @@ export const useProgressSync = () => {
   };
 
   const handleSyncChoice = (useCloud: boolean) => {
-    syncUserProgress(localData, useCloud);
+    if (localData) {
+      syncUserProgress(localData, useCloud);
+    }
   };
 
   return {
@@ -125,7 +208,7 @@ export const useProgressSync = () => {
     syncUserProgress,
     showSyncDialog,
     setShowSyncDialog,
-    cloudData,
+    cloudData: cloudData ? cloudStateToGameState(cloudData) : null,
     localData,
     handleSyncChoice
   };

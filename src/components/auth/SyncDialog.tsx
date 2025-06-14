@@ -3,27 +3,18 @@
 import { useState } from 'react';
 import { useAuth } from './AuthProvider';
 
+interface GameState {
+  gameState: any;
+  dailyState: any;
+  infiniteState: any;
+  medallium: any;
+  medalliumFavorites: string[];
+  medalliumUnlockDates: Record<string, string>;
+}
+
 interface SyncDialogProps {
-  localData: {
-    medallium: string[];
-    stats: {
-      gamesPlayed: number;
-      victories: number;
-      currentStreak: number;
-      bestStreak: number;
-      infiniteWins: number;
-    };
-  };
-  cloudData: {
-    medallium: string[];
-    statistics: {
-      gamesPlayed: number;
-      victories: number;
-      currentStreak: number;
-      bestStreak: number;
-      infiniteWins: number;
-    };
-  } | null;
+  localData: GameState;
+  cloudData: GameState | null;
   onChoice: (useCloud: boolean) => void;
   onClose: () => void;
 }
@@ -39,27 +30,25 @@ export default function SyncDialog({ localData, cloudData, onChoice, onClose }: 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 border rounded-lg dark:border-gray-700">
-              <h3 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Datos locales</h3>
-              <ul className="space-y-2 text-sm">
-                <li>Medallium: {localData.medallium.length} Yo-kai</li>
-                <li>Partidas jugadas: {localData.stats.gamesPlayed}</li>
-                <li>Victorias: {localData.stats.victories}</li>
-                <li>Racha actual: {localData.stats.currentStreak}</li>
-                <li>Mejor racha: {localData.stats.bestStreak}</li>
-                <li>Victorias infinitas: {localData.stats.infiniteWins}</li>
+              <h3 className="font-semibold mb-2 text-blue-600 dark:text-blue-400">Datos locales</h3>              <ul className="space-y-2 text-sm">
+                <li>Estado del juego: {localData.gameState ? '✅' : '❌'}</li>
+                <li>Estado diario: {localData.dailyState ? '✅' : '❌'}</li>
+                <li>Estado infinito: {localData.infiniteState ? '✅' : '❌'}</li>
+                <li>Medallium: {localData.medallium ? '✅' : '❌'}</li>
+                <li>Favoritos: {localData.medalliumFavorites.length} Yo-kai</li>
+                <li>Fechas de desbloqueo: {Object.keys(localData.medalliumUnlockDates).length} registros</li>
               </ul>
             </div>
             
             <div className="p-4 border rounded-lg dark:border-gray-700">
               <h3 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Datos en la nube</h3>
-              {cloudData ? (
-                <ul className="space-y-2 text-sm">
-                  <li>Medallium: {cloudData.medallium.length} Yo-kai</li>
-                  <li>Partidas jugadas: {cloudData.statistics.gamesPlayed}</li>
-                  <li>Victorias: {cloudData.statistics.victories}</li>
-                  <li>Racha actual: {cloudData.statistics.currentStreak}</li>
-                  <li>Mejor racha: {cloudData.statistics.bestStreak}</li>
-                  <li>Victorias infinitas: {cloudData.statistics.infiniteWins}</li>
+              {cloudData ? (                <ul className="space-y-2 text-sm">
+                  <li>Estado del juego: {cloudData.gameState ? '✅' : '❌'}</li>
+                  <li>Estado diario: {cloudData.dailyState ? '✅' : '❌'}</li>
+                  <li>Estado infinito: {cloudData.infiniteState ? '✅' : '❌'}</li>
+                  <li>Medallium: {cloudData.medallium ? '✅' : '❌'}</li>
+                  <li>Favoritos: {cloudData.medalliumFavorites.length} Yo-kai</li>
+                  <li>Fechas de desbloqueo: {Object.keys(cloudData.medalliumUnlockDates).length} registros</li>
                 </ul>
               ) : (
                 <p className="text-sm text-gray-500">No hay datos en la nube</p>
