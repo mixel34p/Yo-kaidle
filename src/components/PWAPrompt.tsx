@@ -67,26 +67,27 @@ export default function PWAPrompt() {
   };
 
   if (!deferredPrompt && !showNotificationPrompt) return null;
-
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 flex flex-col gap-2 md:w-auto md:left-4">
+    <div className="fixed bottom-20 left-4 right-4 z-50 flex flex-col gap-2 sm:bottom-4 md:w-auto md:left-4">
       {deferredPrompt && (
         <button
           onClick={handleInstallClick}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-yellow-400 text-black rounded-lg shadow-lg hover:bg-yellow-500 transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-yellow-400 text-black rounded-lg shadow-lg hover:bg-yellow-500 transition-colors font-medium"
         >
-          <span>📱</span>
-          Instalar como app
+          <span className="text-xl">📱</span>
+          <span className="flex-1">Instalar como app</span>
+          <span className="text-sm opacity-75">↓</span>
         </button>
       )}
       
       {showNotificationPrompt && (
         <button
           onClick={handleNotificationPermission}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-colors font-medium"
         >
-          <span>🔔</span>
-          Activar notificaciones
+          <span className="text-xl">🔔</span>
+          <span className="flex-1">Activar notificaciones</span>
+          <span className="text-sm opacity-75">↓</span>
         </button>
       )}
     </div>

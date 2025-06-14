@@ -1,0 +1,104 @@
+.search-container {
+  position: relative;
+  width: 100%;
+  z-index: 50;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(66, 196, 255, 0.4);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: rgba(66, 196, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(66, 196, 255, 0.2);
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 0.75rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid rgba(66, 196, 255, 0.4);
+  backdrop-filter: blur(8px);
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.search-item:last-child {
+  border-bottom: none;
+}
+
+.search-item:hover {
+  background: rgba(66, 196, 255, 0.1);
+}
+
+.search-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.search-item-info {
+  flex: 1;
+}
+
+.search-item-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.search-item-tribe {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Estilos específicos para móvil */
+@media (max-width: 640px) {
+  .search-container.keyboard-open .search-dropdown {
+    max-height: 40vh;
+  }
+  
+  .search-item {
+    padding: 0.5rem;
+  }
+  
+  .search-item img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .search-input {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .search-item-name {
+    font-size: 0.9rem;
+  }
+  
+  .search-item-tribe {
+    font-size: 0.75rem;
+  }
+}

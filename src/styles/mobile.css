@@ -1,0 +1,17 @@
+/* Ajuste para pantallas móviles con PWA */
+@media screen and (max-width: 640px) {
+  /* Asegurar que hay espacio para el botón de instalación y el footer */
+  .pwa-spacing {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
+  }
+  
+  /* Ajustar el footer para dispositivos con notch */
+  footer {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Prevenir el pull-to-refresh en Safari */
+body {
+  overscroll-behavior-y: none;
+}

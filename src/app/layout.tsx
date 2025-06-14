@@ -59,8 +59,7 @@ export default function RootLayout({
         <script src="/register-sw.js" defer />
       </head>
       <body className={`${inter.className} overscroll-none`}>
-        {/* Componente cliente para el popup de actualizaciones */}        <ClientUpdatesWrapper />
-        <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
+        {/* Componente cliente para el popup de actualizaciones */}        <ClientUpdatesWrapper />        <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
           {children}
         </main>
         <PWAPrompt />

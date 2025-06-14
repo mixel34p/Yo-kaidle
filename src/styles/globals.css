@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @import './pwa.css';
+@import './mobile.css';
+@import './search.css';
+@import './home.css';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -34,11 +37,98 @@ body {
   border-radius: 1.2rem;
   border: 1px solid rgba(66, 196, 255, 0.4);
   box-shadow: 0 8px 32px rgba(10, 44, 112, 0.25);
-  padding: 1.5rem;
-  margin: 2rem auto;
+  padding: 1rem;
+  margin: 0.5rem auto;
   max-width: 680px;
   backdrop-filter: blur(12px);
   color: white;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 640px) {
+  .app-container {
+    padding: 1.5rem;
+    margin: 2rem auto;
+    font-size: 1rem;
+  }
+}
+
+/* Estilos mejorados para móvil */
+.yokai-grid {
+  position: relative;
+  width: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.yokai-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.yokai-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(70px, 1fr));
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .yokai-row {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.yokai-cell {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+@media (min-width: 640px) {
+  .yokai-cell {
+    font-size: 0.9rem;
+    min-height: 4rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Indicador de scroll horizontal en móvil */
+.scroll-indicator {
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: scrollIndicator 2s infinite;
+}
+
+@keyframes scrollIndicator {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
 }
 
 /* Eliminar definición de yokai-cell a nivel raíz (está duplicada) */

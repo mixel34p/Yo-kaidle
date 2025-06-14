@@ -14,6 +14,7 @@ function getYokaiImageUrl(yokai: Yokai): string {
 }
 
 const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
+  const [isMobileKeyboardOpen, setIsMobileKeyboardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [yokaiList, setYokaiList] = useState<Yokai[]>([]);
   const [filteredYokai, setFilteredYokai] = useState<Yokai[]>([]);
