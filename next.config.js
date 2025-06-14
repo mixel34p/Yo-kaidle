@@ -1,10 +1,17 @@
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
   images: {
     domains: ['supabase.co', 'yokaiwatch.fandom.com', 'static.wikia.nocookie.net'],
-  },
+  }
 }
 
-module.exports = nextConfig
+module.exports = withPWA(nextConfig);
