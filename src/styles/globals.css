@@ -54,43 +54,11 @@ body {
 }
 
 /* Estilos mejorados para móvil */
-.yokai-grid {
-  position: relative;
-  width: 100%;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.yokai-grid::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.yokai-row {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(70px, 1fr));
-  gap: 0.35rem;
-  margin-bottom: 0.35rem;
-}
-
-@media (min-width: 640px) {
-  .yokai-row {
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-}
-
-.yokai-grid {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
 .yokai-row {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  width: 100%;
 }
 
 .yokai-cell {
@@ -106,9 +74,16 @@ body {
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: white;
-  word-break: break-word;
-  hyphens: auto;
 }
+
+@media (max-width: 640px) {
+  .yokai-cell {
+    padding: 0.25rem;
+    min-height: 2.5rem;
+    font-size: 0.7rem;
+  }
+}
+
 
 @media (max-width: 640px) {
   .yokai-row {
