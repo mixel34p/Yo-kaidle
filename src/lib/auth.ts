@@ -36,54 +36,89 @@ export async function getCurrentUser(): Promise<User | null> {
   return user;
 }
 
-interface GameState {
-  game_state: any | null;
-  daily_state: any | null;
-  infinite_state: any | null;
-  medallium: any[] | null;
-  medallium_favorites: string[];
-  medallium_unlock_dates: Record<string, string>;
-}
-
-interface UserProgress extends GameState {
+interface UserProgress {
   id: string;
+  medallium: string[];
+  statistics: {
+    gamesPlayed: number;
+    victories: number;
+    currentStreak: number;
+    bestStreak: number;
+    infiniteWins: number;
+  };
   updated_at: string;
 }
 
-export async function syncProgress(localState: GameState): Promise<UserProgress | null> {
+interface LocalProgress {
+  medallium: string[];
+  stats: {
+    gamesPlayed: number;
+    victories: number;
+    currentStreak: number;
+    bestStreak: number;
+    infiniteWins: number;
+  };
+}
+
+export async function syncProgress(localProgress: LocalProgress): Promise<UserProgress | null> {
   const user = await getCurrentUser();
   if (!user) return null;
 
-  try {
-    // Preparar el estado para sincronización
-    const newProgress: UserProgress = {
-      id: user.id,
-      game_state: localState.game_state,
-      daily_state: localState.daily_state,
-      infinite_state: localState.infinite_state,
-      medallium: Array.from(new Set(localState.medallium || [])),
-      medallium_favorites: Array.from(new Set(localState.medallium_favorites || [])),
-      medallium_unlock_dates: localState.medallium_unlock_dates || {},
-      updated_at: new Date().toISOString()
-    };
+  // First, get existing progress
+  const { data: existingProgress, error: fetchError } = await supabase
+    .from('user_progress')
+    .select('*')
+    .eq('id', user.id)
+    .single();
 
-    // Actualizar o insertar el nuevo estado
-    const { data, error } = await supabase
-      .from('user_progress')
-      .upsert(newProgress)
-      .select()
-      .single();
+  if (fetchError && fetchError.code !== 'PGRST116') {
+    console.error('Error fetching progress:', fetchError);
+    return null;
+  }
 
-    if (error) {
-      console.error('Error syncing progress:', error);
-      throw error;
-    }
+  // Merge progress
+  const mergedProgress: UserProgress = {
+    id: user.id,
+    medallium: existingProgress
+      ? Array.from(new Set([...existingProgress.medallium, ...localProgress.medallium]))
+      : localProgress.medallium,
+    statistics: {
+      gamesPlayed: Math.max(
+        existingProgress?.statistics?.gamesPlayed || 0,
+        localProgress.stats.gamesPlayed || 0
+      ),
+      victories: Math.max(
+        existingProgress?.statistics?.victories || 0,
+        localProgress.stats.victories || 0
+      ),
+      currentStreak: Math.max(
+        existingProgress?.statistics?.currentStreak || 0,
+        localProgress.stats.currentStreak || 0
+      ),
+      bestStreak: Math.max(
+        existingProgress?.statistics?.bestStreak || 0,
+        localProgress.stats.bestStreak || 0
+      ),
+      infiniteWins: Math.max(
+        existingProgress?.statistics?.infiniteWins || 0,
+        localProgress.stats.infiniteWins || 0
+      )
+    },
+    updated_at: new Date().toISOString()
+  };
 
-    if (!data) {
-      throw new Error('No data returned from upsert operation');
-    }    return data;
-  } catch (error) {
-    console.error('Error in syncProgress:', error);
+  const { data, error } = await supabase
+    .from('user_progress')
+    .upsert(mergedProgress)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error syncing progress:', error);
     throw error;
   }
+
+  return data as UserProgress;
+
+  return data;
 }
