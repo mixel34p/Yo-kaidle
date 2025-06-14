@@ -79,11 +79,18 @@ body {
   }
 }
 
+.yokai-grid {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .yokai-row {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .yokai-cell {
@@ -104,11 +111,23 @@ body {
 }
 
 @media (max-width: 640px) {
+  .yokai-row {
+    gap: 0.25rem;
+  }
+
   .yokai-cell {
-    font-size: 0.7rem;
-    padding: 0.25rem;
-    min-height: 2.75rem;
-    line-height: 1.1;
+    font-size: 0.65rem;
+    padding: 0.2rem;
+    min-height: 2.5rem;
+    line-height: 1;
+    border-radius: 0.35rem;
+  }
+
+  /* Headers específicamente */
+  .yokai-row:first-child .yokai-cell {
+    font-size: 0.6rem;
+    min-height: 2rem;
+    padding: 0.15rem;
   }
 }
 
