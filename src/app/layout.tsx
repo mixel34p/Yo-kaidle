@@ -1,23 +1,16 @@
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import RootClientWrapper from '@/components/ClientWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  themeColor: '#ffcc00',
-}
 
 export const metadata: Metadata = {
   title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
   description: '🎮 Juego diario de adivinanzas de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
   keywords: 'Yo-kai Watch, juego, adivinanza, Yo-kai, diario, wordle, puzzle',
   manifest: '/manifest.json',
+  themeColor: '#ffcc00',
   openGraph: {
     title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
     description: '🎮 Juego diario de adivinanzas de Yo-kai Watch',
@@ -42,10 +35,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://yokaidle.vercel.app'
-  },
-  verification: {
+  },  verification: {
     google: '4ZhECbls7bJiq7jnLXlWJhtTlFLGoWa8s69XTEKrmi8'
   },
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
   applicationName: 'Yo-kaidle',
   appleWebApp: {
     capable: true,
@@ -54,6 +47,15 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: false
+  },
+  icons: {
+    icon: [
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/icons/icon-192.png' }
+    ]
   }
 }
 
