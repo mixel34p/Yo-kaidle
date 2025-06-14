@@ -1,4 +1,6 @@
 const CACHE_NAME = 'yokaidle-v1';
+const STATIC_CACHE_NAME = 'static-v1';
+const DYNAMIC_CACHE_NAME = 'dynamic-v1';
 
 // Add the assets you want to cache
 const PRECACHE_ASSETS = [
@@ -7,6 +9,9 @@ const PRECACHE_ASSETS = [
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/images/background.jpg',
+  '/images/elements/*.png',
+  '/images/foods/*.png',
+  '/images/tribes/*.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -19,28 +24,39 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - return response
-      if (response) {
-        return response;
-      }
-
-      return fetch(event.request).then((response) => {
-        // Don't cache if not a success response
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
+    caches.match(event.request)
+      .then(cacheRes => {
+        // Return cached response if found
+        if (cacheRes) {
+          return cacheRes;
         }
+        
+        // Otherwise, fetch from network
+        return fetch(event.request)
+          .then(fetchRes => {
+            // Check if we received a valid response
+            if (!fetchRes || fetchRes.status !== 200 || fetchRes.type !== 'basic') {
+              return fetchRes;
+            }
 
-        // IMPORTANT: Clone the response since it can only be consumed once
-        const responseToCache = response.clone();
+            // Clone the response
+            const responseToCache = fetchRes.clone();
 
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
+            // Store in dynamic cache
+            caches.open(DYNAMIC_CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
 
-        return response;
-      });
-    })
+            return fetchRes;
+          })
+          .catch(() => {
+            // If both cache and network fail, return offline fallback
+            if (event.request.url.indexOf('.html') > -1) {
+              return caches.match('/');
+            }
+          });
+      })
   );
 });
 
