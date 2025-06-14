@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './pwa.css';
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --primary-color: #FF315B; /* Rojo vibrante de Yo-kai Watch */

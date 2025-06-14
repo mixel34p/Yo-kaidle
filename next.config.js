@@ -21,7 +21,10 @@ const withPWA = require('next-pwa')({
         }
       }
     }
-  ]
+  ],
+  cacheOnFrontEndNav: true,
+  reloadOnOnline: false,
+  swcMinify: true
 });
 
 /** @type {import('next').NextConfig} */

@@ -46,17 +46,19 @@ export default function RootLayout({
 }) {  return (
     <html lang="es">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
         <meta name="application-name" content="Yo-kaidle" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Yo-kaidle" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#ffcc00" />
-        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ffcc00" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#ffcc00" media="(prefers-color-scheme: dark)" />
+        <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <script src="/register-sw.js" defer />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} overscroll-none`}>
         {/* Componente cliente para el popup de actualizaciones */}        <ClientUpdatesWrapper />
         <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
           {children}
