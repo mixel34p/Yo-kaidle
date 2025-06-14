@@ -79,20 +79,9 @@ body {
   }
 }
 
-.yokai-grid {
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.yokai-grid::-webkit-scrollbar {
-  display: none;
-}
-
 .yokai-row {
   display: grid;
-  grid-template-columns: repeat(6, minmax(80px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -110,17 +99,16 @@ body {
   backdrop-filter: blur(8px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: white;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 @media (max-width: 640px) {
-  .yokai-row {
-    min-width: min-content;
-  }
-
   .yokai-cell {
-    font-size: 0.75rem;
-    padding: 0.35rem;
-    min-height: 3rem;
+    font-size: 0.7rem;
+    padding: 0.25rem;
+    min-height: 2.75rem;
+    line-height: 1.1;
   }
 }
 
