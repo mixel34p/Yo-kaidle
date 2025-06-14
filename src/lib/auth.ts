@@ -55,19 +55,14 @@ export async function syncProgress(localState: GameState): Promise<UserProgress 
   if (!user) return null;
 
   try {
-    // Preparar el estado para sincronización    // Asegurar que los arrays sean válidos antes de usar Set
-    const safeArray = (arr: any): any[] => {
-      if (Array.isArray(arr)) return arr;
-      return [];
-    };
-
+    // Preparar el estado para sincronización
     const newProgress: UserProgress = {
       id: user.id,
-      game_state: localState.game_state ?? null,
-      daily_state: localState.daily_state ?? null,
-      infinite_state: localState.infinite_state ?? null,
-      medallium: Array.from(new Set(safeArray(localState.medallium))),
-      medallium_favorites: Array.from(new Set(safeArray(localState.medallium_favorites))),
+      game_state: localState.game_state,
+      daily_state: localState.daily_state,
+      infinite_state: localState.infinite_state,
+      medallium: Array.from(new Set(localState.medallium || [])),
+      medallium_favorites: Array.from(new Set(localState.medallium_favorites || [])),
       medallium_unlock_dates: localState.medallium_unlock_dates || {},
       updated_at: new Date().toISOString()
     };

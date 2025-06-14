@@ -133,30 +133,24 @@ export const useProgressSync = () => {
     } finally {
       setIsSyncing(false);
     }
-  };  // Helper function to safely handle arrays
-  const safeArray = (arr: any): any[] => {
-    if (Array.isArray(arr)) return arr;
-    return [];
-  };
-
-  const cloudStateToGameState = (cloudData: CloudState): GameState => {
+  };  const cloudStateToGameState = (cloudData: CloudState): GameState => {
     return {
-      gameState: cloudData.game_state ?? null,
-      dailyState: cloudData.daily_state ?? null,
-      infiniteState: cloudData.infinite_state ?? null,
-      medallium: safeArray(cloudData.medallium),
-      medalliumFavorites: safeArray(cloudData.medallium_favorites),
-      medalliumUnlockDates: cloudData.medallium_unlock_dates || {}
+      gameState: cloudData.game_state,
+      dailyState: cloudData.daily_state,
+      infiniteState: cloudData.infinite_state,
+      medallium: cloudData.medallium,
+      medalliumFavorites: cloudData.medallium_favorites,
+      medalliumUnlockDates: cloudData.medallium_unlock_dates
     };
   };
 
   const gameStateToCloudState = (localData: GameState): CloudState => {
     return {
-      game_state: localData.gameState ?? null,
-      daily_state: localData.dailyState ?? null,
-      infinite_state: localData.infiniteState ?? null,
-      medallium: Array.from(new Set(safeArray(localData.medallium))),
-      medallium_favorites: Array.from(new Set(safeArray(localData.medalliumFavorites))),
+      game_state: localData.gameState,
+      daily_state: localData.dailyState,
+      infinite_state: localData.infiniteState,
+      medallium: Array.from(new Set(localData.medallium || [])),
+      medallium_favorites: Array.from(new Set(localData.medalliumFavorites || [])),
       medallium_unlock_dates: localData.medalliumUnlockDates || {}
     };
   };
@@ -188,7 +182,11 @@ export const useProgressSync = () => {
 
       // Actualizar el estado local
       setLastSyncTime(new Date());
-      setShowSyncDialog(false);      // Forzar una recarga de la página para asegurar que todos los componentes
+      setShowSyncDialog(false);
+
+      // Forzar una recarga de la página para asegurar que todos los componentes
+      // se actualicen con los nuevos datos
+      window.location.reload();
       // se actualicen con los nuevos datos
       window.location.reload();
     } catch (error) {
