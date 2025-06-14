@@ -1,52 +1,71 @@
-"use client";
+import { Inter } from 'next/font/google'
+import '@/styles/globals.css'
+import Footer from '@/components/Footer'
+import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
+import type { Metadata } from 'next'
 
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useEffect, useState } from 'react';
-import type { User } from '@supabase/supabase-js';
-import Footer from '@/components/Footer';
-import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper';
-import { Inter } from 'next/font/google';
-import '@/styles/globals.css';
-import PWAPrompt from '@/components/PWAPrompt';
+// PWAPrompt se importará solo en el cliente
+import dynamic from 'next/dynamic'
+const PWAPrompt = dynamic(() => import('@/components/PWAPrompt'), {
+  ssr: false,
+  loading: () => null
+})
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] })
 
-const UserAvatarOrLogin = () => {
-  const supabase = createClientComponentClient();
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    fetchUser();
-  }, [supabase]);
-
-  if (!user) {
-    return (
-      <div className="absolute top-4 right-4">
-        <a
-          href="/auth/login"
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-        >
-          Iniciar sesión
-        </a>
-      </div>
-    );
+export const metadata: Metadata = {
+  title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
+  description: '🎮 Juego diario de adivinanzas de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
+  keywords: 'Yo-kai Watch, juego, adivinanza, Yo-kai, diario, wordle, puzzle',
+  manifest: '/manifest.json',
+  themeColor: '#ffcc00',
+  openGraph: {
+    title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
+    description: '🎮 Juego diario de adivinanzas de Yo-kai Watch',
+    url: 'https://yokaidle.vercel.app',
+    siteName: 'Yo-kaidle',
+    images: [
+      {
+        url: 'https://yokaidle.vercel.app/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Yo-kaidle Preview'
+      }
+    ],
+    locale: 'es_ES',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
+    description: '🎮 Juego diario de adivinanzas de Yo-kai Watch',
+    images: ['https://yokaidle.vercel.app/og-image.jpg'],
+  },
+  alternates: {
+    canonical: 'https://yokaidle.vercel.app'
+  },  verification: {
+    google: '4ZhECbls7bJiq7jnLXlWJhtTlFLGoWa8s69XTEKrmi8'
+  },
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  applicationName: 'Yo-kaidle',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Yo-kaidle'
+  },
+  formatDetection: {
+    telephone: false
+  },
+  icons: {
+    icon: [
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/icons/icon-192.png' }
+    ]
   }
-
-  return (
-    <div className="absolute top-4 right-4 flex items-center space-x-2">
-      <img
-        src={user.user_metadata.avatar_url}
-        alt={user.user_metadata.full_name}
-        className="w-10 h-10 rounded-full border-2 border-white shadow-md"
-      />
-      <span className="text-white font-medium">{user.user_metadata.full_name}</span>
-    </div>
-  );
-};
+}
 
 export default function RootLayout({
   children,
