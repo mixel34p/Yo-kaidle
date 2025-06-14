@@ -11,12 +11,13 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
-
   useEffect(() => {
     // Check if notifications are supported and not already granted
     if ('Notification' in window) {
-      if (Notification.permission === 'default') {
+      if (Notification.permission !== 'granted') {
         setShowNotificationPrompt(true);
+      } else {
+        setShowNotificationPrompt(false);
       }
     }
 
@@ -49,7 +50,6 @@ export default function PWAPrompt() {
       console.error('Error al instalar la PWA:', err);
     }
   };
-
   const handleNotificationPermission = async () => {
     try {
       const permission = await Notification.requestPermission();
@@ -58,8 +58,9 @@ export default function PWAPrompt() {
         toast.success('¡Notificaciones activadas! 🔔');
         // Register push subscription here if using web push
         setShowNotificationPrompt(false);
-      } else {
+      } else if (permission === 'denied') {
         toast.error('Las notificaciones fueron denegadas 🔕');
+        setShowNotificationPrompt(false); // Ocultamos el botón también si fueron denegadas
       }
     } catch (err) {
       console.error('Error al solicitar permisos:', err);

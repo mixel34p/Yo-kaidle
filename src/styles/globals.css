@@ -79,9 +79,27 @@ body {
   }
 }
 
+.yokai-grid {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.yokai-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.yokai-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(80px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .yokai-cell {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(41, 98, 179, 0.65);
+  border: 1px solid rgba(66, 196, 255, 0.4);
   border-radius: 0.5rem;
   padding: 0.5rem;
   text-align: center;
@@ -89,9 +107,21 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 3.5rem;
-  font-size: 0.8rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .yokai-row {
+    min-width: min-content;
+  }
+
+  .yokai-cell {
+    font-size: 0.75rem;
+    padding: 0.35rem;
+    min-height: 3rem;
+  }
 }
 
 @media (min-width: 640px) {
