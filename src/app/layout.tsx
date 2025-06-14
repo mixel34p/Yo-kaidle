@@ -2,11 +2,13 @@ import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import Footer from '@/components/Footer'
 import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
-import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 
+// PWAPrompt se importará solo en el cliente
+import dynamic from 'next/dynamic'
 const PWAPrompt = dynamic(() => import('@/components/PWAPrompt'), {
-  ssr: false
+  ssr: false,
+  loading: () => null
 })
 
 const inter = Inter({ subsets: ['latin'] })
