@@ -2,10 +2,29 @@
 
 import { useProgressSync } from './useProgressSync';
 import { useAuth } from './AuthProvider';
+import SyncDialog from './SyncDialog';
 
 export function AuthSyncWrapper({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  useProgressSync();  // This will automatically sync when user logs in
+  const {
+    showSyncDialog,
+    setShowSyncDialog,
+    cloudData,
+    localData,
+    handleSyncChoice
+  } = useProgressSync();
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {showSyncDialog && localData && (
+        <SyncDialog
+          localData={localData}
+          cloudData={cloudData}
+          onChoice={handleSyncChoice}
+          onClose={() => setShowSyncDialog(false)}
+        />
+      )}
+    </>
+  );
 }

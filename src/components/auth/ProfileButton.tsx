@@ -16,14 +16,20 @@ export const ProfileButton = ({ username, avatarUrl }: ProfileButtonProps) => {
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-gray-700/20 transition-colors"
       >
-        <div className="w-8 h-8 rounded-full overflow-hidden">
-          <Image
+        <div className="w-8 h-8 rounded-full overflow-hidden">         
+            <Image
             src={avatarUrl}
             alt={username}
             width={32}
             height={32}
             className="w-full h-full object-cover"
-          />
+            priority
+            unoptimized
+            onError={(e) => {
+              const img = e.target as HTMLImageElement;
+              img.src = '/default-avatar.png';
+            }}
+            ></Image>
         </div>
         <span className="text-sm font-medium">{username}</span>
       </button>
