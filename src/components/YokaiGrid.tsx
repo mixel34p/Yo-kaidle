@@ -8,15 +8,15 @@ interface YokaiGridProps {
   foodIconTimestamp?: number; // Timestamp para forzar recarga de iconos de comida
 }
 
-const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTimestamp = Date.now() }) => {  return (    
-    <div className="yokai-grid overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0 sm:overflow-x-visible">
-      <div className="yokai-row font-bold mb-2 text-[10px] leading-tight sm:text-sm whitespace-nowrap">
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[90px] sm:min-w-0">Yo-kai</div>
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[70px] sm:min-w-0">Tribu</div>
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[60px] sm:min-w-0">Rango</div>
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[70px] sm:min-w-0">Elemento</div>
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[70px] sm:min-w-0">Comida</div>
-        <div className="yokai-cell bg-secondary text-white shadow-lg transform hover:scale-105 transition-transform min-w-[90px] sm:min-w-0">Juego</div>
+const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTimestamp = Date.now() }) => {  return (
+    <div className="yokai-grid w-full overflow-x-auto">
+      <div className="yokai-row font-bold mb-2 text-sm whitespace-nowrap">
+        <div className="yokai-cell bg-secondary text-white p-2">Yo-kai</div>
+        <div className="yokai-cell bg-secondary text-white p-2">Tribu</div>
+        <div className="yokai-cell bg-secondary text-white p-2">Rango</div>
+        <div className="yokai-cell bg-secondary text-white p-2">Elemento</div>
+        <div className="yokai-cell bg-secondary text-white p-2">Comida</div>
+        <div className="yokai-cell bg-secondary text-white p-2">Juego</div>
       </div>
       
       {guesses.map((guess, index) => (
