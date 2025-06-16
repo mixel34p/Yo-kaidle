@@ -14,14 +14,14 @@ const PWAPrompt = dynamic(() => import('@/components/PWAPrompt'), {
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
-  description: '🎮 Juego diario de adivinanzas de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
+  title: 'Yo-kaidle - Wordle de Yo-kai Watch',
+  description: 'Wordle inspirado en la franquicia de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
   keywords: 'Yo-kai Watch, juego, adivinanza, Yo-kai, diario, wordle, puzzle',
   manifest: '/manifest.json',
   themeColor: '#ffcc00',
   openGraph: {
-    title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
-    description: '🎮 Juego diario de adivinanzas de Yo-kai Watch',
+    title: 'Yo-kaidle - Wordle de Yo-kai Watch',
+    description: 'Wordle inspirado en la franquicia de Yo-kai Watch.',
     url: 'https://yokaidle.vercel.app',
     siteName: 'Yo-kaidle',
     images: [
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Yo-kaidle - ¡Adivina el Yo-kai diario!',
-    description: '🎮 Juego diario de adivinanzas de Yo-kai Watch',
+    title: 'Yo-kaidle - Wordle de Yo-kai Watch',
+    description: 'Wordle inspirado en la franquicia de Yo-kai Watch.',
     images: ['https://yokaidle.vercel.app/og-image.jpg'],
   },
   alternates: {
