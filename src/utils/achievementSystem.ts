@@ -123,7 +123,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'tribe_brave_complete',
     name: 'Maestro de los Valientes',
     description: 'Completa la tribu Valiente',
-    icon: '/images/tribes/brave.PNG',
+    icon: '/images/tribes/Brave.PNG',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const braveYokai = allYokai.filter(y => y.tribe === 'Brave');
@@ -279,7 +279,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'game_blasters_complete',
     name: 'Comandante Blaster',
     description: 'Completa Yo-kai Watch Blasters',
-    icon: '/images/games/ykwb.png',
+    icon: '/images/games/ywb.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const blastersYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
@@ -293,7 +293,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'game_sangokushi_complete',
     name: 'Estratega de los Tres Reinos',
     description: 'Completa Yo-kai Watch Sangokushi',
-    icon: '/images/games/sangokushi.png',
+    icon: '/images/games/ykws.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const sangokushiYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
@@ -309,7 +309,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_e_collector',
     name: 'Coleccionista Principiante',
     description: 'Desbloquea 10 Yo-kai de rango E',
-    icon: '/images/ranks/e.png',
+    icon: '/images/ranks/rank-e.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
@@ -322,7 +322,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_d_collector',
     name: 'Coleccionista Básico',
     description: 'Desbloquea 15 Yo-kai de rango D',
-    icon: '/images/ranks/d.png',
+    icon: '/images/ranks/rank-d.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
@@ -335,7 +335,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_c_collector',
     name: 'Coleccionista Intermedio',
     description: 'Desbloquea 20 Yo-kai de rango C',
-    icon: '/images/ranks/c.png',
+    icon: '/images/ranks/rank-c.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
@@ -348,7 +348,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_b_collector',
     name: 'Coleccionista Avanzado',
     description: 'Desbloquea 15 Yo-kai de rango B',
-    icon: '/images/ranks/b.png',
+    icon: '/images/ranks/rank-b.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
@@ -361,7 +361,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_a_collector',
     name: 'Coleccionista Elite',
     description: 'Desbloquea 10 Yo-kai de rango A',
-    icon: '/images/ranks/a.png',
+    icon: '/images/ranks/rank-a.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
@@ -374,7 +374,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'rank_s_collector',
     name: 'Cazador de Leyendas',
     description: 'Desbloquea 5 Yo-kai de rango S',
-    icon: '/images/ranks/s.png',
+    icon: '/images/ranks/rank-s.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
