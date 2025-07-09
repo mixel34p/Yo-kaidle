@@ -70,11 +70,10 @@ export interface AdvancedMedalliumStats {
 }
 
 export function calculateAdvancedStats(
-  medallium: MedalliumData, 
+  medallium: MedalliumData,
   allYokai: Yokai[]
 ): AdvancedMedalliumStats {
-  const unlockedYokaiIds = Object.keys(medallium).map(id => parseInt(id));
-  const unlockedYokai = allYokai.filter(yokai => unlockedYokaiIds.includes(yokai.id));
+  const unlockedYokai = Object.values(medallium.unlockedYokai);
   
   // Estadísticas generales
   const totalYokai = allYokai.length;
@@ -88,11 +87,8 @@ export function calculateAdvancedStats(
   uniqueTribes.forEach(tribe => {
     const tribeYokai = allYokai.filter(y => y.tribe === tribe);
     const unlockedTribeYokai = unlockedYokai.filter(y => y.tribe === tribe);
-    const lastUnlocked = unlockedTribeYokai
-      .map(y => medallium[y.id]?.unlockedDate)
-      .filter(date => date)
-      .sort()
-      .pop();
+    // Las fechas se manejan por separado en el componente
+    const lastUnlocked = undefined;
     
     tribeStats.push({
       tribe,
@@ -110,11 +106,8 @@ export function calculateAdvancedStats(
   uniqueGames.forEach(game => {
     const gameYokai = allYokai.filter(y => y.game === game);
     const unlockedGameYokai = unlockedYokai.filter(y => y.game === game);
-    const lastUnlocked = unlockedGameYokai
-      .map(y => medallium[y.id]?.unlockedDate)
-      .filter(date => date)
-      .sort()
-      .pop();
+    // Las fechas se manejan por separado en el componente
+    const lastUnlocked = undefined;
     
     gameStats.push({
       game,
@@ -157,49 +150,20 @@ export function calculateAdvancedStats(
     });
   });
   
-  // Actividad de colección (últimos 30 días)
+  // Actividad de colección (simplificada)
   const recentActivity: CollectionActivity[] = [];
-  const last30Days = Array.from({ length: 30 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    return date.toISOString().split('T')[0];
-  }).reverse();
+  // Las fechas se manejan por separado en el componente del medallium
   
-  last30Days.forEach(date => {
-    const dayUnlocks = unlockedYokai.filter(yokai => {
-      const unlockDate = medallium[yokai.id]?.unlockedDate;
-      return unlockDate && unlockDate.split('T')[0] === date;
-    });
-    
-    if (dayUnlocks.length > 0) {
-      recentActivity.push({
-        date,
-        count: dayUnlocks.length,
-        yokaiNames: dayUnlocks.map(y => y.name)
-      });
-    }
-  });
-  
-  // Calcular rachas
-  const { currentStreak, bestStreak } = calculateCollectionStreaks(medallium, unlockedYokai);
-  
-  // Fechas importantes
-  const unlockDates = Object.values(medallium)
-    .map(entry => entry.unlockedDate)
-    .filter(date => date)
-    .sort();
-  
-  const firstYokaiDate = unlockDates[0];
-  const lastYokaiDate = unlockDates[unlockDates.length - 1];
-  
-  // Promedio por día
-  let averagePerDay = 0;
-  if (firstYokaiDate && lastYokaiDate) {
-    const daysDiff = Math.max(1, Math.ceil(
-      (new Date(lastYokaiDate).getTime() - new Date(firstYokaiDate).getTime()) / (1000 * 60 * 60 * 24)
-    ));
-    averagePerDay = Math.round((unlockedCount / daysDiff) * 100) / 100;
-  }
+  // Rachas simplificadas (sin fechas)
+  const currentStreak = 0;
+  const bestStreak = 0;
+
+  // Fechas importantes (no disponibles en estructura base)
+  const firstYokaiDate = undefined;
+  const lastYokaiDate = undefined;
+
+  // Promedio por día (simplificado)
+  const averagePerDay = 0;
   
   // Próximos hitos
   const nextMilestones = calculateNextMilestones(unlockedCount, tribeStats, gameStats);
@@ -222,80 +186,7 @@ export function calculateAdvancedStats(
   };
 }
 
-function calculateCollectionStreaks(medallium: MedalliumData, unlockedYokai: Yokai[]): {
-  currentStreak: number;
-  bestStreak: number;
-} {
-  const unlockDates = Object.values(medallium)
-    .map(entry => entry.unlockedDate)
-    .filter(date => date)
-    .map(date => date.split('T')[0]) // Solo la fecha, sin hora
-    .sort();
-  
-  if (unlockDates.length === 0) {
-    return { currentStreak: 0, bestStreak: 0 };
-  }
-  
-  // Agrupar por fecha
-  const dateGroups = unlockDates.reduce((acc, date) => {
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  const uniqueDates = Object.keys(dateGroups).sort();
-  
-  let currentStreak = 0;
-  let bestStreak = 0;
-  let tempStreak = 0;
-  
-  // Verificar si hay actividad hoy o ayer para la racha actual
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-  
-  // Calcular racha actual (desde el final hacia atrás)
-  for (let i = uniqueDates.length - 1; i >= 0; i--) {
-    const currentDate = uniqueDates[i];
-    const expectedDate = i === uniqueDates.length - 1 ? 
-      (currentDate === today || currentDate === yesterday ? currentDate : null) :
-      getDateBefore(uniqueDates[i + 1]);
-    
-    if (currentDate === expectedDate || (i === uniqueDates.length - 1 && (currentDate === today || currentDate === yesterday))) {
-      currentStreak++;
-    } else {
-      break;
-    }
-  }
-  
-  // Calcular mejor racha
-  tempStreak = 1;
-  for (let i = 1; i < uniqueDates.length; i++) {
-    const prevDate = uniqueDates[i - 1];
-    const currentDate = uniqueDates[i];
-    const expectedDate = getDateAfter(prevDate);
-    
-    if (currentDate === expectedDate) {
-      tempStreak++;
-    } else {
-      bestStreak = Math.max(bestStreak, tempStreak);
-      tempStreak = 1;
-    }
-  }
-  bestStreak = Math.max(bestStreak, tempStreak);
-  
-  return { currentStreak, bestStreak };
-}
-
-function getDateBefore(dateStr: string): string {
-  const date = new Date(dateStr);
-  date.setDate(date.getDate() - 1);
-  return date.toISOString().split('T')[0];
-}
-
-function getDateAfter(dateStr: string): string {
-  const date = new Date(dateStr);
-  date.setDate(date.getDate() + 1);
-  return date.toISOString().split('T')[0];
-}
+// Funciones auxiliares eliminadas - las fechas se manejan en el componente
 
 function calculateNextMilestones(
   unlockedCount: number,
