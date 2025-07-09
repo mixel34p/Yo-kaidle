@@ -76,7 +76,7 @@ const GameRules: React.FC = () => {
               <h4 className="font-bold text-sm mb-2" style={{ color: 'var(--gold-accent)' }}>Aclaraciones importantes:</h4>
               <ul className="list-disc pl-5 space-y-1 text-xs">
                 <li>La sección juego se refiere al juego en el que debutó el Yo-kai como <strong>obtenible</strong>.</li>
-                <li>Los Yo-kais usan las características del primer juego en el que aparecen.</li>
+                <li>Los Yo-kais usan las características del primer juego en el que aparecen. (Salvo los de Sangokushi, que se adaptan al 3)</li>
                 <li>No se toma en cuenta a la versión obtenible de los bosses y los bosses que no tienen ningún rango oficial son Rango S.</li>
                 <li>El juego está aún en fase de desarrollo y puede contener errores. Puedes reportarlos en el <a href="https://discord.gg/Mv4HpkCz3w" target="_blank" rel="noopener noreferrer">discord</a>.</li>
               </ul>
