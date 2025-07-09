@@ -17,6 +17,8 @@ import GameSourceSelector from '@/components/GameSourceSelector';
 import TribeRestrictionsSelector from '@/components/TribeRestrictionsSelector';
 import { saveGameSources, loadGameSources, saveTribeRestrictions, loadTribeRestrictions, TribeRestrictions } from '@/utils/gameSourcePreferences';
 import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
+import { checkAchievements } from '@/utils/achievementSystem';
+import { getAllYokai } from '@/lib/supabase';
 
 
 const MAX_GUESSES = 6;
@@ -612,6 +614,17 @@ export default function Home() {
       // Añadir el Yo-kai al Medallium si es acertado
       const medallium = loadMedallium();
       unlockYokai(medallium, targetYokai);
+
+      // Verificar logros nuevos (async para no bloquear la UI)
+      getAllYokai().then(allYokaiData => {
+        const newAchievements = checkAchievements(medallium, allYokaiData);
+        if (newAchievements.length > 0) {
+          // Aquí podrías mostrar una notificación de logros desbloqueados
+          console.log('¡Nuevos logros desbloqueados!', newAchievements.map(a => a.name));
+        }
+      }).catch(error => {
+        console.error('Error verificando logros:', error);
+      });
       
       setMessage('');
       // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas

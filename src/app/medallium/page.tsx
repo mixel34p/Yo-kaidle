@@ -18,6 +18,10 @@ import MedalliumCard from '@/components/MedalliumCard';
 import MedalliumDetail from '@/components/MedalliumDetail';
 import { getAllYokai } from '@/lib/supabase';
 import { Search, Grid, List, Heart, Filter, SlidersHorizontal, ArrowDownAZ, Hash, ChevronDown, X, RefreshCw } from 'lucide-react';
+import { checkAchievements } from '@/utils/achievementSystem';
+import { calculateAdvancedStats } from '@/utils/advancedStats';
+import AchievementsPanel from '@/components/AchievementsPanel';
+import AdvancedStatsPanel from '@/components/AdvancedStatsPanel';
 
 // Tipos para la ordenación y filtros
 type SortOption = 'number' | 'name' | 'tribe';
@@ -54,6 +58,12 @@ export default function Medallium() {
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
 
+  // Estados para nuevos paneles
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [showAdvancedStats, setShowAdvancedStats] = useState(false);
+  const [allYokai, setAllYokai] = useState<Yokai[]>([]);
+  const [advancedStats, setAdvancedStats] = useState<any>(null);
+
   // Cargar preferencias del usuario desde localStorage
   useEffect(() => {
     const loadUserPreferences = () => {
@@ -88,11 +98,23 @@ export default function Medallium() {
       
       try {
         // Cargar todos los Yo-kai de la base de datos para obtener el total
-        const allYokai = await getAllYokai();
-        
+        const allYokaiData = await getAllYokai();
+        setAllYokai(allYokaiData);
+
         // Cargar los Yo-kai desbloqueados del medallium
         const medallium = loadMedallium();
         const unlocked = getUnlockedYokaiArray(medallium);
+
+        // Verificar logros nuevos
+        const newAchievements = checkAchievements(medallium, allYokaiData);
+        if (newAchievements.length > 0) {
+          // Aquí podrías mostrar una notificación de logros desbloqueados
+          console.log('Nuevos logros desbloqueados:', newAchievements);
+        }
+
+        // Calcular estadísticas avanzadas
+        const advancedStatsData = calculateAdvancedStats(medallium, allYokaiData);
+        setAdvancedStats(advancedStatsData);
         
         // Guardar fechas de desbloqueo si no existen ya
         const dates: UnlockDates = { ...unlockDates };
@@ -107,18 +129,18 @@ export default function Medallium() {
         localStorage.setItem('medalliumUnlockDates', JSON.stringify(dates));
         
         // Extraer todas las tribus y juegos disponibles para los filtros
-        const uniqueTribes = Array.from(new Set(allYokai.map(y => y.tribe))) as Tribe[];
-        const uniqueGames = Array.from(new Set(allYokai.map(y => y.game))) as Game[];
-        
+        const uniqueTribes = Array.from(new Set(allYokaiData.map(y => y.tribe))) as Tribe[];
+        const uniqueGames = Array.from(new Set(allYokaiData.map(y => y.game))) as Game[];
+
         // Establecer los datos
-        setTotalYokai(allYokai.length);
+        setTotalYokai(allYokaiData.length);
         setUnlockedYokai(unlocked);
         setFilteredYokai(sortByMedalNumber(unlocked));
         setTribes(uniqueTribes);
         setGames(uniqueGames);
-        
+
         // Calcular estadísticas
-        setStats(calculateMedalliumStats(medallium, allYokai.length));
+        setStats(calculateMedalliumStats(medallium, allYokaiData.length));
       } catch (error) {
         console.error('Error cargando datos del medallium:', error);
       } finally {
@@ -387,6 +409,24 @@ export default function Medallium() {
               <Filter size={18} />
             </button>
 
+            {/* Botón de logros */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${showAchievements ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setShowAchievements(!showAchievements)}
+              title="Ver logros"
+            >
+              <span className="text-lg">🏆</span>
+            </button>
+
+            {/* Botón de estadísticas avanzadas */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${showAdvancedStats ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setShowAdvancedStats(!showAdvancedStats)}
+              title="Estadísticas avanzadas"
+            >
+              <span className="text-lg">📊</span>
+            </button>
+
             {/* Menú desplegable de ordenación */}
             <div className="relative">
               <button
@@ -518,7 +558,9 @@ export default function Medallium() {
                         onChange={(e) => setRankFilter(e.target.value || null)}
                       >
                         <option value="">Todos los rangos</option>
-                        {Object.keys(rankIcons).map((rank) => (
+                        {Object.keys(rankIcons)
+                          .filter(rank => rank !== 'SS' && rank !== 'SSS') // Excluir SS y SSS
+                          .map((rank) => (
                           <option key={rank} value={rank}>
                             {rank.toUpperCase()}
                           </option>
@@ -765,6 +807,46 @@ export default function Medallium() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Panel de Logros */}
+      {showAchievements && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-800">🏆 Logros del Medallium</h2>
+              <button
+                onClick={() => setShowAchievements(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
+              <AchievementsPanel />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Panel de Estadísticas Avanzadas */}
+      {showAdvancedStats && advancedStats && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-800">📊 Estadísticas Avanzadas</h2>
+              <button
+                onClick={() => setShowAdvancedStats(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
+              <AdvancedStatsPanel stats={advancedStats} />
             </div>
           </div>
         </div>
