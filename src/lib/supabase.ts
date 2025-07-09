@@ -149,23 +149,24 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
     const day = dateObj.getDate();
     const month = dateObj.getMonth() + 1; // Los meses en JS son 0-11
     const year = dateObj.getFullYear();
-    
+
     // Crear un número hash único para cada día
     // Multiplicamos por números primos para mejorar la distribución
     const dailyHash = day + (month * 31) + (year * 372);
-    
-    // Obtener todos los Yo-kai de la base de datos
+
+    // Obtener todos los Yo-kai de la base de datos, excluyendo tribus Boss para modo diario
     const { data, error } = await supabase
       .from('yokai')
-      .select('*');
-    
+      .select('*')
+      .neq('tribe', 'Boss'); // Excluir yokais de la tribu Boss en modo diario
+
     if (error) {
       console.error('Error fetching Yo-kai from Supabase:', error.message);
       return null;
     }
-    
+
     if (!data || data.length === 0) {
-      console.error('No Yo-kai found in the database');
+      console.error('No Yo-kai found in the database (excluding Boss tribe)');
       return null;
     }
     
@@ -230,17 +231,22 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
   }
 }
 
-export async function getRandomYokai(gameSources?: Game[]): Promise<Yokai | null> {
-  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos
+export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: boolean): Promise<Yokai | null> {
+  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos y tribus
   let query = supabase
     .from('yokai')
     .select('*');
-  
+
   // Si hay filtro de juegos, aplicarlo
   if (gameSources && gameSources.length > 0) {
     query = query.in('game', gameSources);
   }
-  
+
+  // Si se debe excluir tribus Boss, aplicar filtro
+  if (excludeBossTribes) {
+    query = query.neq('tribe', 'Boss');
+  }
+
   const { data, error } = await query;
   
   if (error || !data || data.length === 0) {

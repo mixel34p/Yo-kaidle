@@ -14,7 +14,8 @@ import { getDailyYokai, getRandomYokai } from '@/lib/supabase';
 import { compareYokai, getTodayDateString, formatDateForDisplay, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
 import GameModeSelector from '@/components/GameModeSelector';
 import GameSourceSelector from '@/components/GameSourceSelector';
-import { saveGameSources, loadGameSources } from '@/utils/gameSourcePreferences';
+import TribeRestrictionsSelector from '@/components/TribeRestrictionsSelector';
+import { saveGameSources, loadGameSources, saveTribeRestrictions, loadTribeRestrictions, TribeRestrictions } from '@/utils/gameSourcePreferences';
 import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
 
 
@@ -23,28 +24,45 @@ const MAX_GUESSES = 6;
 // Lista de todos los juegos disponibles obtenidos de los tipos
 const AVAILABLE_GAMES: Game[] = [
   'Yo-kai Watch 1',
-  'Yo-kai Watch 2', 
-  'Yo-kai Watch 3', 
-  'Yo-kai Watch 4', 
-  'Yo-kai Watch Blasters', 
+  'Yo-kai Watch 2',
+  'Yo-kai Watch 3',
+  'Yo-kai Watch 4',
+  'Yo-kai Watch Blasters',
   'Yo-kai Watch Busters 2',
   'Yo-kai Watch Sangokushi'
 ];
+
+// Juegos deshabilitados (no disponibles aún)
+const DISABLED_GAMES: Game[] = ['Yo-kai Watch 4', 'Yo-kai Watch Busters 2'];
+
+// Juegos habilitados para selección por defecto
+const ENABLED_GAMES: Game[] = AVAILABLE_GAMES.filter(game => !DISABLED_GAMES.includes(game));
 
 export default function Home() {
   // Estado para la configuración de juegos
   const [selectedGameSources, setSelectedGameSources] = useState<Game[]>([]);
   const [showGameConfig, setShowGameConfig] = useState(false);
+
+  // Estado para las restricciones de tribus
+  const [tribeRestrictions, setTribeRestrictions] = useState<TribeRestrictions>({ excludeBossTribes: false });
   
   // Cargar configuración de juegos guardada
   useEffect(() => {
     const savedSources = loadGameSources();
     if (savedSources && savedSources.length > 0) {
-      setSelectedGameSources(savedSources);
+      // Filtrar juegos guardados para excluir los deshabilitados
+      const enabledSavedSources = savedSources.filter(game => !DISABLED_GAMES.includes(game));
+      setSelectedGameSources(enabledSavedSources.length > 0 ? enabledSavedSources : [...ENABLED_GAMES]);
     } else {
-      // Si no hay nada guardado, seleccionar todos los juegos por defecto
-      setSelectedGameSources([...AVAILABLE_GAMES]);
+      // Si no hay nada guardado, seleccionar solo los juegos habilitados por defecto
+      setSelectedGameSources([...ENABLED_GAMES]);
     }
+  }, []);
+
+  // Cargar restricciones de tribus guardadas
+  useEffect(() => {
+    const savedRestrictions = loadTribeRestrictions();
+    setTribeRestrictions(savedRestrictions);
   }, []);
   
   // El popup de actualizaciones ahora se gestiona en el layout global
@@ -52,7 +70,7 @@ export default function Home() {
   const handleNewInfiniteGame = async () => {
     setLoading(true);
     const today = getTodayDateString();
-    const randomYokai = await getRandomYokai(selectedGameSources);
+    const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
     if (randomYokai) {
       const newGameState = createNewInfiniteGame(today, randomYokai, gameState);
       setGameState(newGameState);
@@ -69,6 +87,12 @@ export default function Home() {
   const handleGameSourcesChange = (sources: Game[]) => {
     setSelectedGameSources(sources);
     saveGameSources(sources);
+  };
+
+  // Manejar cambios en las restricciones de tribus
+  const handleTribeRestrictionsChange = (restrictions: TribeRestrictions) => {
+    setTribeRestrictions(restrictions);
+    saveTribeRestrictions(restrictions);
   };
   
   // Función para recargar el Yo-kai diario cuando llega medianoche
@@ -331,7 +355,7 @@ export default function Home() {
           // En modo infinito, si NO hay juego guardado, creamos uno nuevo
           if (!savedGame || savedGame.gameMode !== 'infinite') {
             // Obtener un Yo-kai aleatorio para modo infinito
-            const randomYokai = await getRandomYokai();
+            const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
             if (randomYokai) {
               // Usar la función auxiliar para crear un nuevo juego infinito
               const newGameState = createNewInfiniteGame(today, randomYokai, savedGame);
@@ -730,10 +754,14 @@ return (
                   </svg>
                 </button>
               </div>
-              <GameSourceSelector 
+              <GameSourceSelector
                 availableGames={AVAILABLE_GAMES}
                 initialSelectedGames={selectedGameSources}
                 onSourcesChange={handleGameSourcesChange}
+              />
+              <TribeRestrictionsSelector
+                restrictions={tribeRestrictions}
+                onRestrictionsChange={handleTribeRestrictionsChange}
               />
               <div className="mt-4 flex justify-center">
                 <button

@@ -639,8 +639,8 @@ export async function getAIGuess(
       .not('id', 'in', previousGuesses.map(y => y.id).join(','));
     
     if (error || !allYokai || allYokai.length === 0) {
-      // Si hay un error, obtener un Yo-kai aleatorio
-      const fallbackYokai = await getRandomYokai();
+      // Si hay un error, obtener un Yo-kai aleatorio (sin restricciones para duelos)
+      const fallbackYokai = await getRandomYokai(undefined, false);
       if (!fallbackYokai) {
         throw new Error('No se pudo obtener un Yo-kai para la IA');
       }
@@ -737,8 +737,8 @@ export async function getAIGuess(
     }
   } catch (error) {
     console.error('Error al generar adivinanza de IA:', error);
-    // En caso de error, obtener un Yo-kai aleatorio como fallback
-    const fallbackYokai = await getRandomYokai();
+    // En caso de error, obtener un Yo-kai aleatorio como fallback (sin restricciones para duelos)
+    const fallbackYokai = await getRandomYokai(undefined, false);
     if (!fallbackYokai) {
       throw new Error('No se pudo obtener un Yo-kai para la IA');
     }

@@ -17,18 +17,22 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
   const [selectedGames, setSelectedGames] = useState<Game[]>(initialSelectedGames);
 
   useEffect(() => {
-    // Si no hay juegos seleccionados inicialmente, seleccionar todos por defecto
+    // Si no hay juegos seleccionados inicialmente, seleccionar todos los habilitados por defecto
     if (initialSelectedGames.length === 0 && availableGames.length > 0) {
-      setSelectedGames([...availableGames]);
+      const enabledGames = availableGames.filter(game => !disabledGames.includes(game));
+      setSelectedGames([...enabledGames]);
     }
   }, [availableGames, initialSelectedGames]);
 
+  // Juegos deshabilitados (no disponibles aún)
+  const disabledGames: Game[] = ['Yo-kai Watch 4', 'Yo-kai Watch Busters 2'];
+
   const handleToggleGame = (game: Game) => {
-    // No permitir seleccionar Yo-kai Watch 4
-    if (game === 'Yo-kai Watch 4') {
+    // No permitir seleccionar juegos deshabilitados
+    if (disabledGames.includes(game)) {
       return;
     }
-    
+
     // Si es el único juego seleccionado, no permitir deseleccionarlo
     if (selectedGames.length === 1 && selectedGames.includes(game)) {
       return;
@@ -37,22 +41,25 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
     const updatedGames = selectedGames.includes(game)
       ? selectedGames.filter(g => g !== game)
       : [...selectedGames, game];
-    
+
     setSelectedGames(updatedGames);
     onSourcesChange(updatedGames);
   };
 
   const selectAll = () => {
-    setSelectedGames([...availableGames]);
-    onSourcesChange([...availableGames]);
+    // Solo seleccionar juegos que no están deshabilitados
+    const enabledGames = availableGames.filter(game => !disabledGames.includes(game));
+    setSelectedGames([...enabledGames]);
+    onSourcesChange([...enabledGames]);
   };
 
   const deselectAll = () => {
-    // Mantener al menos un juego seleccionado
-    if (availableGames.length > 0) {
-      const firstGame = [availableGames[0]];
-      setSelectedGames(firstGame);
-      onSourcesChange(firstGame);
+    // Mantener al menos un juego seleccionado (solo de los habilitados)
+    const enabledGames = availableGames.filter(game => !disabledGames.includes(game));
+    if (enabledGames.length > 0) {
+      const firstEnabledGame = [enabledGames[0]];
+      setSelectedGames(firstEnabledGame);
+      onSourcesChange(firstEnabledGame);
     }
   };
 
@@ -83,15 +90,15 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
           <button
             key={game}
             onClick={() => handleToggleGame(game)}
-            disabled={game === 'Yo-kai Watch 4'}
+            disabled={disabledGames.includes(game)}
             className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-300 ${
-              game === 'Yo-kai Watch 4'
+              disabledGames.includes(game)
                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60 border border-gray-300'
               : selectedGames.includes(game)
                 ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white shadow-lg transform scale-105'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-200'
             }`}
-            title={game === 'Yo-kai Watch 4' ? 'Próximamente' : game}
+            title={disabledGames.includes(game) ? 'Próximamente' : game}
           >
             {/* Icono del juego */}
             <div className="w-12 h-12 mb-2 rounded-full bg-white p-1 shadow-inner overflow-hidden flex items-center justify-center">
