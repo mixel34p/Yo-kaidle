@@ -25,6 +25,38 @@ const PointsIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" })
   />
 );
 
+// Componente para iconos de logros (emoji o imagen)
+const AchievementIcon: React.FC<{ icon: string; alt: string; className?: string }> = ({
+  icon,
+  alt,
+  className = "text-3xl"
+}) => {
+  if (icon.startsWith('/') || icon.startsWith('http')) {
+    // Es una ruta de imagen
+    return (
+      <img
+        src={icon}
+        alt={alt}
+        className={`${className} object-contain`}
+        onError={(e) => {
+          // Fallback a emoji si no se puede cargar la imagen
+          e.currentTarget.style.display = 'none';
+          const parent = e.currentTarget.parentElement;
+          if (parent) {
+            const span = document.createElement('span');
+            span.className = 'text-3xl';
+            span.textContent = '🏆'; // Emoji por defecto
+            parent.appendChild(span);
+          }
+        }}
+      />
+    );
+  } else {
+    // Es un emoji
+    return <div className={className}>{icon}</div>;
+  }
+};
+
 interface AchievementsPanelProps {
   className?: string;
 }
@@ -157,7 +189,13 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                   key={achievement.id}
                   className="flex items-center p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg"
                 >
-                  <div className="text-3xl mr-4">{achievement.icon}</div>
+                  <div className="mr-4">
+                    <AchievementIcon
+                      icon={achievement.icon}
+                      alt={achievement.name}
+                      className="w-12 h-12"
+                    />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
                       <h3 className="font-semibold text-gray-800">{achievement.name}</h3>
@@ -169,13 +207,6 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                       )}
                     </div>
                     <p className="text-sm text-gray-600 mb-2">{achievement.description}</p>
-                    {achievement.reward?.title && (
-                      <div className="flex items-center space-x-2">
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                          🏷️ Título: {achievement.reward.title}
-                        </span>
-                      </div>
-                    )}
                   </div>
                   <div className="text-right text-xs text-gray-500">
                     <div className="text-green-600 font-medium">✅ Desbloqueado</div>
@@ -197,7 +228,13 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                   key={achievement.id}
                   className="flex items-center p-4 bg-gray-50 border border-gray-200 rounded-lg opacity-75"
                 >
-                  <div className="text-3xl mr-4 grayscale">{achievement.icon}</div>
+                  <div className="mr-4 grayscale">
+                    <AchievementIcon
+                      icon={achievement.icon}
+                      alt={achievement.name}
+                      className="w-12 h-12"
+                    />
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
                       <h3 className="font-semibold text-gray-600">{achievement.name}</h3>
@@ -209,13 +246,6 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                       )}
                     </div>
                     <p className="text-sm text-gray-500 mb-2">{achievement.description}</p>
-                    {achievement.reward?.title && (
-                      <div className="flex items-center space-x-2">
-                        <span className="px-2 py-1 bg-gray-200 text-gray-600 text-xs rounded-full">
-                          🏷️ Título: {achievement.reward.title}
-                        </span>
-                      </div>
-                    )}
                   </div>
                   <div className="text-right text-xs text-gray-400">
                     <div>🔒 Bloqueado</div>

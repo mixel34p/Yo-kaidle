@@ -5,12 +5,10 @@ export interface Achievement {
   id: string;
   name: string;
   description: string;
-  icon: string;
+  icon: string; // Puede ser emoji o ruta de imagen
   category: 'collection' | 'tribe' | 'game' | 'rank' | 'special';
   condition: (medallium: MedalliumData, allYokai: Yokai[]) => boolean;
   reward?: {
-    title?: string;
-    badge?: string;
     points?: number;
   };
   hidden?: boolean; // Logros secretos
@@ -32,7 +30,7 @@ export interface AchievementProgress {
 
 // Definición de todos los logros disponibles
 export const ACHIEVEMENTS: Achievement[] = [
-  // === LOGROS DE COLECCIÓN ===
+  // === LOGROS DE COLECCIÓN GENERAL ===
   {
     id: 'first_yokai',
     name: 'Primer Paso',
@@ -40,7 +38,16 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🥇',
     category: 'collection',
     condition: (medallium) => medallium.totalUnlocked >= 1,
-    reward: { title: 'Novato', points: 10 }
+    reward: { points: 10 }
+  },
+  {
+    id: 'collector_5',
+    name: 'Iniciado',
+    description: 'Desbloquea 5 Yo-kai',
+    icon: '📝',
+    category: 'collection',
+    condition: (medallium) => medallium.totalUnlocked >= 5,
+    reward: { points: 25 }
   },
   {
     id: 'collector_10',
@@ -49,7 +56,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '📚',
     category: 'collection',
     condition: (medallium) => medallium.totalUnlocked >= 10,
-    reward: { title: 'Coleccionista', points: 50 }
+    reward: { points: 50 }
   },
   {
     id: 'collector_25',
@@ -58,7 +65,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '📖',
     category: 'collection',
     condition: (medallium) => medallium.totalUnlocked >= 25,
-    reward: { title: 'Experimentado', points: 100 }
+    reward: { points: 100 }
   },
   {
     id: 'collector_50',
@@ -67,7 +74,16 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🔥',
     category: 'collection',
     condition: (medallium) => medallium.totalUnlocked >= 50,
-    reward: { title: 'Experto', points: 200 }
+    reward: { points: 200 }
+  },
+  {
+    id: 'collector_75',
+    name: 'Coleccionista Veterano',
+    description: 'Desbloquea 75 Yo-kai',
+    icon: '⭐',
+    category: 'collection',
+    condition: (medallium) => medallium.totalUnlocked >= 75,
+    reward: { points: 300 }
   },
   {
     id: 'collector_100',
@@ -76,15 +92,24 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '👑',
     category: 'collection',
     condition: (medallium) => medallium.totalUnlocked >= 100,
-    reward: { title: 'Maestro Yokai', points: 500 }
+    reward: { points: 500 }
+  },
+  {
+    id: 'collector_150',
+    name: 'Leyenda Viviente',
+    description: 'Desbloquea 150 Yo-kai',
+    icon: '🏆',
+    category: 'collection',
+    condition: (medallium) => medallium.totalUnlocked >= 150,
+    reward: { points: 750 }
   },
 
   // === LOGROS POR TRIBU ===
   {
     id: 'tribe_charming_complete',
-    name: 'Encantador',
-    description: 'Desbloquea todos los Yo-kai de la tribu Guapo',
-    icon: '😊',
+    name: 'Maestro de los Guapos',
+    description: 'Completa la tribu Guapo',
+    icon: '/icons/tribes/charming.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const charmingYokai = allYokai.filter(y => y.tribe === 'Charming');
@@ -92,13 +117,27 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedCharming = unlockedYokai.filter(y => y.tribe === 'Charming');
       return charmingYokai.length > 0 && unlockedCharming.length === charmingYokai.length;
     },
-    reward: { title: 'Encantador', points: 300 }
+    reward: { points: 300 }
+  },
+  {
+    id: 'tribe_brave_complete',
+    name: 'Maestro de los Valientes',
+    description: 'Completa la tribu Valiente',
+    icon: '/icons/tribes/brave.png',
+    category: 'tribe',
+    condition: (medallium, allYokai) => {
+      const braveYokai = allYokai.filter(y => y.tribe === 'Brave');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedBrave = unlockedYokai.filter(y => y.tribe === 'Brave');
+      return braveYokai.length > 0 && unlockedBrave.length === braveYokai.length;
+    },
+    reward: { points: 300 }
   },
   {
     id: 'tribe_mysterious_complete',
-    name: 'Misterioso',
-    description: 'Desbloquea todos los Yo-kai de la tribu Misterioso',
-    icon: '🔮',
+    name: 'Maestro de los Misteriosos',
+    description: 'Completa la tribu Misterioso',
+    icon: '/icons/tribes/mysterious.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const mysteriousYokai = allYokai.filter(y => y.tribe === 'Mysterious');
@@ -106,13 +145,13 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedMysterious = unlockedYokai.filter(y => y.tribe === 'Mysterious');
       return mysteriousYokai.length > 0 && unlockedMysterious.length === mysteriousYokai.length;
     },
-    reward: { title: 'Misterioso', points: 300 }
+    reward: { points: 300 }
   },
   {
     id: 'tribe_tough_complete',
-    name: 'Resistente',
-    description: 'Desbloquea todos los Yo-kai de la tribu Resistente',
-    icon: '💪',
+    name: 'Maestro de los Resistentes',
+    description: 'Completa la tribu Resistente',
+    icon: '/icons/tribes/tough.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const toughYokai = allYokai.filter(y => y.tribe === 'Tough');
@@ -120,13 +159,13 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedTough = unlockedYokai.filter(y => y.tribe === 'Tough');
       return toughYokai.length > 0 && unlockedTough.length === toughYokai.length;
     },
-    reward: { title: 'Resistente', points: 300 }
+    reward: { points: 300 }
   },
   {
     id: 'tribe_heartful_complete',
-    name: 'Bondadoso',
-    description: 'Desbloquea todos los Yo-kai de la tribu Bondadoso',
-    icon: '❤️',
+    name: 'Maestro de los Bondadosos',
+    description: 'Completa la tribu Bondadoso',
+    icon: '/icons/tribes/heartful.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const heartfulYokai = allYokai.filter(y => y.tribe === 'Heartful');
@@ -134,15 +173,71 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedHeartful = unlockedYokai.filter(y => y.tribe === 'Heartful');
       return heartfulYokai.length > 0 && unlockedHeartful.length === heartfulYokai.length;
     },
-    reward: { title: 'Bondadoso', points: 300 }
+    reward: { points: 300 }
+  },
+  {
+    id: 'tribe_shady_complete',
+    name: 'Maestro de los Sombríos',
+    description: 'Completa la tribu Sombrío',
+    icon: '/icons/tribes/shady.png',
+    category: 'tribe',
+    condition: (medallium, allYokai) => {
+      const shadyYokai = allYokai.filter(y => y.tribe === 'Shady');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedShady = unlockedYokai.filter(y => y.tribe === 'Shady');
+      return shadyYokai.length > 0 && unlockedShady.length === shadyYokai.length;
+    },
+    reward: { points: 300 }
+  },
+  {
+    id: 'tribe_eerie_complete',
+    name: 'Maestro de los Escalofriantes',
+    description: 'Completa la tribu Escalofriante',
+    icon: '/icons/tribes/eerie.png',
+    category: 'tribe',
+    condition: (medallium, allYokai) => {
+      const eerieYokai = allYokai.filter(y => y.tribe === 'Eerie');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedEerie = unlockedYokai.filter(y => y.tribe === 'Eerie');
+      return eerieYokai.length > 0 && unlockedEerie.length === eerieYokai.length;
+    },
+    reward: { points: 300 }
+  },
+  {
+    id: 'tribe_slippery_complete',
+    name: 'Maestro de los Escurridizos',
+    description: 'Completa la tribu Escurridizo',
+    icon: '/icons/tribes/slippery.png',
+    category: 'tribe',
+    condition: (medallium, allYokai) => {
+      const slipperyYokai = allYokai.filter(y => y.tribe === 'Slippery');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedSlippery = unlockedYokai.filter(y => y.tribe === 'Slippery');
+      return slipperyYokai.length > 0 && unlockedSlippery.length === slipperyYokai.length;
+    },
+    reward: { points: 300 }
+  },
+  {
+    id: 'tribe_wicked_complete',
+    name: 'Maestro de los Malvados',
+    description: 'Completa la tribu Malvado',
+    icon: '/icons/tribes/wicked.png',
+    category: 'tribe',
+    condition: (medallium, allYokai) => {
+      const wickedYokai = allYokai.filter(y => y.tribe === 'Wicked');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedWicked = unlockedYokai.filter(y => y.tribe === 'Wicked');
+      return wickedYokai.length > 0 && unlockedWicked.length === wickedYokai.length;
+    },
+    reward: { points: 300 }
   },
 
   // === LOGROS POR JUEGO ===
   {
     id: 'game_yw1_complete',
-    name: 'Nostálgico',
-    description: 'Desbloquea todos los Yo-kai de Yo-kai Watch 1',
-    icon: '🎮',
+    name: 'Maestro del Primer Reloj',
+    description: 'Completa Yo-kai Watch 1',
+    icon: '/icons/games/yw1.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const yw1Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 1');
@@ -150,13 +245,13 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedYw1 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 1');
       return yw1Yokai.length > 0 && unlockedYw1.length === yw1Yokai.length;
     },
-    reward: { title: 'Nostálgico', points: 400 }
+    reward: { points: 400 }
   },
   {
     id: 'game_yw2_complete',
-    name: 'Veterano',
-    description: 'Desbloquea todos los Yo-kai de Yo-kai Watch 2',
-    icon: '🎯',
+    name: 'Maestro del Segundo Reloj',
+    description: 'Completa Yo-kai Watch 2',
+    icon: '/icons/games/yw2.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const yw2Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 2');
@@ -164,50 +259,214 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedYw2 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 2');
       return yw2Yokai.length > 0 && unlockedYw2.length === yw2Yokai.length;
     },
-    reward: { title: 'Veterano', points: 400 }
+    reward: { points: 400 }
+  },
+  {
+    id: 'game_yw3_complete',
+    name: 'Maestro del Tercer Reloj',
+    description: 'Completa Yo-kai Watch 3',
+    icon: '/icons/games/yw3.png',
+    category: 'game',
+    condition: (medallium, allYokai) => {
+      const yw3Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 3');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedYw3 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 3');
+      return yw3Yokai.length > 0 && unlockedYw3.length === yw3Yokai.length;
+    },
+    reward: { points: 400 }
+  },
+  {
+    id: 'game_yw4_complete',
+    name: 'Maestro del Cuarto Reloj',
+    description: 'Completa Yo-kai Watch 4',
+    icon: '/icons/games/yw4.png',
+    category: 'game',
+    condition: (medallium, allYokai) => {
+      const yw4Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 4');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedYw4 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 4');
+      return yw4Yokai.length > 0 && unlockedYw4.length === yw4Yokai.length;
+    },
+    reward: { points: 400 }
+  },
+  {
+    id: 'game_blasters_complete',
+    name: 'Comandante Blaster',
+    description: 'Completa Yo-kai Watch Blasters',
+    icon: '/icons/games/blasters.png',
+    category: 'game',
+    condition: (medallium, allYokai) => {
+      const blastersYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedBlasters = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
+      return blastersYokai.length > 0 && unlockedBlasters.length === blastersYokai.length;
+    },
+    reward: { points: 400 }
+  },
+  {
+    id: 'game_busters2_complete',
+    name: 'Comandante Busters',
+    description: 'Completa Yo-kai Watch Busters 2',
+    icon: '/icons/games/busters2.png',
+    category: 'game',
+    condition: (medallium, allYokai) => {
+      const busters2Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch Busters 2');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedBusters2 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Busters 2');
+      return busters2Yokai.length > 0 && unlockedBusters2.length === busters2Yokai.length;
+    },
+    reward: { points: 400 }
+  },
+  {
+    id: 'game_sangokushi_complete',
+    name: 'Estratega de los Tres Reinos',
+    description: 'Completa Yo-kai Watch Sangokushi',
+    icon: '/icons/games/sangokushi.png',
+    category: 'game',
+    condition: (medallium, allYokai) => {
+      const sangokushiYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const unlockedSangokushi = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
+      return sangokushiYokai.length > 0 && unlockedSangokushi.length === sangokushiYokai.length;
+    },
+    reward: { points: 400 }
   },
 
   // === LOGROS POR RANGO ===
   {
-    id: 'rank_s_collector',
-    name: 'Cazador de Leyendas',
-    description: 'Desbloquea 10 Yo-kai de rango S',
-    icon: '⭐',
+    id: 'rank_e_collector',
+    name: 'Coleccionista Principiante',
+    description: 'Desbloquea 10 Yo-kai de rango E',
+    icon: '/icons/ranks/e.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
-      const sRankYokai = unlockedYokai.filter(y => y.rank === 'S');
-      return sRankYokai.length >= 10;
+      const eRankYokai = unlockedYokai.filter(y => y.rank === 'E');
+      return eRankYokai.length >= 10;
     },
-    reward: { title: 'Cazador de Leyendas', points: 250 }
+    reward: { points: 100 }
+  },
+  {
+    id: 'rank_d_collector',
+    name: 'Coleccionista Básico',
+    description: 'Desbloquea 15 Yo-kai de rango D',
+    icon: '/icons/ranks/d.png',
+    category: 'rank',
+    condition: (medallium, allYokai) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const dRankYokai = unlockedYokai.filter(y => y.rank === 'D');
+      return dRankYokai.length >= 15;
+    },
+    reward: { points: 125 }
+  },
+  {
+    id: 'rank_c_collector',
+    name: 'Coleccionista Intermedio',
+    description: 'Desbloquea 20 Yo-kai de rango C',
+    icon: '/icons/ranks/c.png',
+    category: 'rank',
+    condition: (medallium, allYokai) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const cRankYokai = unlockedYokai.filter(y => y.rank === 'C');
+      return cRankYokai.length >= 20;
+    },
+    reward: { points: 150 }
+  },
+  {
+    id: 'rank_b_collector',
+    name: 'Coleccionista Avanzado',
+    description: 'Desbloquea 15 Yo-kai de rango B',
+    icon: '/icons/ranks/b.png',
+    category: 'rank',
+    condition: (medallium, allYokai) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const bRankYokai = unlockedYokai.filter(y => y.rank === 'B');
+      return bRankYokai.length >= 15;
+    },
+    reward: { points: 175 }
   },
   {
     id: 'rank_a_collector',
     name: 'Coleccionista Elite',
-    description: 'Desbloquea 15 Yo-kai de rango A',
-    icon: '🌟',
+    description: 'Desbloquea 10 Yo-kai de rango A',
+    icon: '/icons/ranks/a.png',
     category: 'rank',
     condition: (medallium, allYokai) => {
       const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
       const aRankYokai = unlockedYokai.filter(y => y.rank === 'A');
-      return aRankYokai.length >= 15;
+      return aRankYokai.length >= 10;
     },
-    reward: { title: 'Elite', points: 200 }
+    reward: { points: 200 }
+  },
+  {
+    id: 'rank_s_collector',
+    name: 'Cazador de Leyendas',
+    description: 'Desbloquea 5 Yo-kai de rango S',
+    icon: '/icons/ranks/s.png',
+    category: 'rank',
+    condition: (medallium, allYokai) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const sRankYokai = unlockedYokai.filter(y => y.rank === 'S');
+      return sRankYokai.length >= 5;
+    },
+    reward: { points: 250 }
   },
 
   // === LOGROS ESPECIALES ===
   {
-    id: 'speed_demon',
-    name: 'Demonio de la Velocidad',
-    description: 'Desbloquea 5 Yo-kai en una sesión',
-    icon: '⚡',
+    id: 'all_tribes_master',
+    name: 'Maestro de Todas las Tribus',
+    description: 'Completa todas las tribus disponibles',
+    icon: '👑',
     category: 'special',
-    condition: (medallium) => {
-      // Este logro se verificará de manera especial en el juego
-      // Por ahora, simplemente verificamos si tiene muchos yokais
-      return medallium.totalUnlocked >= 5;
+    condition: (medallium, allYokai) => {
+      const allTribes = Array.from(new Set(allYokai.map(y => y.tribe)));
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+
+      return allTribes.every(tribe => {
+        const tribeYokai = allYokai.filter(y => y.tribe === tribe);
+        const unlockedTribeYokai = unlockedYokai.filter(y => y.tribe === tribe);
+        return tribeYokai.length > 0 && unlockedTribeYokai.length === tribeYokai.length;
+      });
     },
-    reward: { title: 'Velocista', points: 150 },
+    reward: { points: 1000 },
+    hidden: true
+  },
+  {
+    id: 'all_games_master',
+    name: 'Maestro de Todos los Juegos',
+    description: 'Completa todos los juegos disponibles',
+    icon: '🎮',
+    category: 'special',
+    condition: (medallium, allYokai) => {
+      const allGames = Array.from(new Set(allYokai.map(y => y.game)));
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+
+      return allGames.every(game => {
+        const gameYokai = allYokai.filter(y => y.game === game);
+        const unlockedGameYokai = unlockedYokai.filter(y => y.game === game);
+        return gameYokai.length > 0 && unlockedGameYokai.length === gameYokai.length;
+      });
+    },
+    reward: { points: 1500 },
+    hidden: true
+  },
+  {
+    id: 'rank_perfectionist',
+    name: 'Perfeccionista de Rangos',
+    description: 'Desbloquea al menos 5 Yo-kai de cada rango',
+    icon: '⭐',
+    category: 'special',
+    condition: (medallium, allYokai) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+      const ranks = ['E', 'D', 'C', 'B', 'A', 'S'];
+
+      return ranks.every(rank => {
+        const rankYokai = unlockedYokai.filter(y => y.rank === rank);
+        return rankYokai.length >= 5;
+      });
+    },
+    reward: { points: 750 },
     hidden: true
   },
   {
@@ -219,7 +478,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     condition: (medallium, allYokai) => {
       return medallium.totalUnlocked === allYokai.length;
     },
-    reward: { title: 'Completista Total', points: 1000 },
+    reward: { points: 2000 },
     hidden: true
   }
 ];
