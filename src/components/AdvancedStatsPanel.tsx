@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { AdvancedMedalliumStats } from '@/utils/advancedStats';
-import { tribeTranslations, elementTranslations } from '@/types/yokai';
+import { tribeTranslations, elementTranslations, tribeIcons, gameLogos, rankIcons } from '@/types/yokai';
 
 interface AdvancedStatsPanelProps {
   stats: AdvancedMedalliumStats;
@@ -121,6 +121,14 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {stats.rankStats.map(rank => (
                   <div key={rank.rank} className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-center mb-2">
+                      <img
+                        src={rankIcons[rank.rank]}
+                        alt={`Rango ${rank.rank}`}
+                        className="w-8 h-8"
+                        title={`Rango ${rank.rank}`}
+                      />
+                    </div>
                     <div className="text-lg font-bold text-gray-800">{rank.unlocked}</div>
                     <div className="text-sm text-gray-600">Rango {rank.rank}</div>
                     <div className="text-xs text-gray-500">{rank.percentage}%</div>
@@ -157,15 +165,23 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
               {stats.tribeStats.map(tribe => (
                 <div key={tribe.tribe} className="p-4 bg-gray-50 rounded-lg">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-800">
-                      {tribeTranslations[tribe.tribe] || tribe.tribe}
-                    </span>
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={tribeIcons[tribe.tribe]}
+                        alt={tribe.tribe}
+                        className="w-8 h-8"
+                        title={tribeTranslations[tribe.tribe] || tribe.tribe}
+                      />
+                      <span className="font-medium text-gray-800">
+                        {tribeTranslations[tribe.tribe] || tribe.tribe}
+                      </span>
+                    </div>
                     <span className="text-sm text-gray-600">
                       {tribe.unlocked}/{tribe.total} ({tribe.percentage}%)
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div 
+                    <div
                       className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(tribe.percentage)}`}
                       style={{ width: `${tribe.percentage}%` }}
                     ></div>
@@ -188,13 +204,35 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
               {stats.gameStats.map(game => (
                 <div key={game.game} className="p-4 bg-gray-50 rounded-lg">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-800">{game.game}</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-6 flex items-center justify-center">
+                        <img
+                          src={gameLogos[game.game as keyof typeof gameLogos]}
+                          alt={game.game}
+                          className="max-w-full max-h-full object-contain"
+                          title={game.game}
+                          onError={(e) => {
+                            // Fallback a texto abreviado si no hay logo
+                            const target = e.currentTarget.parentElement;
+                            if (target) {
+                              const shortName = game.game
+                                .replace(/Yo-kai Watch/i, 'YW')
+                                .replace(/Blasters/i, 'B')
+                                .replace(/Busters/i, 'B')
+                                .replace(/Sangokushi/i, 'S');
+                              target.innerHTML = `<span class="text-xs font-bold text-gray-600">${shortName}</span>`;
+                            }
+                          }}
+                        />
+                      </div>
+                      <span className="font-medium text-gray-800">{game.game}</span>
+                    </div>
                     <span className="text-sm text-gray-600">
                       {game.unlocked}/{game.total} ({game.percentage}%)
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div 
+                    <div
                       className={`h-3 rounded-full transition-all duration-500 ${getProgressColor(game.percentage)}`}
                       style={{ width: `${game.percentage}%` }}
                     ></div>

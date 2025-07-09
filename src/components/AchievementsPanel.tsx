@@ -3,6 +3,28 @@
 import React, { useState } from 'react';
 import { Achievement, getUnlockedAchievements, getLockedAchievements, getAchievementStats } from '@/utils/achievementSystem';
 
+// Componente de icono de puntos personalizable
+const PointsIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
+  <img
+    src="/icons/points-icon.png"
+    alt="Puntos"
+    className={className}
+    onError={(e) => {
+      // Fallback a un icono SVG si no existe la imagen
+      e.currentTarget.style.display = 'none';
+      const parent = e.currentTarget.parentElement;
+      if (parent) {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', className);
+        svg.setAttribute('viewBox', '0 0 20 20');
+        svg.setAttribute('fill', 'currentColor');
+        svg.innerHTML = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />';
+        parent.appendChild(svg);
+      }
+    }}
+  />
+);
+
 interface AchievementsPanelProps {
   className?: string;
 }
@@ -65,8 +87,14 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
         
         {/* Puntos */}
         <div className="flex justify-between text-sm text-gray-600">
-          <span>Puntos ganados: <strong className="text-yellow-600">{stats.earnedPoints}</strong></span>
-          <span>Total disponible: <strong>{stats.totalPoints}</strong></span>
+          <span className="flex items-center">
+            <PointsIcon className="w-4 h-4 mr-1" />
+            <span>Ganados: <strong className="text-yellow-600">{stats.earnedPoints}</strong></span>
+          </span>
+          <span className="flex items-center">
+            <PointsIcon className="w-4 h-4 mr-1" />
+            <span>Total: <strong>{stats.totalPoints}</strong></span>
+          </span>
         </div>
       </div>
       
@@ -134,8 +162,9 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                     <div className="flex items-center space-x-2 mb-1">
                       <h3 className="font-semibold text-gray-800">{achievement.name}</h3>
                       {achievement.reward?.points && (
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">
-                          +{achievement.reward.points} pts
+                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium flex items-center">
+                          <PointsIcon className="w-3 h-3 mr-1" />
+                          <span>+{achievement.reward.points}</span>
                         </span>
                       )}
                     </div>
@@ -173,8 +202,9 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                     <div className="flex items-center space-x-2 mb-1">
                       <h3 className="font-semibold text-gray-600">{achievement.name}</h3>
                       {achievement.reward?.points && (
-                        <span className="px-2 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium">
-                          +{achievement.reward.points} pts
+                        <span className="px-2 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium flex items-center">
+                          <PointsIcon className="w-3 h-3 mr-1" />
+                          <span>+{achievement.reward.points}</span>
                         </span>
                       )}
                     </div>
