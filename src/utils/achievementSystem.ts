@@ -235,7 +235,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   // === LOGROS POR JUEGO ===
   {
     id: 'game_yw1_complete',
-    name: 'Maestro Yo-kai',
+    name: 'Coleccionista del primer medallium',
     description: 'Completa Yo-kai Watch 1',
     icon: '/images/games/yw1.png',
     category: 'game',
