@@ -109,7 +109,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'tribe_charming_complete',
     name: 'Maestro de los Guapos',
     description: 'Completa la tribu Guapo',
-    icon: '/icons/tribes/charming.png',
+    icon: '/images/tribes/charming.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const charmingYokai = allYokai.filter(y => y.tribe === 'Charming');
@@ -123,7 +123,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'tribe_brave_complete',
     name: 'Maestro de los Valientes',
     description: 'Completa la tribu Valiente',
-    icon: '/icons/tribes/brave.png',
+    icon: '/images/tribes/brave.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const braveYokai = allYokai.filter(y => y.tribe === 'Brave');
@@ -137,7 +137,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'tribe_mysterious_complete',
     name: 'Maestro de los Misteriosos',
     description: 'Completa la tribu Misterioso',
-    icon: '/icons/tribes/mysterious.png',
+    icon: '/images/tribes/mysterious.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const mysteriousYokai = allYokai.filter(y => y.tribe === 'Mysterious');
@@ -149,9 +149,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'tribe_tough_complete',
-    name: 'Maestro de los Resistentes',
-    description: 'Completa la tribu Resistente',
-    icon: '/icons/tribes/tough.png',
+    name: 'Maestro de los Robustos',
+    description: 'Completa la tribu Robusta',
+    icon: '/images/tribes/tough.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const toughYokai = allYokai.filter(y => y.tribe === 'Tough');
@@ -163,9 +163,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'tribe_heartful_complete',
-    name: 'Maestro de los Bondadosos',
-    description: 'Completa la tribu Bondadoso',
-    icon: '/icons/tribes/heartful.png',
+    name: 'Maestro de los Amables',
+    description: 'Completa la tribu Amable',
+    icon: '/images/tribes/heartful.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const heartfulYokai = allYokai.filter(y => y.tribe === 'Heartful');
@@ -177,9 +177,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'tribe_shady_complete',
-    name: 'Maestro de los Sombríos',
-    description: 'Completa la tribu Sombrío',
-    icon: '/icons/tribes/shady.png',
+    name: 'Maestro de los Oscuros',
+    description: 'Completa la tribu Oscura',
+    icon: '/images/tribes/shady.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const shadyYokai = allYokai.filter(y => y.tribe === 'Shady');
@@ -191,9 +191,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'tribe_eerie_complete',
-    name: 'Maestro de los Escalofriantes',
-    description: 'Completa la tribu Escalofriante',
-    icon: '/icons/tribes/eerie.png',
+    name: 'Maestro de los Siniestros',
+    description: 'Completa la tribu Siniestra',
+    icon: '/images/tribes/eerie.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const eerieYokai = allYokai.filter(y => y.tribe === 'Eerie');
@@ -206,8 +206,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'tribe_slippery_complete',
     name: 'Maestro de los Escurridizos',
-    description: 'Completa la tribu Escurridizo',
-    icon: '/icons/tribes/slippery.png',
+    description: 'Completa la tribu Escurridiza',
+    icon: '/images/tribes/slippery.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const slipperyYokai = allYokai.filter(y => y.tribe === 'Slippery');
@@ -219,9 +219,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'tribe_wicked_complete',
-    name: 'Maestro de los Malvados',
-    description: 'Completa la tribu Malvado',
-    icon: '/icons/tribes/wicked.png',
+    name: 'Maestro de los Maleficos',
+    description: 'Completa la tribu Malefica',
+    icon: '/images/tribes/wicked.png',
     category: 'tribe',
     condition: (medallium, allYokai) => {
       const wickedYokai = allYokai.filter(y => y.tribe === 'Wicked');
@@ -237,7 +237,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'game_yw1_complete',
     name: 'Maestro del Primer Reloj',
     description: 'Completa Yo-kai Watch 1',
-    icon: '/icons/games/yw1.png',
+    icon: '/images/games/yw1.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const yw1Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 1');
@@ -251,7 +251,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'game_yw2_complete',
     name: 'Maestro del Segundo Reloj',
     description: 'Completa Yo-kai Watch 2',
-    icon: '/icons/games/yw2.png',
+    icon: '/images/games/yw2.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const yw2Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 2');
@@ -265,7 +265,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'game_yw3_complete',
     name: 'Maestro del Tercer Reloj',
     description: 'Completa Yo-kai Watch 3',
-    icon: '/icons/games/yw3.png',
+    icon: '/images/games/yw3.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const yw3Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 3');
@@ -276,24 +276,10 @@ export const ACHIEVEMENTS: Achievement[] = [
     reward: { points: 400 }
   },
   {
-    id: 'game_yw4_complete',
-    name: 'Maestro del Cuarto Reloj',
-    description: 'Completa Yo-kai Watch 4',
-    icon: '/icons/games/yw4.png',
-    category: 'game',
-    condition: (medallium, allYokai) => {
-      const yw4Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 4');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
-      const unlockedYw4 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 4');
-      return yw4Yokai.length > 0 && unlockedYw4.length === yw4Yokai.length;
-    },
-    reward: { points: 400 }
-  },
-  {
     id: 'game_blasters_complete',
     name: 'Comandante Blaster',
     description: 'Completa Yo-kai Watch Blasters',
-    icon: '/icons/games/blasters.png',
+    icon: '/images/games/blasters.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const blastersYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
@@ -304,24 +290,10 @@ export const ACHIEVEMENTS: Achievement[] = [
     reward: { points: 400 }
   },
   {
-    id: 'game_busters2_complete',
-    name: 'Comandante Busters',
-    description: 'Completa Yo-kai Watch Busters 2',
-    icon: '/icons/games/busters2.png',
-    category: 'game',
-    condition: (medallium, allYokai) => {
-      const busters2Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch Busters 2');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
-      const unlockedBusters2 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Busters 2');
-      return busters2Yokai.length > 0 && unlockedBusters2.length === busters2Yokai.length;
-    },
-    reward: { points: 400 }
-  },
-  {
     id: 'game_sangokushi_complete',
     name: 'Estratega de los Tres Reinos',
     description: 'Completa Yo-kai Watch Sangokushi',
-    icon: '/icons/games/sangokushi.png',
+    icon: '/images/games/sangokushi.png',
     category: 'game',
     condition: (medallium, allYokai) => {
       const sangokushiYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
