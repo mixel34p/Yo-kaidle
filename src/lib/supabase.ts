@@ -231,26 +231,48 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
   }
 }
 
+import { InfiniteFilters } from '@/utils/gameSourcePreferences';
+
 export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: boolean): Promise<Yokai | null> {
-  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos y tribus
+  // Mantener compatibilidad con la función anterior
+  const simpleFilters: InfiniteFilters = {
+    games: gameSources || [],
+    excludeBossTribes: excludeBossTribes || false,
+    tribes: [],
+    ranks: [],
+    elements: [],
+    difficultyMode: 'mixed',
+    excludeRecent: false,
+    recentCount: 10
+  };
+
+  return getRandomYokaiWithFilters(simpleFilters);
+}
+
+export async function getRandomYokaiWithFilters(
+  filters: InfiniteFilters,
+  recentYokaiIds: number[] = []
+): Promise<Yokai | null> {
+  // Obtiene un Yo-kai aleatorio para el modo infinito con filtros avanzados
   let query = supabase
     .from('yokai')
     .select('*');
 
-  // Si hay filtro de juegos, aplicarlo
-  if (gameSources && gameSources.length > 0) {
-    query = query.in('game', gameSources);
-  }
-
-  // Si se debe excluir tribus Boss, aplicar filtro
-  if (excludeBossTribes) {
-    query = query.neq('tribe', 'Boss');
-  }
+  // Aplicar filtros de base de datos
+  query = applyDatabaseFilters(query, filters);
 
   const { data, error } = await query;
-  
+
   if (error || !data || data.length === 0) {
-    console.error('Error fetching random Yo-kai:', error);
+    console.error('Error fetching random Yo-kai with filters:', error);
+    return null;
+  }
+
+  // Aplicar filtros post-consulta (que no se pueden hacer en Supabase)
+  let filteredData = applyPostFilters(data, filters, recentYokaiIds);
+
+  if (filteredData.length === 0) {
+    console.warn('No Yo-kai found after applying filters');
     return null;
   }
   
@@ -297,4 +319,76 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
   }
   
   return yokai as Yokai;
+}
+
+// Aplicar filtros que se pueden hacer en la consulta de Supabase
+function applyDatabaseFilters(query: any, filters: InfiniteFilters): any {
+  let filteredQuery = query;
+
+  // Filtros de juegos
+  if (filters.games.length > 0) {
+    filteredQuery = filteredQuery.in('game', filters.games);
+  }
+
+  // Excluir tribus Boss
+  if (filters.excludeBossTribes) {
+    filteredQuery = filteredQuery.neq('tribe', 'Boss');
+  }
+
+  // Filtros de tribus específicas
+  if (filters.tribes.length > 0) {
+    filteredQuery = filteredQuery.in('tribe', filters.tribes);
+  }
+
+  // Filtros de rangos
+  if (filters.ranks.length > 0) {
+    filteredQuery = filteredQuery.in('rank', filters.ranks);
+  }
+
+  // Filtros de elementos
+  if (filters.elements.length > 0) {
+    filteredQuery = filteredQuery.in('element', filters.elements);
+  }
+
+  return filteredQuery;
+}
+
+// Aplicar filtros que requieren lógica adicional
+function applyPostFilters(
+  data: any[],
+  filters: InfiniteFilters,
+  recentYokaiIds: number[]
+): any[] {
+  let filtered = [...data];
+
+  // Excluir yokais recientes
+  if (filters.excludeRecent && recentYokaiIds.length > 0) {
+    const recentToExclude = recentYokaiIds.slice(0, filters.recentCount);
+    filtered = filtered.filter(yokai => !recentToExclude.includes(yokai.id));
+  }
+
+  // Filtro por dificultad
+  if (filters.difficultyMode !== 'mixed') {
+    filtered = filtered.filter(yokai => {
+      const difficulty = determineYokaiDifficulty(yokai);
+      return difficulty === filters.difficultyMode;
+    });
+  }
+
+  return filtered;
+}
+
+// Determinar dificultad de un yokai
+function determineYokaiDifficulty(yokai: any): 'easy' | 'medium' | 'hard' {
+  let difficultyScore = 0;
+
+  // Factores que aumentan dificultad
+  if (yokai.rank === 'S' || yokai.rank === 'SS' || yokai.rank === 'SSS') difficultyScore += 2;
+  if (yokai.tribe === 'Boss' || yokai.tribe === 'Enma') difficultyScore += 3;
+  if (yokai.game === 'Yo-kai Watch 3' || yokai.game === 'Yo-kai Watch 4') difficultyScore += 1;
+  if (yokai.weight > 50) difficultyScore += 1; // Yokais pesados pueden ser más difíciles
+
+  if (difficultyScore >= 4) return 'hard';
+  if (difficultyScore >= 2) return 'medium';
+  return 'easy';
 }

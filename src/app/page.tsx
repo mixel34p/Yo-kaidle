@@ -10,13 +10,33 @@ import MotivationalHint from '@/components/MotivationalHint';
 import GameRules from '@/components/GameRules';
 import { Yokai, GameState, GameMode, Game } from '@/types/yokai';
 import { normalizeYokai } from '@/utils/gameLogic';
-import { getDailyYokai, getRandomYokai } from '@/lib/supabase';
+import { getDailyYokai, getRandomYokai, getRandomYokaiWithFilters } from '@/lib/supabase';
 import { compareYokai, getTodayDateString, formatDateForDisplay, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
 import GameModeSelector from '@/components/GameModeSelector';
 import GameSourceSelector from '@/components/GameSourceSelector';
 import TribeRestrictionsSelector from '@/components/TribeRestrictionsSelector';
-import { saveGameSources, loadGameSources, saveTribeRestrictions, loadTribeRestrictions, TribeRestrictions } from '@/utils/gameSourcePreferences';
+import InfiniteFiltersPanel from '@/components/InfiniteFiltersPanel';
+import InfiniteConfigPanel from '@/components/InfiniteConfigPanel';
+import InfiniteStatsCompact from '@/components/InfiniteStatsCompact';
+import InfiniteStatsModal from '@/components/InfiniteStatsModal';
+import GameTimer from '@/components/GameTimer';
+import DifficultyIndicator from '@/components/DifficultyIndicator';
+import InfiniteHints from '@/components/InfiniteHints';
+import {
+  saveGameSources,
+  loadGameSources,
+  saveTribeRestrictions,
+  loadTribeRestrictions,
+  TribeRestrictions,
+  InfiniteFilters,
+  InfiniteConfig,
+  saveInfiniteFilters,
+  loadInfiniteFilters,
+  saveInfiniteConfig,
+  loadInfiniteConfig
+} from '@/utils/gameSourcePreferences';
 import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
+import { addRecentYokai, getRecentYokaiIds } from '@/utils/recentYokaiManager';
 
 
 const MAX_GUESSES = 6;
@@ -45,6 +65,16 @@ export default function Home() {
 
   // Estado para las restricciones de tribus
   const [tribeRestrictions, setTribeRestrictions] = useState<TribeRestrictions>({ excludeBossTribes: false });
+
+  // Estados para filtros y configuración avanzada
+  const [infiniteFilters, setInfiniteFilters] = useState<InfiniteFilters>(loadInfiniteFilters());
+  const [infiniteConfig, setInfiniteConfig] = useState<InfiniteConfig>(loadInfiniteConfig());
+  const [showAdvancedConfig, setShowAdvancedConfig] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
+
+  // Estados para el timer
+  const [gameStartTime, setGameStartTime] = useState<number | null>(null);
+  const [currentGameTime, setCurrentGameTime] = useState(0);
   
   // Cargar configuración de juegos guardada
   useEffect(() => {
@@ -70,15 +100,36 @@ export default function Home() {
   const handleNewInfiniteGame = async () => {
     setLoading(true);
     const today = getTodayDateString();
-    const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
+
+    // Preparar filtros combinando configuración básica y avanzada
+    const combinedFilters: InfiniteFilters = {
+      ...infiniteFilters,
+      games: selectedGameSources,
+      excludeBossTribes: tribeRestrictions.excludeBossTribes
+    };
+
+    // Obtener IDs de yokais recientes si está habilitado
+    const recentYokaiIds = combinedFilters.excludeRecent
+      ? getRecentYokaiIds(combinedFilters.recentCount)
+      : [];
+
+    const randomYokai = await getRandomYokaiWithFilters(combinedFilters, recentYokaiIds);
     if (randomYokai) {
       const newGameState = createNewInfiniteGame(today, randomYokai, gameState);
+      // Aplicar configuración de intentos máximos
+      newGameState.maxGuesses = infiniteConfig.maxAttempts || 6;
+
       setGameState(newGameState);
       setGuessResults([]);
       setShowGameOver(false);
       setMessage("");
       setFoodIconTimestamp(Date.now());
       saveGameToLocalStorage(newGameState);
+
+      // Iniciar timer para modo infinito
+      if (infiniteConfig.timeLimit > 0 || infiniteConfig.showTimer) {
+        startGameTimer();
+      }
     }
     setLoading(false);
   };
@@ -93,6 +144,50 @@ export default function Home() {
   const handleTribeRestrictionsChange = (restrictions: TribeRestrictions) => {
     setTribeRestrictions(restrictions);
     saveTribeRestrictions(restrictions);
+  };
+
+  // Manejar cambios en filtros infinitos
+  const handleInfiniteFiltersChange = (filters: InfiniteFilters) => {
+    setInfiniteFilters(filters);
+    saveInfiniteFilters(filters);
+  };
+
+  // Manejar cambios en configuración infinita
+  const handleInfiniteConfigChange = (config: InfiniteConfig) => {
+    setInfiniteConfig(config);
+    saveInfiniteConfig(config);
+  };
+
+  // Mostrar modal de estadísticas
+  const handleShowStats = () => {
+    setShowStatsModal(true);
+  };
+
+  // Funciones del timer
+  const startGameTimer = () => {
+    setGameStartTime(Date.now());
+    setCurrentGameTime(0);
+  };
+
+  const handleTimeUp = () => {
+    if (gameState.gameStatus === 'playing') {
+      // Terminar el juego por tiempo agotado
+      const newGameState = { ...gameState, gameStatus: 'lost' as const };
+      setGameState(newGameState);
+      saveGameToLocalStorage(newGameState);
+
+      // Añadir al historial como perdido
+      if (gameState.gameMode === 'infinite' && gameState.infiniteYokai) {
+        addRecentYokai(gameState.infiniteYokai, gameState.guesses.length, false);
+      }
+
+      setMessage('¡Tiempo agotado!');
+      setTimeout(() => setShowGameOver(true), 1000);
+    }
+  };
+
+  const handleTimeUpdate = (seconds: number) => {
+    setCurrentGameTime(seconds);
   };
   
   // Función para recargar el Yo-kai diario cuando llega medianoche
@@ -354,11 +449,25 @@ export default function Home() {
         else if (currentMode === 'infinite') {
           // En modo infinito, si NO hay juego guardado, creamos uno nuevo
           if (!savedGame || savedGame.gameMode !== 'infinite') {
+            // Preparar filtros para modo infinito
+            const combinedFilters: InfiniteFilters = {
+              ...infiniteFilters,
+              games: selectedGameSources,
+              excludeBossTribes: tribeRestrictions.excludeBossTribes
+            };
+
+            const recentYokaiIds = combinedFilters.excludeRecent
+              ? getRecentYokaiIds(combinedFilters.recentCount)
+              : [];
+
             // Obtener un Yo-kai aleatorio para modo infinito
-            const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
+            const randomYokai = await getRandomYokaiWithFilters(combinedFilters, recentYokaiIds);
             if (randomYokai) {
               // Usar la función auxiliar para crear un nuevo juego infinito
               const newGameState = createNewInfiniteGame(today, randomYokai, savedGame);
+              // Aplicar configuración de intentos máximos
+              newGameState.maxGuesses = infiniteConfig.maxAttempts || 6;
+
               setGameState(newGameState);
               saveGameToLocalStorage(newGameState);
               setGuessResults([]);
@@ -367,6 +476,10 @@ export default function Home() {
                 setShowGameOver(true);
               } else {
                 setShowGameOver(false);
+                // Iniciar timer para nuevo juego infinito
+                if (infiniteConfig.timeLimit > 0 || infiniteConfig.showTimer) {
+                  startGameTimer();
+                }
               }
             }
           } else {
@@ -612,7 +725,12 @@ export default function Home() {
       // Añadir el Yo-kai al Medallium si es acertado
       const medallium = loadMedallium();
       unlockYokai(medallium, targetYokai);
-      
+
+      // Añadir al historial de yokais recientes (solo en modo infinito)
+      if (!isDaily) {
+        addRecentYokai(targetYokai, newGuesses.length, true);
+      }
+
       setMessage('');
       // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas
       const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
@@ -629,8 +747,10 @@ export default function Home() {
         newStreak = 0;
       } else {
         newInfiniteStats.totalPlayed++;
+        // Añadir al historial de yokais recientes (perdido)
+        addRecentYokai(targetYokai, newGuesses.length, false);
       }
-      
+
       setMessage('');
       // Retrasar la pantalla de derrota para permitir que se complete la animación de todas las celdas
       const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
@@ -728,7 +848,7 @@ return (
         gameMode={gameState.gameMode}
         gameStatus={gameState.gameStatus}
         onClose={() => setShowGameOver(false)}
-        showStats={() => setShowStats(true)}
+        showStats={handleShowStats}
         playAgain={gameState.gameMode === 'infinite' ? handleNewInfiniteGame : undefined}
         onMidnightReached={handleMidnightReached}
         guesses={gameState.guesses}
@@ -739,6 +859,14 @@ return (
     {/* SELECCIÓN DE MODO DE JUEGO */}
     <div className="mb-4">
       <GameModeSelector currentMode={gameState.gameMode} onModeChange={handleModeChange} />
+
+      {/* ESTADÍSTICAS DEL MODO INFINITO */}
+      {gameState.gameMode === 'infinite' && (
+        <div className="mt-4 mb-4">
+          <InfiniteStatsCompact />
+        </div>
+      )}
+
       {gameState.gameMode === 'infinite' && (
         <div className="mt-4 flex flex-col items-center">
           {showGameConfig ? (
@@ -763,6 +891,34 @@ return (
                 restrictions={tribeRestrictions}
                 onRestrictionsChange={handleTribeRestrictionsChange}
               />
+
+              {/* Botón para mostrar configuración avanzada */}
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowAdvancedConfig(!showAdvancedConfig)}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-lg shadow-lg hover:from-purple-600 hover:to-purple-800 transition-all duration-300 flex items-center justify-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                  </svg>
+                  {showAdvancedConfig ? 'Ocultar' : 'Mostrar'} Configuración Avanzada
+                </button>
+              </div>
+
+              {/* Paneles de configuración avanzada */}
+              {showAdvancedConfig && (
+                <div className="mt-4 space-y-4">
+                  <InfiniteFiltersPanel
+                    filters={infiniteFilters}
+                    onFiltersChange={handleInfiniteFiltersChange}
+                  />
+                  <InfiniteConfigPanel
+                    config={infiniteConfig}
+                    onConfigChange={handleInfiniteConfigChange}
+                  />
+                </div>
+              )}
+
               <div className="mt-4 flex justify-center">
                 <button
                   onClick={() => {
@@ -795,12 +951,34 @@ return (
       )}
     </div>
 
+    {/* TIMER DEL JUEGO (solo modo infinito) */}
+    {gameState.gameMode === 'infinite' && (infiniteConfig.timeLimit > 0 || infiniteConfig.showTimer) && (
+      <GameTimer
+        isActive={gameState.gameStatus === 'playing'}
+        timeLimit={infiniteConfig.timeLimit}
+        showTimer={infiniteConfig.showTimer}
+        onTimeUp={handleTimeUp}
+        onTimeUpdate={handleTimeUpdate}
+      />
+    )}
+
     {/* CUADRÍCULA DE ADIVINANZAS */}
-    <YokaiGrid 
-      guesses={guessResults} 
-      maxGuesses={gameState.maxGuesses} 
-      foodIconTimestamp={foodIconTimestamp} 
+    <YokaiGrid
+      guesses={guessResults}
+      maxGuesses={gameState.maxGuesses}
+      foodIconTimestamp={foodIconTimestamp}
     />
+
+    {/* SISTEMA DE PISTAS (solo modo infinito) */}
+    {gameState.gameMode === 'infinite' && gameState.infiniteYokai && (
+      <InfiniteHints
+        yokai={gameState.infiniteYokai}
+        attemptsCount={gameState.guesses.length}
+        hintsEnabled={infiniteConfig.hintsEnabled}
+        hintsAfterAttempts={infiniteConfig.hintsAfterAttempts}
+        gameStatus={gameState.gameStatus}
+      />
+    )}
 
     {/* CONTADOR DE INTENTOS Y BÚSQUEDA */}
     <div className="w-full mb-6 mt-4">
@@ -810,6 +988,16 @@ return (
         </div>
         <YokaiSearch onSelect={handleGuess} disabled={gameState.gameStatus !== 'playing'} />
       </div>
+
+      {/* INDICADOR DE DIFICULTAD (solo modo infinito) */}
+      {gameState.gameMode === 'infinite' && infiniteConfig.showDifficulty && gameState.infiniteYokai && (
+        <div className="flex justify-center mt-3">
+          <DifficultyIndicator
+            yokai={gameState.infiniteYokai}
+            show={infiniteConfig.showDifficulty}
+          />
+        </div>
+      )}
     </div>
 
     {/* MENSAJE DE FINAL DE PARTIDA Y BOTÓN DE ESTADÍSTICAS */}
@@ -1082,6 +1270,11 @@ return (
       </div>
     )}
 
+    {/* MODAL DE ESTADÍSTICAS INFINITAS */}
+    <InfiniteStatsModal
+      isOpen={showStatsModal}
+      onClose={() => setShowStatsModal(false)}
+    />
 
     {/* El pie de página ahora está en el layout */}
   </div>
