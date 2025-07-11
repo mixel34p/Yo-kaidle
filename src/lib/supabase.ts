@@ -141,18 +141,39 @@ export function cleanWikiImageUrl(url: string): string {
   return url;
 }
 
+// Función de hash simple pero efectiva para generar números pseudoaleatorios determinísticos
+function simpleHash(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convertir a entero de 32 bits
+  }
+  return Math.abs(hash);
+}
+
+// Generador de números pseudoaleatorios con semilla (Linear Congruential Generator)
+function seededRandom(seed: number): number {
+  // Parámetros del LCG (mismos que usa glibc)
+  const a = 1103515245;
+  const c = 12345;
+  const m = Math.pow(2, 31);
+
+  return (a * seed + c) % m;
+}
+
 export async function getDailyYokai(date: string): Promise<Yokai | null> {
   try {
-    // Algoritmo mejorado para seleccionar un Yo-kai determinístico basado en la fecha
-    const dateObj = new Date(date);
-    // Crear un número único para cada día del año usando la fecha, mes y año
-    const day = dateObj.getDate();
-    const month = dateObj.getMonth() + 1; // Los meses en JS son 0-11
-    const year = dateObj.getFullYear();
+    // Algoritmo verdaderamente aleatorio pero determinístico basado en la fecha
+    // Crear una semilla única basada en la fecha usando hash
+    const dateString = date.replace(/-/g, ''); // Remover guiones: "2024-01-01" -> "20240101"
+    const baseSeed = simpleHash(dateString);
 
-    // Crear un número hash único para cada día
-    // Multiplicamos por números primos para mejorar la distribución
-    const dailyHash = day + (month * 31) + (year * 372);
+    // Aplicar múltiples iteraciones del generador para mejorar la distribución
+    let seed = baseSeed;
+    for (let i = 0; i < 3; i++) {
+      seed = seededRandom(seed);
+    }
 
     // Obtener todos los Yo-kai de la base de datos, excluyendo tribus Boss para modo diario
     const { data, error } = await supabase
@@ -169,9 +190,9 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
       console.error('No Yo-kai found in the database (excluding Boss tribe)');
       return null;
     }
-    
-    // Seleccionar el Yo-kai del día usando el hash
-    const index = Math.abs(dailyHash % data.length);
+
+    // Seleccionar el Yo-kai del día usando la semilla pseudoaleatoria
+    const index = seed % data.length;
     let rawYokai = data[index]; // Usar let en lugar de const para poder reasignar
     
     if (!rawYokai) {
@@ -222,7 +243,7 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
     }
     
     // Registro para depuración (solo en desarrollo)
-    console.log(`Daily Yo-kai selected for ${date}: ${yokai.name} (ID: ${yokai.id})`);
+    console.log(`Daily Yo-kai selected for ${date}: ${yokai.name} (ID: ${yokai.id}, Seed: ${seed}, Index: ${index})`);
     
     return yokai as Yokai;
   } catch (error) {

@@ -1,0 +1,70 @@
+{
+  "app": {
+    "title": "Yo-kaidle",
+    "subtitle": "A Yo-kai Watch wordle game.",
+    "description": "Wordle inspired by the Yo-kai Watch franchise. Show your knowledge about Yo-kai and complete your Medallium!"
+  },
+  "navigation": {
+    "play": "Play",
+    "medallium": "My Medallium"
+  },
+  "search": {
+    "placeholder": "Search for a Yo-kai...",
+    "tribe": "Tribe",
+    "rank": "Rank"
+  },
+  "gameRules": {
+    "title": "Game Rules",
+    "toggleButton": "How to play?",
+    "rules": [
+      "Guess the daily Yo-kai in 6 attempts or less.",
+      "Each attempt must be a valid Yo-kai from the series.",
+      "After each attempt, you'll receive clues about the Yo-kai's characteristics:"
+    ],
+    "colorExplanations": {
+      "correct": "Green: The characteristic is correct",
+      "incorrect": "Red: The characteristic is incorrect",
+      "higher": "Yellow with ↑: The target Yo-kai's rank is higher",
+      "lower": "Yellow with ↓: The target Yo-kai's rank is lower"
+    },
+    "clarifications": {
+      "title": "Important clarifications:",
+      "items": [
+        "The game section refers to the game where the Yo-kai debuted as obtainable.",
+        "Yo-kai use characteristics from the first game they appear in. (Except Sangokushi ones, which adapt to 3)",
+        "The obtainable version of bosses is not taken into account and bosses without an official rank are Rank S.",
+        "The game is still in development and may contain errors. You can report them on discord."
+      ]
+    }
+  },
+  "gameModes": {
+    "daily": "Daily",
+    "infinite": "Infinite",
+    "configuration": "Configuration"
+  },
+  "gameOver": {
+    "won": "Congratulations!",
+    "lost": "Better luck next time!",
+    "share": "Share",
+    "playAgain": "Play again",
+    "showStats": "Show statistics",
+    "shareMessage": {
+      "header": "I guessed the Yokaidle in {mode} mode!",
+      "attempts": "Attempts: {current}/{max}",
+      "yokai": "Yo-kai: {name}",
+      "tribe": "Tribe: {tribe}",
+      "game": "Game: {game}",
+      "footer": "Try it yourself: https://yokaidle.vercel.app"
+    },
+    "modes": {
+      "daily": "daily",
+      "infinite": "infinite"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Yo-kaidle",
+    "trademark": "Yo-kai Watch is a registered trademark of Level-5 and LEVEL-5 Inc.",
+    "createdBy": "Created by",
+    "helpedBy": "Helped by"
+  }
+}

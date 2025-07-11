@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface NextYokaiTimerProps {
   gameStatus: 'playing' | 'won' | 'lost';
@@ -6,11 +7,13 @@ interface NextYokaiTimerProps {
   onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
 }
 
-const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({ 
-  gameStatus, 
-  gameMode, 
-  onMidnightReached 
+const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({
+  gameStatus,
+  gameMode,
+  onMidnightReached
 }) => {
+  const { t } = useLanguage();
+
   const [timeRemaining, setTimeRemaining] = useState<{
     hours: number;
     minutes: number;
@@ -70,27 +73,27 @@ const NextYokaiTimer: React.FC<NextYokaiTimerProps> = ({
 
   return (
     <div className="bg-gradient-to-r from-blue-600/80 to-blue-800/80 text-white rounded-lg p-4 text-center shadow-lg max-w-md mx-auto mt-4 border border-blue-300/30 backdrop-blur-sm">
-      <h3 className="text-lg font-bold mb-2 text-blue-100">Próximo Yo-kaidle en</h3>
+      <h3 className="text-lg font-bold mb-2 text-blue-100">{t.nextYokaiIn}</h3>
       <div className="flex justify-center space-x-2 text-2xl font-bold">
         <div className="flex flex-col items-center">
           <span className="bg-blue-900/50 rounded p-2 min-w-[3rem]">{timeRemaining.hours.toString().padStart(2, '0')}</span>
-          <span className="text-xs mt-1 text-blue-200">horas</span>
+          <span className="text-xs mt-1 text-blue-200">{t.hours}</span>
         </div>
         <span className="self-center">:</span>
         <div className="flex flex-col items-center">
           <span className="bg-blue-900/50 rounded p-2 min-w-[3rem]">{timeRemaining.minutes.toString().padStart(2, '0')}</span>
-          <span className="text-xs mt-1 text-blue-200">minutos</span>
+          <span className="text-xs mt-1 text-blue-200">{t.minutes}</span>
         </div>
         <span className="self-center">:</span>
         <div className="flex flex-col items-center">
           <span className="bg-blue-900/50 rounded p-2 min-w-[3rem]">{timeRemaining.seconds.toString().padStart(2, '0')}</span>
-          <span className="text-xs mt-1 text-blue-200">segundos</span>
+          <span className="text-xs mt-1 text-blue-200">{t.seconds}</span>
         </div>
       </div>
       
       {/* Mensaje adicional para clarificar que se actualizará automáticamente a medianoche */}
       <p className="text-xs mt-3 text-blue-200">
-        El nuevo Yo-kai estará disponible automáticamente a medianoche.
+        {t.newYokaiAvailable}
       </p>
     </div>
   );

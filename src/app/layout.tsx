@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
 import Footer from '@/components/Footer'
 import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
+import ClientLanguageProvider from '@/components/ClientLanguageProvider'
 import type { Metadata } from 'next'
 
 // PWAPrompt se importará solo en el cliente
@@ -105,11 +106,13 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} overscroll-none`}>
-        {/* Componente cliente para el popup de actualizaciones */}        <ClientUpdatesWrapper />        <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
-          {children}
-        </main>
-        <PWAPrompt />
-        <Footer />
+        <ClientLanguageProvider>
+          {/* Componente cliente para el popup de actualizaciones */}          <ClientUpdatesWrapper />          <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
+            {children}
+          </main>
+          <PWAPrompt />
+          <Footer />
+        </ClientLanguageProvider>
       </body>
     </html>
   )

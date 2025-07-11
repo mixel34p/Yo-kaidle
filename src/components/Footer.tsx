@@ -1,19 +1,24 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer: React.FC = () => {
+  const { t } = useLanguage();
+
   return (    <footer className="fixed bottom-0 left-0 right-0 w-full bg-gradient-to-r from-blue-700/90 to-blue-900/90 text-white py-2 sm:py-3 px-4 shadow-lg backdrop-blur-sm border-t border-blue-400/30 z-40">
       <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4">
         <div className="text-center sm:text-left text-sm sm:mb-0">
-          <p className="opacity-75 text-sm sm:text-base">© 2025 Yo-kaidle</p>
-          <p className="text-xs opacity-60 hidden sm:block">Yo-kai Watch es una marca registrada de Level-5 y LEVEL-5 Inc.</p>
+          <p className="opacity-75 text-sm sm:text-base">{t.copyright}</p>
+          <p className="text-xs opacity-60 hidden sm:block">{t.trademark}</p>
         </div>
         
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Créditos */}
           <div className="text-right">
-            <p className="opacity-80 text-sm">Creado por <span className="font-semibold text-blue-200">Mixel</span></p>
-            <p className="text-xs opacity-60 hidden sm:block">Ayudado por <span className="font-semibold">Union Earth</span></p>
+            <p className="opacity-80 text-sm">{t.createdBy} <span className="font-semibold text-blue-200">Mixel</span></p>
+            <p className="text-xs opacity-60 hidden sm:block">{t.helpedBy} <span className="font-semibold">Union Earth</span></p>
           </div>
           
           {/* Discord */}

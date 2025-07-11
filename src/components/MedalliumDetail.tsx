@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Yokai, tribeIcons, elementIcons, rankIcons, foodIcons, tribeTranslations, elementTranslations, foodTranslations } from '@/types/yokai';
 import { X, Heart, Star, Zap, Apple, User, Map, Info } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MedalliumDetailProps {
   yokai: Yokai;
@@ -20,6 +21,8 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
   isFavorite = false,
   onToggleFavorite
 }) => {
+  const { t, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
+
   const handleFavoriteClick = () => {
     if (onToggleFavorite) {
       onToggleFavorite(yokai.id);
@@ -63,7 +66,7 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
           <div className="yokai-image-container h-32 w-32 z-10 relative">
             <img 
               src={imageUrl} 
-              alt={yokai.name}
+              alt={getYokaiName(yokai)}
               className="w-full h-full object-contain"
               onError={(e) => {
                 e.currentTarget.src = '/images/yokai-placeholder.png';
@@ -75,13 +78,13 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white p-4">
             <div className="flex items-center">
               <img src={rankIcons[yokai.rank]} alt={yokai.rank} className="w-8 h-8 mr-2" />
-              <h2 className="text-2xl font-bold">{yokai.name}</h2>
+              <h2 className="text-2xl font-bold">{getYokaiName(yokai)}</h2>
             </div>
             <div className="flex items-center mt-1">
-              <p className="text-sm opacity-80">No. {yokai.medalNumber}</p>
+              <p className="text-sm opacity-80">{t.medalNumber} {yokai.medalNumber}</p>
               {unlockedDate && (
                 <p className="ml-auto text-xs opacity-70">
-                  Desbloqueado: {unlockedDate}
+                  {t.unlocked}: {unlockedDate}
                 </p>
               )}
             </div>
@@ -96,9 +99,9 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
             <div className="attribute-card bg-gray-100 p-4 rounded-lg flex items-center">
               <img src={tribeIcons[yokai.tribe]} alt={yokai.tribe} className="w-12 h-12 mr-3" />
               <div>
-                <span className="text-xs text-gray-500">Tribu</span>
+                <span className="text-xs text-gray-500">{t.tribe}</span>
                 <p className="text-sm font-medium">
-                  {tribeTranslations ? tribeTranslations[yokai.tribe] : yokai.tribe}
+                  {getTribeTranslation(yokai.tribe)}
                 </p>
               </div>
             </div>
@@ -109,7 +112,7 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
                 <img src={rankIcons[yokai.rank]} alt={yokai.rank} className="w-10 h-10" />
               </div>
               <div>
-                <span className="text-xs text-gray-500">Rango</span>
+                <span className="text-xs text-gray-500">{t.rank}</span>
                 <p className="text-sm font-medium">{yokai.rank}</p>
               </div>
             </div>
@@ -118,9 +121,9 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
             <div className="attribute-card bg-gray-100 p-4 rounded-lg flex items-center">
               <img src={foodIcons[yokai.favoriteFood]} alt={yokai.favoriteFood} className="w-12 h-12 mr-3" />
               <div>
-                <span className="text-xs text-gray-500">Comida favorita</span>
+                <span className="text-xs text-gray-500">{t.food}</span>
                 <p className="text-sm font-medium">
-                  {foodTranslations ? foodTranslations[yokai.favoriteFood] : yokai.favoriteFood}
+                  {getFoodTranslation(yokai.favoriteFood)}
                 </p>
               </div>
             </div>
@@ -131,7 +134,7 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
                 <Map className="text-blue-600" size={24} />
               </div>
               <div>
-                <span className="text-xs text-gray-500">Juego</span>
+                <span className="text-xs text-gray-500">{t.game}</span>
                 <p className="text-sm font-medium">{yokai.game}</p>
               </div>
             </div>
@@ -144,7 +147,7 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
             onClick={onClose}
             className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
           >
-            Cerrar
+            {t.close}
           </button>
         </div>
       </motion.div>

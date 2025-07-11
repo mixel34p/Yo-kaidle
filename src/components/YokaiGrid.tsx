@@ -1,6 +1,7 @@
 import React from 'react';
 import YokaiRow from './YokaiRow';
 import { Yokai } from '@/types/yokai';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiGridProps {
   guesses: any[]; // Array de objetos con el Yo-kai adivinado y su resultado
@@ -9,17 +10,19 @@ interface YokaiGridProps {
 }
 
 const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTimestamp = Date.now() }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="yokai-grid-container">
       <div className="yokai-grid">
         {/* Encabezados */}
         <div className="yokai-row header-row">
           <div className="yokai-cell header-cell">Yo-kai</div>
-          <div className="yokai-cell header-cell">Tribu</div>
-          <div className="yokai-cell header-cell">Rango</div>
-          <div className="yokai-cell header-cell">Elemento</div>
-          <div className="yokai-cell header-cell">Comida</div>
-          <div className="yokai-cell header-cell">Juego</div>
+          <div className="yokai-cell header-cell">{t.tribe}</div>
+          <div className="yokai-cell header-cell">{t.rank}</div>
+          <div className="yokai-cell header-cell">{t.element}</div>
+          <div className="yokai-cell header-cell">{t.food}</div>
+          <div className="yokai-cell header-cell">{t.game}</div>
         </div>
         
         {/* Filas con adivinanzas */}
@@ -47,7 +50,7 @@ const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTime
       {/* Indicador de scroll solo en móvil */}
       <div className="scroll-hint sm:hidden">
         <div className="scroll-arrow">←</div>
-        <span className="scroll-text">Desliza para ver más</span>
+        <span className="scroll-text">{t.swipeToSeeMore}</span>
         <div className="scroll-arrow">→</div>
       </div>
     </div>

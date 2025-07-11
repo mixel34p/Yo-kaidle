@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { GameMode } from '@/types/yokai';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface GameModeSelectorProps {
   currentMode: GameMode;
@@ -10,6 +11,8 @@ interface GameModeSelectorProps {
 }
 
 const GameModeSelector: React.FC<GameModeSelectorProps> = ({ currentMode, onModeChange }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="game-mode-selector my-3">
       <div className="flex p-1 rounded-lg shadow-inner" style={{ background: 'rgba(15, 82, 152, 0.3)', backdropFilter: 'blur(4px)' }}>
@@ -44,7 +47,7 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({ currentMode, onMode
                 e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
               }}
             />
-            <span>Diario</span>
+            <span>{t.daily}</span>
           </div>
         </button>
         
@@ -79,7 +82,7 @@ const GameModeSelector: React.FC<GameModeSelectorProps> = ({ currentMode, onMode
                 e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
               }}
             />
-            <span>Infinito</span>
+            <span>{t.infinite}</span>
           </div>
         </button>
       </div>

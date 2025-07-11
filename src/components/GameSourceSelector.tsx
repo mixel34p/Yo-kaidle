@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Game, gameLogos } from '@/types/yokai';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface GameSourceSelectorProps {
   onSourcesChange: (selectedSources: Game[]) => void;
@@ -14,6 +15,7 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
   availableGames,
   initialSelectedGames = []
 }) => {
+  const { t } = useLanguage();
   const [selectedGames, setSelectedGames] = useState<Game[]>(initialSelectedGames);
 
   useEffect(() => {
@@ -67,20 +69,20 @@ const GameSourceSelector: React.FC<GameSourceSelectorProps> = ({
     <div className="game-source-selector p-3 rounded-lg shadow-lg" 
          style={{ background: 'rgba(15, 82, 152, 0.1)', backdropFilter: 'blur(4px)' }}>
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-bold text-primary-600">Seleccionar juegos</h3>
+        <h3 className="text-lg font-bold text-primary-600">{t.selectGames}</h3>
         <div className="flex space-x-2">
           <button 
             onClick={selectAll}
             className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition"
           >
-            Todos
+            {t.all}
           </button>
           <button 
             onClick={deselectAll}
             className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition"
             disabled={selectedGames.length <= 1}
           >
-            Ninguno
+            {t.none}
           </button>
         </div>
       </div>

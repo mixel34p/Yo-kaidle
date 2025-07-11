@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Yokai, tribeIcons, elementColors, elementIcons, rankIcons, gameLogos, GameMode, tribeTranslations, elementTranslations, foodTranslations, foodIcons } from '@/types/yokai';
 import NextYokaiTimer from './NextYokaiTimer';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface GameOverMessageProps {
   dailyYokai: Yokai;
@@ -17,11 +18,11 @@ interface GameOverMessageProps {
   maxGuesses?: number; // Número máximo de intentos permitidos
 }
 
-const GameOverMessage: React.FC<GameOverMessageProps> = ({ 
-  dailyYokai, 
-  won, 
-  gameMode, 
-  onClose, 
+const GameOverMessage: React.FC<GameOverMessageProps> = ({
+  dailyYokai,
+  won,
+  gameMode,
+  onClose,
   showStats,
   playAgain,
   gameStatus = won ? 'won' : 'lost', // Por defecto, usar won para determinar el estado
@@ -34,7 +35,10 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'error'>('idle');
   const [showShareScreen, setShowShareScreen] = useState(false);
   const [isSharing, setIsSharing] = useState(false); // Para evitar múltiples operaciones de compartir simultáneas
-  
+
+  // Hook para traducciones
+  const { t, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
+
   // Usar los iconos de elementos importados arriba
 
   // Obtener iconos con el manejo apropiado de extensiones
@@ -169,12 +173,12 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
     // Determinar si mostrar el nombre del Yo-kai (solo en modo infinito)
     const showYokaiName = gameMode === 'infinite';
     
-    // Traducir el modo de juego al español
-    const modoJuego = gameMode === 'daily' ? 'diario' : 'infinito';
-    
+    // Traducir el modo de juego
+    const modoJuego = gameMode === 'daily' ? t.dailyMode : t.infiniteMode;
+
     // Encabezado con el modo y los intentos
-    let message = `¡He adivinado el Yokaidle en modo ${modoJuego}\n!`;
-    message += `Intentos: ${guesses.length}/${maxGuesses}\n\n`;
+    let message = t.shareHeader.replace('{mode}', modoJuego) + '\n';
+    message += t.shareAttempts.replace('{current}', guesses.length.toString()).replace('{max}', maxGuesses.toString()) + '\n\n';
     
     // Añadir línea de emojis para cada intento
     message += generateEmojiResults();
@@ -183,14 +187,14 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
     message += `\n\n`;
     // Mostrar el nombre del Yo-kai solo en modo infinito
     if (showYokaiName) {
-      message += `Yo-kai: ${dailyYokai.name}\n`;
-      message += `Tribu: ${tribeTranslations[dailyYokai.tribe]}`;
-      message += `\nJuego: ${dailyYokai.game}`;
+      message += `${t.yokaiLabel}: ${getYokaiName(dailyYokai)}\n`;
+      message += `${t.tribe}: ${getTribeTranslation(dailyYokai.tribe)}`;
+      message += `\n${t.game}: ${dailyYokai.game}`;
     }
-    
-    
+
+
     // Añadir enlace al juego
-    message += `\n\nPruebalo tu mismo: https://yokaidle.vercel.app`;
+    message += `\n\n${t.shareFooter}`;
     
     return message;
   };
@@ -217,7 +221,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
       if (navigator.share) {
         // Usar Web Share API si está disponible
         await navigator.share({
-          title: 'Yo-kaidle - Resultado',
+          title: t.shareTitle,
           text: shareMessage
         });
       } else {
@@ -230,7 +234,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
         }, 3000);
       }
     } catch (error) {
-      console.error('Error al compartir:', error);
+      console.error('Error sharing:', error);
       setShareStatus('error');
       // Resetear el estado después de 3 segundos
       setTimeout(() => {
@@ -269,7 +273,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   // Función para compartir por correo electrónico
   const handleEmailShare = () => {
     const shareMessage = createShareMessage();
-    const emailSubject = 'Yo-kaidle - Mi resultado';
+    const emailSubject = t.emailSubject;
     const emailBody = shareMessage;
     const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
     window.open(mailtoUrl);
@@ -286,7 +290,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
         setShareStatus('idle');
       }, 3000);
     } catch (error) {
-      console.error('Error al copiar al portapapeles:', error);
+      console.error('Error copying to clipboard:', error);
       setShareStatus('error');
     }
   };
@@ -307,7 +311,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
             {/* Cabecera */}
             <div className="p-4 text-center bg-gradient-to-r from-[#22AD55] to-[#0F5298]">
               <h2 className="text-2xl font-bold text-white drop-shadow-md">
-                Compartir Resultado
+                {t.share}
               </h2>
             </div>
             
@@ -334,7 +338,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                   </svg>
-                  <span>{shareStatus === 'copied' ? '¡Copiado!' : 'Copiar al portapapeles'}</span>
+                  <span>{shareStatus === 'copied' ? t.copied : t.copyToClipboard}</span>
                 </button>
                 
                 {/* Web Share API (si está disponible) */}
@@ -347,7 +351,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                   </svg>
-                  <span>Compartir</span>
+                  <span>{t.share}</span>
                 </button>
                 
                 {/* Twitter */}
@@ -406,7 +410,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 className="w-full py-2 rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
                 style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)', color: 'white' }}
               >
-                Cerrar
+                {t.close}
               </button>
             </div>
           </div>
@@ -427,17 +431,17 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
         {/* Cabecera con fondo de gradiente */}
         <div className={`p-6 text-center ${won ? 'bg-gradient-to-r from-[#22AD55] to-[#0F5298]' : 'bg-gradient-to-r from-[#FF315B] to-[#8A3FFC]'}`}>
           <h2 className="text-3xl font-bold text-white drop-shadow-md mb-2">
-            {won ? '¡FELICIDADES!' : 'GAME OVER'}
+            {won ? t.congratulations.toUpperCase() : 'GAME OVER'}
           </h2>
           <p className="text-white text-opacity-90 text-lg">
-            {won 
-              ? '¡Has adivinado el Yo-kai!' 
-              : 'No has logrado adivinar el Yo-kai'
+            {won
+              ? t.wonMessage
+              : t.lostMessage
             }
           </p>
           {gameMode === 'daily' && (
             <p className="text-white text-opacity-75 text-sm mt-1">
-              Vuelve mañana para un nuevo Yo-kai
+              {t.comeBackTomorrow}
             </p>
           )}
         </div>
@@ -449,7 +453,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
             <div className="relative w-32 h-32 mb-4">
               <img 
                 src={dailyYokai.image_url || dailyYokai.imageurl || dailyYokai.img || dailyYokai.image} 
-                alt={dailyYokai.name}
+                alt={getYokaiName(dailyYokai)}
                 className="w-full h-full object-contain drop-shadow-lg animate-float"
               />
               
@@ -463,7 +467,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
               )}
             </div>
             
-            <h3 className="text-2xl font-bold mb-1" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>{dailyYokai.name}</h3>
+            <h3 className="text-2xl font-bold mb-1" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>{getYokaiName(dailyYokai)}</h3>
           </div>
           
           {/* Características con iconos */}
@@ -474,8 +478,8 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 <img src={tribeIcon} alt={dailyYokai.tribe} className="w-full h-full object-contain" />
               </div>
               <div>
-                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Tribu</p>
-                <p className="font-medium text-white">{tribeTranslations[dailyYokai.tribe]}</p>
+                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.tribe}</p>
+                <p className="font-medium text-white">{getTribeTranslation(dailyYokai.tribe)}</p>
               </div>
             </div>
             
@@ -490,7 +494,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 )}
               </div>
               <div>
-                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Rango</p>
+                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.rank}</p>
                 <p className="font-medium text-white">{dailyYokai.rank}</p>
               </div>
             </div>
@@ -501,8 +505,8 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 <img src={elementIcon} alt={dailyYokai.element} className="w-full h-full object-contain" />
               </div>
               <div>
-                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Elemento</p>
-                <p className="font-medium text-white">{elementTranslations[dailyYokai.element]}</p>
+                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.element}</p>
+                <p className="font-medium text-white">{getElementTranslation(dailyYokai.element)}</p>
               </div>
             </div>
 
@@ -511,13 +515,13 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
               <div className="w-10 h-10 mr-3 flex-shrink-0 flex items-center justify-center">
                 <img 
                   src={foodIcons[dailyYokai.favoriteFood]} 
-                  alt={foodTranslations[dailyYokai.favoriteFood]}
+                  alt={getFoodTranslation(dailyYokai.favoriteFood)}
                   className="w-8 h-8 object-contain"
                 />
               </div>
               <div>
-                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Comida Favorita</p>
-                <p className="font-medium text-white">{foodTranslations[dailyYokai.favoriteFood]}</p>
+                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.food}</p>
+                <p className="font-medium text-white">{getFoodTranslation(dailyYokai.favoriteFood)}</p>
               </div>
             </div>
             
@@ -527,7 +531,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 <img src={gameIcon} alt={dailyYokai.game} className="w-full h-full object-contain" />
               </div>
               <div>
-                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Juego</p>
+                <p className="text-xs uppercase" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.game}</p>
                 <p className="font-medium text-white">{dailyYokai.game}</p>
               </div>
             </div>
@@ -553,7 +557,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                 className="flex-1 py-3 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
                 style={{ background: 'linear-gradient(135deg, var(--primary-color), #FF6384)' }}
               >
-                Ver Estadísticas
+                {t.showStats}
               </button>
               
               {/* Mostrar botón de jugar de nuevo solo en modo infinito */}
@@ -566,7 +570,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                   className="flex-1 py-3 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
                   style={{ background: 'linear-gradient(135deg, var(--secondary-color), #1E75D3)' }}
                 >
-                  Jugar de nuevo
+                  {t.playAgain}
                 </button>
               )}
             </div>
@@ -583,7 +587,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                   </svg>
-                  Compartir Resultado
+                  {t.share}
                 </button>
               </div>
             )}
@@ -594,7 +598,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
               className="py-2 rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
               style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(4px)', color: 'white' }}
             >
-              Cerrar
+              {t.close}
             </button>
           </div>
         </div>

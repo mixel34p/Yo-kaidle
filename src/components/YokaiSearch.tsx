@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Yokai, tribeTranslations } from '@/types/yokai';
 import { cleanWikiImageUrl } from '@/lib/supabase';
 import { getAllYokai } from '@/lib/supabase';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiSearchProps {
   onSelect: (yokai: Yokai) => void;
@@ -14,6 +15,7 @@ function getYokaiImageUrl(yokai: Yokai): string {
 }
 
 const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
+  const { t, language, getTribeTranslation, getYokaiName } = useLanguage();
   const [isMobileKeyboardOpen, setIsMobileKeyboardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [yokaiList, setYokaiList] = useState<Yokai[]>([]);
@@ -43,13 +45,17 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
       return;
     }
 
-    const filtered = yokaiList.filter(yokai => 
-      yokai.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    
+    const query = searchQuery.toLowerCase();
+    const filtered = yokaiList.filter(yokai => {
+      const translatedName = getYokaiName(yokai).toLowerCase();
+
+      // Buscar solo en el nombre traducido del idioma actual
+      return translatedName.includes(query);
+    });
+
     setFilteredYokai(filtered.slice(0, 5)); // Limitar a 5 resultados
     setIsDropdownOpen(filtered.length > 0);
-  }, [searchQuery, yokaiList]);
+  }, [searchQuery, yokaiList, language, getYokaiName]);
 
   const handleSelect = (yokai: Yokai) => {
     onSelect(yokai);
@@ -63,7 +69,7 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
         <div className="flex shadow-md rounded-lg overflow-hidden">
           <input
             type="text"
-            placeholder="Buscar un Yo-kai..."
+            placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => searchQuery.trim() !== '' && setIsDropdownOpen(true)}
@@ -98,13 +104,13 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
           <div className="absolute inset-0 bg-black bg-opacity-25 rounded-lg flex items-center justify-center backdrop-blur-sm">
             <span className="px-3 py-1 rounded-full text-sm font-medium" 
                   style={{ background: 'rgba(15, 82, 152, 0.8)', color: 'white' }}>
-              Juego terminado
+              {t.gameOver}
             </span>
           </div>
         )}
       </div>
       
-      {isLoading && <div className="mt-2">Cargando...</div>}
+      {isLoading && <div className="mt-2">{t.loading}</div>}
       {error && <div className="mt-2 text-red-500">{error}</div>}
       
       {isDropdownOpen && filteredYokai.length > 0 && (
@@ -112,7 +118,7 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
              style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(8px)', border: '1px solid var(--accent-color)' }}>
           <div className="p-2 text-white text-sm font-medium" 
                style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}>
-            Resultados de la búsqueda
+            {t.searchResults}
           </div>
           <ul className="max-h-64 overflow-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: 'var(--accent-color) transparent' }}>
             {filteredYokai.map(yokai => (
@@ -141,10 +147,10 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
                   />
                 </div>
                 <div className="flex-grow">
-                  <div className="font-bold" style={{ color: 'var(--gold-accent)', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>{yokai.name}</div>
+                  <div className="font-bold" style={{ color: 'var(--gold-accent)', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>{getYokaiName(yokai)}</div>
                   <div className="text-xs flex flex-wrap gap-2 mt-1">
-                    <span className="px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>Tribu: {tribeTranslations[yokai.tribe]}</span>
-                    <span className="px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>Rango: {yokai.rank}</span>
+                    <span className="px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>{t.tribe}: {getTribeTranslation(yokai.tribe)}</span>
+                    <span className="px-2 py-1 rounded-full" style={{ background: 'rgba(255, 255, 255, 0.15)' }}>{t.rank}: {yokai.rank}</span>
                   </div>
                 </div>
               </li>

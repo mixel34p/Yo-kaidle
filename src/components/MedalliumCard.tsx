@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Yokai, tribeIcons, elementIcons, rankIcons, foodIcons, gameLogos } from '@/types/yokai';
 import { Info, Maximize2, Heart, Clock, Medal } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MedalliumCardProps {
   yokai: Yokai;
@@ -24,8 +25,9 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
   isFavorite = false,
   onToggleFavorite
 }) => {
+  const { t, getYokaiName, getTribeTranslation, getElementTranslation } = useLanguage();
   const [isHovering, setIsHovering] = useState(false);
-  
+
   const handleClick = () => {
     if (!isLocked) {
       onClick(yokai);
@@ -96,7 +98,7 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
           ) : (
             <img 
               src={imageUrl} 
-              alt={yokai.name}
+              alt={getYokaiName(yokai)}
               className="w-full h-full object-contain"
               onError={(e) => {
                 e.currentTarget.src = '/images/yokai-placeholder.png';
@@ -115,7 +117,7 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
         {/* Información del Yo-kai */}
         <div className={view === 'grid' ? 'mt-3 text-center w-full' : 'ml-3 flex-grow'}>
           <h3 className={`font-bold ${view === 'grid' ? 'text-md' : 'text-lg'} truncate`}>
-            {isLocked ? '???' : yokai.name}
+            {isLocked ? '???' : getYokaiName(yokai)}
           </h3>
           
           {/* Atributos visibles */}
@@ -176,8 +178,8 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
               <img src={elementIcons[yokai.element]} alt={yokai.element} className="w-6 h-6" />
               <img src={rankIcons[yokai.rank]} alt={yokai.rank} className="w-6 h-6" />
             </div>
-            <p className="text-xs opacity-80">Juego: {yokai.game.replace('Yo-kai Watch', 'YW')}</p>
-            <p className="mt-1 text-xs font-semibold">¡Pulsa para ver detalles!</p>
+            <p className="text-xs opacity-80">{t.game}: {yokai.game.replace('Yo-kai Watch', 'YW')}</p>
+            <p className="mt-1 text-xs font-semibold">{t.clickForDetails}</p>
           </div>
         </motion.div>
       )}

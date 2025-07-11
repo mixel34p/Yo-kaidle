@@ -7,26 +7,11 @@ export function compareYokai(dailyYokai: Yokai, guessedYokai: Yokai): GuessResul
   // y asegurar que ambos Yokai tengan valores válidos para la comida favorita
   let foodResult: 'correct' | 'incorrect' = 'incorrect';
   
-  console.log('DATOS DE YOKAI DIARIO:', {
-    nombre: dailyYokai.name,
-    id: dailyYokai.id,
-    comida: dailyYokai.favoriteFood,
-    camposDisponibles: Object.keys(dailyYokai)
-  });
-  
-  console.log('DATOS DE YOKAI ADIVINADO:', {
-    nombre: guessedYokai.name,
-    id: guessedYokai.id,
-    comida: guessedYokai.favoriteFood,
-    camposDisponibles: Object.keys(guessedYokai)
-  });
+  // Debug logs removed for cleaner console output
   
   // Asegurar que ambos valores estén definidos antes de compararlos
   if (dailyYokai.favoriteFood && guessedYokai.favoriteFood) {
     foodResult = (dailyYokai.favoriteFood === guessedYokai.favoriteFood) ? 'correct' : 'incorrect';
-    console.log(`Comparación de comida: ${dailyYokai.favoriteFood} vs ${guessedYokai.favoriteFood} = ${foodResult}`);
-  } else {
-    console.log('ERROR: Uno o ambos Yokai no tienen favoriteFood definido');
   }
 
   return {

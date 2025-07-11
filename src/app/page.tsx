@@ -19,6 +19,8 @@ import { saveGameSources, loadGameSources, saveTribeRestrictions, loadTribeRestr
 import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
 import { checkAchievements } from '@/utils/achievementSystem';
 import { getAllYokai } from '@/lib/supabase';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 
 const MAX_GUESSES = 6;
@@ -40,7 +42,11 @@ const DISABLED_GAMES: Game[] = ['Yo-kai Watch 4', 'Yo-kai Watch Busters 2'];
 // Juegos habilitados para selección por defecto
 const ENABLED_GAMES: Game[] = AVAILABLE_GAMES.filter(game => !DISABLED_GAMES.includes(game));
 
-export default function Home() {
+// Componente interno que usa las traducciones
+function HomeContent() {
+  // Hook para traducciones
+  const { t } = useLanguage();
+
   // Estado para la configuración de juegos
   const [selectedGameSources, setSelectedGameSources] = useState<Game[]>([]);
   const [showGameConfig, setShowGameConfig] = useState(false);
@@ -176,6 +182,8 @@ export default function Home() {
   // Estado para controlar si estamos cambiando de modo
   const [changingMode, setChangingMode] = useState(false);
 
+
+
   // Mostrar Game Over siempre que el estado sea 'won' o 'lost'
   useEffect(() => {
     if (!loading && (gameState.gameStatus === 'won' || gameState.gameStatus === 'lost')) {
@@ -251,14 +259,12 @@ export default function Home() {
               // Si es del mismo día, continuamos el juego normalmente
               setGameState(savedGame);
               setGuessResults(savedGame.guesses.map((yokai: Yokai) => {
-                // Normaliza el campo favoriteFood si viene en snake_case
-                const normalizedYokai = {
-                  ...yokai,
-                  favoriteFood: yokai.favoriteFood || (yokai as any).favorite_food || 'None'
-                };
+                // Normalizar tanto el Yo-kai adivinado como el objetivo
+                const normalizedYokai = normalizeYokai(yokai);
+                const normalizedTargetYokai = normalizeYokai(savedGame.dailyYokai as Yokai);
                 return {
                   yokai: normalizedYokai,
-                  result: compareYokai(savedGame.dailyYokai as Yokai, normalizedYokai)
+                  result: compareYokai(normalizedTargetYokai, normalizedYokai)
                 };
               }));
               
@@ -375,16 +381,13 @@ export default function Home() {
             // Continuar con el juego infinito guardado (sin importar el estado)
             setGameState(savedGame);
             setGuessResults(savedGame.guesses.map((yokai: Yokai) => {
-              // Normaliza el campo favoriteFood si viene en snake_case
-              const normalizedYokai = {
-                ...yokai,
-                favoriteFood: yokai.favoriteFood || (yokai as any).favorite_food || 'None'
-              };
-              // Usar solo infiniteYokai como objetivo
+              // Normalizar tanto el Yo-kai adivinado como el objetivo
+              const normalizedYokai = normalizeYokai(yokai);
               const targetYokai = savedGame.infiniteYokai;
+              const normalizedTargetYokai = targetYokai ? normalizeYokai(targetYokai as Yokai) : null;
               return {
                 yokai: normalizedYokai,
-                result: targetYokai ? compareYokai(targetYokai as Yokai, normalizedYokai) : null
+                result: normalizedTargetYokai ? compareYokai(normalizedTargetYokai, normalizedYokai) : null
               };
             }));
             // Mostrar Game Over si el estado no es 'playing'
@@ -558,10 +561,10 @@ export default function Home() {
   // Manejar una nueva adivinanza
   const handleGuess = (yokai: Yokai) => {
     // Determinar qué Yo-kai objetivo se debe usar según el modo de juego
-    const targetYokai = gameState.gameMode === 'daily' ? 
-      gameState.dailyYokai : 
+    const targetYokai = gameState.gameMode === 'daily' ?
+      gameState.dailyYokai :
       gameState.infiniteYokai || gameState.dailyYokai; // Fallback al dailyYokai para compatibilidad
-    
+
     if (gameState.gameStatus !== 'playing' || !targetYokai) {
       return;
     }
@@ -578,7 +581,7 @@ export default function Home() {
 
     const result = compareYokai(targetYokai, normalizedYokai);
     const newGuesses = [...gameState.guesses, normalizedYokai];
-    const newGuessResults = [...guessResults, { yokai, result }];
+    const newGuessResults = [...guessResults, { yokai: normalizedYokai, result }];
     
     // Preparar las estadísticas según el modo de juego
     const isDaily = gameState.gameMode === 'daily';
@@ -672,19 +675,24 @@ export default function Home() {
   }
 
 return (
-  <div className="app-container">
+    <div className="app-container">
 
     {/* CABECERA */}
-    <header className="mb-6 text-center">
+    <header className="mb-6 text-center relative">
+      {/* Selector de idioma en la esquina superior derecha */}
+      <div className="absolute top-0 right-0">
+        <LanguageSwitcher />
+      </div>
+
       <div className="flex justify-center mb-4 px-1">
-        <img 
-          src="/images/logo/logo.png" 
-          alt="Yo-kaidle Logo" 
-          className="w-full object-contain drop-shadow-2xl" 
+        <img
+          src="/images/logo/logo.png"
+          alt="Yo-kaidle Logo"
+          className="w-full object-contain drop-shadow-2xl"
           style={{ maxHeight: 'calc(30vh)' }}
         />
       </div>
-      <p className="mt-2 text-gray-600 font-medium">Un wordle de Yo-kai Watch.</p>
+      <p className="mt-2 text-gray-600 font-medium">{t.appSubtitle}</p>
     </header>
 
 
@@ -716,7 +724,7 @@ return (
             }
           }}
         />
-        <span>Mi Medallium</span>
+        <span>{t.medallium}</span>
       </Link>
     </div>
 
@@ -757,7 +765,7 @@ return (
           {showGameConfig ? (
             <div className="w-full max-w-md mb-4 animate-fadeIn">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-bold text-primary-600">Configuración</h3>
+                <h3 className="text-lg font-bold text-primary-600">{t.configuration}</h3>
                 <button 
                   onClick={() => setShowGameConfig(false)}
                   className="text-gray-500 hover:text-gray-700"
@@ -788,7 +796,7 @@ return (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
-                  Jugar
+                  {t.play}
                 </button>
               </div>
             </div>
@@ -801,7 +809,7 @@ return (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              Nuevo Yo-kai
+              {t.newYokai}
             </button>
           )}
         </div>
@@ -832,7 +840,7 @@ return (
           className="btn-primary transform hover:scale-105 transition-transform"
           onClick={() => setShowStats(true)}
         >
-          Ver estadísticas
+          {t.showStats}
         </button>
       </div>
     )}
@@ -844,8 +852,8 @@ return (
              style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(66, 196, 255, 0.4)', color: 'white' }}>
           {/* Cabecera con fondo de gradiente */}
           <div className="p-6 text-center" style={{ background: 'linear-gradient(135deg, var(--dark-blue), var(--secondary-color))' }}>
-            <h2 className="text-3xl font-bold text-white drop-shadow-md mb-2">ESTADÍSTICAS</h2>
-            <p className="text-white text-opacity-90 text-lg">Tu progreso en Yo-kaidle</p>
+            <h2 className="text-3xl font-bold text-white drop-shadow-md mb-2">{t.statistics.toUpperCase()}</h2>
+            <p className="text-white text-opacity-90 text-lg">{t.yourProgress}</p>
           </div>
           <div className="p-6">
             {/* Selector de modo para estadísticas */}
@@ -882,7 +890,7 @@ return (
                         e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
                       }}
                     />
-                    <span>Diario</span>
+                    <span>{t.daily}</span>
                   </div>
                 </button>
                 
@@ -917,13 +925,13 @@ return (
                         e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
                       }}
                     />
-                    <span>Infinito</span>
+                    <span>{t.infinite}</span>
                   </div>
                 </button>
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>
-              {gameState.gameMode === 'daily' ? 'Estadísticas del Modo Diario' : 'Estadísticas del Modo Infinito'}
+              {gameState.gameMode === 'daily' ? t.dailyModeStats : t.infiniteModeStats}
             </h3>
             {/* Estadísticas con iconos y datos */}
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -954,7 +962,7 @@ return (
                       ? gameState.dailyStats.totalPlayed 
                       : gameState.infiniteStats.totalPlayed}
                   </p>
-                  <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>PARTIDAS</p>
+                  <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.gamesPlayed.toUpperCase()}</p>
                 </div>
               </div>
               {/* Porcentaje de victorias */}
@@ -991,7 +999,7 @@ return (
                           : 0)
                     }%
                   </p>
-                  <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>VICTORIAS</p>
+                  <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.winRate.toUpperCase()}</p>
                 </div>
               </div>
               {/* Racha actual (solo en modo diario) */}
@@ -1020,7 +1028,7 @@ return (
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.dailyStats.streak}</p>
-                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>RACHA ACTUAL</p>
+                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.currentStreak.toUpperCase()}</p>
                   </div>
                 </div>
               )}
@@ -1048,7 +1056,7 @@ return (
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.dailyStats.maxStreak}</p>
-                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>MEJOR RACHA</p>
+                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.bestStreak.toUpperCase()}</p>
                   </div>
                 </div>
               )}
@@ -1078,7 +1086,7 @@ return (
                   </div>
                   <div>
                     <p className="stat-value font-bold text-xl">{gameState.infiniteStats.totalWins}</p>
-                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>TOTAL DE VICTORIAS EN MODO INFINITO</p>
+                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.totalInfiniteWins.toUpperCase()}</p>
                   </div>
                 </div>
               )}
@@ -1088,7 +1096,7 @@ return (
               style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}
               onClick={() => setShowStats(false)}
             >
-              Continuar jugando
+              {t.continuePlaying}
             </button>
           </div>
         </div>
@@ -1097,6 +1105,11 @@ return (
 
 
     {/* El pie de página ahora está en el layout */}
-  </div>
-)
+    </div>
+  );
+}
+
+// Componente principal
+export default function Home() {
+  return <HomeContent />;
 }

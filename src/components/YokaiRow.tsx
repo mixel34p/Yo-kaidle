@@ -4,6 +4,7 @@ import React from 'react';
 import { cleanWikiImageUrl } from '@/lib/supabase';
 import YokaiCell from './YokaiCell';
 import { Yokai, GuessResult, tribeTranslations, tribeIcons, elementTranslations, elementColors, elementIcons, gameLogos, rankIcons, rankColors, foodTranslations, foodIcons } from '@/types/yokai';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiRowProps {
   yokai: Yokai;
@@ -40,6 +41,8 @@ function getYokaiImageUrl(yokai: Yokai): string {
 }
 
 const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIconTimestamp = Date.now(), isNewRow = false }) => {
+  const { getYokaiName } = useLanguage();
+
   // Imprimir valores para diagnosticar el problema con la comida favorita
   // Mostrar esta información cuando sea una fila del Wordle (con resultado)
   if (result) {
@@ -70,10 +73,10 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
     // Si no hay resultado, mostrar todas las celdas con estado 'default'
     return (
       <div className="yokai-row">
-        <YokaiCell 
-          value={yokai.name} 
-          status="default" 
-          iconUrl={getYokaiImageUrl(yokai)} 
+        <YokaiCell
+          value={getYokaiName(yokai)}
+          status="default"
+          iconUrl={getYokaiImageUrl(yokai)}
           isYokai={true} // Añadimos esta propiedad para indicar que es una imagen de Yo-kai
         />
         <YokaiCell 
@@ -121,10 +124,10 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
     <div className={`yokai-row ${isNewRow ? 'animate-row-appear' : ''}`}>
       
       {/* Nombre del Yo-kai - correcto si acertó completamente */}
-      <YokaiCell 
-        value={yokai.name} 
-        status={result.isCorrect ? 'correct' : 'incorrect'} 
-        iconUrl={getYokaiImageUrl(yokai)} 
+      <YokaiCell
+        value={getYokaiName(yokai)}
+        status={result.isCorrect ? 'correct' : 'incorrect'}
+        iconUrl={getYokaiImageUrl(yokai)}
         isYokai={true}
         animationDelay={isNewRow ? 0 : undefined}
       />

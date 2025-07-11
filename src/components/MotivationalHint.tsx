@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MotivationalHintProps {
   guessCount: number;
@@ -6,23 +7,25 @@ interface MotivationalHintProps {
 }
 
 const MotivationalHint: React.FC<MotivationalHintProps> = ({ guessCount, maxGuesses }) => {
+  const { t } = useLanguage();
+
   // Solo mostramos pistas cuando el jugador está en la segunda mitad de sus intentos
   if (guessCount < Math.floor(maxGuesses / 2)) return null;
-  
+
   const remainingGuesses = maxGuesses - guessCount;
-  
+
   // Diferentes mensajes dependiendo de cuántos intentos quedan
   let message = '';
   let icon = '';
-  
+
   if (remainingGuesses === 1) {
-    message = '¡Último intento! ¡Piensa bien!';
+    message = t.lastAttempt;
     icon = '⚠️';
   } else if (remainingGuesses === 2) {
-    message = '¡Casi! Solo te quedan 2 intentos';
+    message = t.almostThere;
     icon = '🔍';
   } else {
-    message = `Te quedan ${remainingGuesses} intentos, ¡tú puedes!`;
+    message = t.attemptsRemaining.replace('{count}', remainingGuesses.toString());
     icon = '💪';
   }
   

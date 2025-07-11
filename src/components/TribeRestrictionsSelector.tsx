@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { TribeRestrictions } from '@/utils/gameSourcePreferences';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface TribeRestrictionsSelectorProps {
   restrictions: TribeRestrictions;
@@ -12,6 +13,8 @@ const TribeRestrictionsSelector: React.FC<TribeRestrictionsSelectorProps> = ({
   restrictions,
   onRestrictionsChange
 }) => {
+  const { t } = useLanguage();
+
   const handleToggleExcludeBoss = () => {
     const newRestrictions = {
       ...restrictions,
@@ -23,7 +26,7 @@ const TribeRestrictionsSelector: React.FC<TribeRestrictionsSelectorProps> = ({
   return (
     <div className="tribe-restrictions-selector p-3 rounded-lg shadow-lg mt-3" 
          style={{ background: 'rgba(15, 82, 152, 0.1)', backdropFilter: 'blur(4px)' }}>
-      <h3 className="text-lg font-bold text-primary-600 mb-3">Restricciones de Tribus</h3>
+      <h3 className="text-lg font-bold text-primary-600 mb-3">{t.tribeRestrictions}</h3>
       
       <div className="space-y-3">
         <div className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-gray-200">
@@ -39,9 +42,9 @@ const TribeRestrictionsSelector: React.FC<TribeRestrictionsSelectorProps> = ({
               />
             </div>
             <div>
-              <p className="font-medium text-gray-800">Excluir Yokais Boss</p>
+              <p className="font-medium text-gray-800">{t.excludeBossYokai}</p>
               <p className="text-sm text-gray-600">
-                No incluir yokais de la tribu Boss en modo infinito
+                {t.excludeBossDescription}
               </p>
             </div>
           </div>
@@ -57,9 +60,10 @@ const TribeRestrictionsSelector: React.FC<TribeRestrictionsSelectorProps> = ({
           </label>
         </div>
         
-        <div className="text-xs text-gray-500 bg-blue-50 p-2 rounded border-l-4 border-blue-400">
-          <strong>Nota:</strong> En el modo diario, los yokais Boss están siempre excluidos para mantener un nivel de dificultad equilibrado.
-        </div>
+        <div
+          className="text-xs text-gray-500 bg-blue-50 p-2 rounded border-l-4 border-blue-400"
+          dangerouslySetInnerHTML={{ __html: t.dailyModeNote }}
+        />
       </div>
     </div>
   );

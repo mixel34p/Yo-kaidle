@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.5.0",
   "previousVersions": [
     {
       "version": "1.0.0",
@@ -18,6 +18,28 @@
           "color": "indigo",
           "items": [
             "Se ha introduccido el modo de Wordle diario y el modo de Wordle infinito."
+          ]
+        }
+      ]
+    },
+     {
+      "version": "1.1.0",
+      "releaseDate": "2025-07-11",
+      "title": "Primera actualización del Yo-kaidle.`.",
+      "features": [
+        {
+          "category": "Traducción beta al Inglés.",
+          "color": "red",
+          "items": [
+            "Se han traducido parte de las interfaces al inglés."
+            "(Faltan varios menús por traducir, además de los Yo-kais.)"
+          ]
+        },
+        {
+          "category": "Solucción de bugs.",
+          "color": "gray",
+          "items": [
+            "Se ha solucionado un bug que provocaba que el algoritmo de selección de Yo-kai diario seleccionara los Yo-kais de forma lineal."
           ]
         }
       ]
