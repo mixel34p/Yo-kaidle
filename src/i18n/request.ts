@@ -8,6 +8,7 @@ export default getRequestConfig(async ({ locale }) => {
   }
 
   return {
+    locale,
     messages: {
       ...(await import(`./locales/${locale}/common.json`)).default,
       yokai: (await import(`./locales/${locale}/yokai.json`)).default
