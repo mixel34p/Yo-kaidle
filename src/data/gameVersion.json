@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.1.0",
   "previousVersions": [
     {
       "version": "1.0.0",
@@ -22,7 +22,7 @@
         }
       ]
     },
-     {
+    {
       "version": "1.1.0",
       "releaseDate": "2025-07-11",
       "title": "Primera actualización del Yo-kaidle.`.",
@@ -31,7 +31,7 @@
           "category": "Traducción beta al Inglés.",
           "color": "red",
           "items": [
-            "Se han traducido parte de las interfaces al inglés."
+            "Se han traducido parte de las interfaces al inglés.",
             "(Faltan varios menús por traducir, además de los Yo-kais.)"
           ]
         },
