@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "previousVersions": [
     {
       "version": "1.0.0",
@@ -40,6 +40,21 @@
           "color": "gray",
           "items": [
             "Se ha solucionado un bug que provocaba que el algoritmo de selección de Yo-kai diario seleccionara los Yo-kais de forma lineal."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "releaseDate": "2025-07-11",
+      "title": "Primera actualización del Yo-kaidle.`.",
+      "features": [
+        {
+          "category": "Traducción beta al Inglés.",
+          "color": "red",
+          "items": [
+            "Se han traducido todos los Yo-kais al inglés.",
+            "(Faltan algunos menús por traducir)"
           ]
         }
       ]
