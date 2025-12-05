@@ -1,0 +1,418 @@
+/* =====================================================
+   SISTEMA DE TEMAS PARA PERFILES
+   Preparado para personalización futura
+   ===================================================== */
+
+/* Contenedor base del perfil */
+.profile-container {
+  @apply max-w-4xl mx-auto px-4 py-8;
+}
+
+/* Layouts del perfil */
+.profile-container.layout-default {
+  @apply space-y-8;
+}
+
+.profile-container.layout-compact {
+  @apply space-y-6 max-w-2xl;
+}
+
+.profile-container.layout-detailed {
+  @apply space-y-10 max-w-6xl;
+}
+
+/* Temas de color base */
+.profile-container.theme-default {
+  --profile-primary: theme('colors.blue.600');
+  --profile-secondary: theme('colors.purple.600');
+  --profile-accent: theme('colors.cyan.400');
+}
+
+.profile-container.theme-blue {
+  --profile-primary: theme('colors.blue.600');
+  --profile-secondary: theme('colors.purple.600');
+  --profile-accent: theme('colors.cyan.400');
+}
+
+.profile-container.theme-fire {
+  --profile-primary: theme('colors.red.600');
+  --profile-secondary: theme('colors.orange.600');
+  --profile-accent: theme('colors.yellow.400');
+}
+
+.profile-container.theme-nature {
+  --profile-primary: theme('colors.green.600');
+  --profile-secondary: theme('colors.emerald.600');
+  --profile-accent: theme('colors.lime.400');
+}
+
+.profile-container.theme-mystic {
+  --profile-primary: theme('colors.purple.600');
+  --profile-secondary: theme('colors.pink.600');
+  --profile-accent: theme('colors.violet.400');
+}
+
+.profile-container.theme-golden {
+  --profile-primary: theme('colors.yellow.600');
+  --profile-secondary: theme('colors.amber.600');
+  --profile-accent: theme('colors.orange.400');
+}
+
+.profile-container.theme-red {
+  --profile-primary: theme('colors.red.600');
+  --profile-secondary: theme('colors.orange.600');
+  --profile-accent: theme('colors.yellow.400');
+}
+
+/* Estilos de fondo personalizables */
+.profile-container[data-background="gradient"] {
+  @apply relative;
+}
+
+.profile-container[data-background="gradient"]::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-3xl -z-10;
+}
+
+.profile-container[data-background="pattern"] {
+  @apply relative;
+}
+
+.profile-container[data-background="pattern"]::before {
+  content: '';
+  @apply absolute inset-0 opacity-5 -z-10;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Header del perfil */
+.profile-header {
+  @apply relative;
+}
+
+/* Temas específicos - Fuego */
+.profile-container.theme-red .bg-blue-600,
+.profile-container.theme-red .bg-blue-700,
+.profile-container.theme-red .bg-blue-800,
+.profile-container.theme-red .bg-blue-900 {
+  @apply bg-red-600 !important;
+}
+
+.profile-container.theme-red .border-blue-400,
+.profile-container.theme-red .border-blue-500 {
+  @apply border-red-400 !important;
+}
+
+.profile-container.theme-red .text-blue-300,
+.profile-container.theme-red .text-blue-400 {
+  @apply text-red-300 !important;
+}
+
+/* Temas específicos - Naturaleza */
+.profile-container.theme-green .bg-blue-600,
+.profile-container.theme-green .bg-blue-700,
+.profile-container.theme-green .bg-blue-800,
+.profile-container.theme-green .bg-blue-900 {
+  @apply bg-green-600 !important;
+}
+
+.profile-container.theme-green .border-blue-400,
+.profile-container.theme-green .border-blue-500 {
+  @apply border-green-400 !important;
+}
+
+.profile-container.theme-green .text-blue-300,
+.profile-container.theme-green .text-blue-400 {
+  @apply text-green-300 !important;
+}
+
+/* Temas específicos - Místico */
+.profile-container.theme-purple .bg-blue-600,
+.profile-container.theme-purple .bg-blue-700,
+.profile-container.theme-purple .bg-blue-800,
+.profile-container.theme-purple .bg-blue-900 {
+  @apply bg-purple-600 !important;
+}
+
+.profile-container.theme-purple .border-blue-400,
+.profile-container.theme-purple .border-blue-500 {
+  @apply border-purple-400 !important;
+}
+
+.profile-container.theme-purple .text-blue-300,
+.profile-container.theme-purple .text-blue-400 {
+  @apply text-purple-300 !important;
+}
+
+/* Temas específicos - Dorado */
+.profile-container.theme-yellow .bg-blue-600,
+.profile-container.theme-yellow .bg-blue-700,
+.profile-container.theme-yellow .bg-blue-800,
+.profile-container.theme-yellow .bg-blue-900 {
+  @apply bg-yellow-600 !important;
+}
+
+.profile-container.theme-yellow .border-blue-400,
+.profile-container.theme-yellow .border-blue-500 {
+  @apply border-yellow-400 !important;
+}
+
+.profile-container.theme-yellow .text-blue-300,
+.profile-container.theme-yellow .text-blue-400 {
+  @apply text-yellow-300 !important;
+}
+
+/* Aplicar temas a gradientes y fondos adicionales */
+.profile-container.theme-red .from-blue-900,
+.profile-container.theme-red .to-purple-900 {
+  @apply from-red-900 to-orange-900 !important;
+}
+
+.profile-container.theme-green .from-blue-900,
+.profile-container.theme-green .to-purple-900 {
+  @apply from-green-900 to-emerald-900 !important;
+}
+
+.profile-container.theme-purple .from-blue-900,
+.profile-container.theme-purple .to-purple-900 {
+  @apply from-purple-900 to-pink-900 !important;
+}
+
+.profile-container.theme-yellow .from-blue-900,
+.profile-container.theme-yellow .to-purple-900 {
+  @apply from-yellow-900 to-amber-900 !important;
+}
+
+/* Aplicar temas a botones y elementos interactivos */
+.profile-container.theme-red .bg-blue-600:hover {
+  @apply bg-red-700 !important;
+}
+
+.profile-container.theme-green .bg-blue-600:hover {
+  @apply bg-green-700 !important;
+}
+
+.profile-container.theme-purple .bg-blue-600:hover {
+  @apply bg-purple-700 !important;
+}
+
+.profile-container.theme-yellow .bg-blue-600:hover {
+  @apply bg-yellow-700 !important;
+}
+
+.profile-header.layout-compact .profile-header-content {
+  @apply p-6;
+}
+
+.profile-header.layout-detailed .profile-header-content {
+  @apply p-10;
+}
+
+/* Estadísticas del perfil */
+.profile-stats {
+  @apply relative;
+}
+
+.profile-stats.layout-compact .stat-bar-container {
+  @apply space-y-3;
+}
+
+.profile-stats.layout-detailed .stat-bar-container {
+  @apply space-y-5;
+}
+
+/* Animaciones para barras de progreso */
+.stat-bar-container .progress-bar {
+  @apply transition-all duration-1000 ease-out;
+}
+
+.stat-bar-container:hover .progress-bar {
+  @apply shadow-lg;
+}
+
+/* Efectos hover para elementos interactivos */
+.profile-container .interactive-element {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.profile-container .interactive-element:hover {
+  @apply transform scale-105 shadow-xl;
+}
+
+/* Botones de acción del perfil */
+.friend-button-container {
+  @apply relative;
+}
+
+.friend-button-container.theme-blue button {
+  @apply focus:ring-blue-500/50;
+}
+
+.friend-button-container.theme-purple button {
+  @apply focus:ring-purple-500/50;
+}
+
+.friend-button-container.theme-green button {
+  @apply focus:ring-green-500/50;
+}
+
+.friend-button-container.theme-red button {
+  @apply focus:ring-red-500/50;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .profile-container {
+    @apply px-2 py-4;
+  }
+  
+  .profile-container.layout-detailed {
+    @apply max-w-full;
+  }
+  
+  .profile-header {
+    @apply text-center;
+  }
+  
+  .profile-stats {
+    @apply space-y-4;
+  }
+}
+
+/* Preparado para futuras personalizaciones */
+.profile-container.custom-theme {
+  /* Variables CSS personalizables */
+  --custom-primary: var(--profile-primary, theme('colors.blue.600'));
+  --custom-secondary: var(--profile-secondary, theme('colors.purple.600'));
+  --custom-accent: var(--profile-accent, theme('colors.cyan.400'));
+  --custom-background: var(--profile-background, 'default');
+  --custom-font: var(--profile-font, 'inherit');
+}
+
+/* Efectos especiales para perfiles premium (futuro) */
+.profile-container.premium {
+  @apply relative overflow-hidden;
+}
+
+.profile-container.premium::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-orange-500/10 rounded-3xl -z-10;
+}
+
+.profile-container.premium .profile-header {
+  @apply relative;
+}
+
+.profile-container.premium .profile-header::after {
+  content: '✨';
+  @apply absolute top-4 left-4 text-yellow-400 text-xl animate-pulse;
+}
+
+/* Animaciones de entrada */
+@keyframes profileFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-container {
+  animation: profileFadeIn 0.6s ease-out;
+}
+
+.profile-header {
+  animation: profileFadeIn 0.8s ease-out;
+}
+
+.profile-stats {
+  animation: profileFadeIn 1s ease-out;
+}
+
+/* Utilidades para elementos personalizables */
+.customizable-element {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.theme-transition {
+  @apply transition-colors duration-500 ease-in-out;
+}
+
+/* =====================================================
+   ESTILOS PARA LEADERBOARDS
+   ===================================================== */
+
+/* Animaciones para entradas del leaderboard */
+.leaderboard-entry {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.leaderboard-entry:hover {
+  @apply transform scale-[1.02] shadow-lg;
+}
+
+/* Efectos para medallas */
+.medal-gold {
+  @apply text-yellow-400;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5));
+}
+
+.medal-silver {
+  @apply text-gray-300;
+  filter: drop-shadow(0 0 8px rgba(209, 213, 219, 0.5));
+}
+
+.medal-bronze {
+  @apply text-orange-400;
+  filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.5));
+}
+
+/* Tabs del leaderboard */
+.leaderboard-tab {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.leaderboard-tab.active {
+  @apply transform scale-105 shadow-lg;
+}
+
+/* Entrada del usuario actual */
+.user-entry {
+  @apply relative;
+}
+
+.user-entry::before {
+  content: '';
+  @apply absolute left-0 top-0 bottom-0 w-1 bg-green-500 rounded-r;
+}
+
+/* Animación de carga para leaderboards */
+@keyframes leaderboardPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.leaderboard-loading {
+  animation: leaderboardPulse 2s ease-in-out infinite;
+}
+
+/* Responsive para leaderboards */
+@media (max-width: 768px) {
+  .leaderboard-entry {
+    @apply px-3 py-3;
+  }
+
+  .leaderboard-tabs {
+    @apply flex-col gap-2;
+  }
+
+  .leaderboard-tab {
+    @apply w-full justify-center;
+  }
+}

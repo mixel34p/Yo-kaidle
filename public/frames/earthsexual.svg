@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="animatedGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0" style="stop-color:transparent;stop-opacity:0"/>
+      <stop offset="0.7" style="stop-color:transparent;stop-opacity:0"/>
+      <stop offset="0.8" style="stop-color:#FF6B6B;stop-opacity:0.4">
+        <animate attributeName="stop-color" values="rgb(0% 0% 0%);rgb(0% 81.569% 100%);rgb(0% 81.569% 100%);rgb(0% 0% 0%)" dur="5.09s" repeatCount="indefinite" keyTimes="0; 0.4; 0.82222; 1"/>
+      </stop>
+      <stop offset="0.9" style="stop-color:#FF6B6B;stop-opacity:0.7">
+        <animate attributeName="stop-color" values="rgb(0% 0% 0%);rgb(100% 100% 100%);rgb(100% 100% 100%);rgb(0% 0% 0%)" dur="5.09s" repeatCount="indefinite" keyTimes="0; 0.4; 0.82472; 1"/>
+      </stop>
+      <stop offset="1" style="stop-color:#FF6B6B;stop-opacity:1">
+        <animate attributeName="stop-color" values="rgb(0% 0% 0%);rgb(0% 0% 0%);rgb(0% 0% 0%);rgb(0% 0% 0%)" dur="5.09s" repeatCount="indefinite" keyTimes="0; 0.4; 0.81829; 1"/>
+      </stop>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <circle cx="128" cy="128" r="128" fill="url(#animatedGradient)"/>
+  <g filter="url(#glow)">
+    <animateTransform attributeName="transform" type="rotate" values="0 128 128;360 128 128" dur="4s" repeatCount="indefinite"/>
+    <image href="data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACwBgCdASpgAD8APm0skkYkIiGhMVdoAIANiWUAQgDBAPX/AxPMpesHpP1BNzVLnJ8toqngtR/Ar+I7N2cvQAD+/rzPjwVigpQ45N9g7dwCL/tbf/6Qf9QnJEbS+wksLKcXuxeNrYUt/8Zfd/Z5P9//9vBP4NfKvY2//68E/g18q9h5zSFSgNc5dadyrmRjEO60dGAAAAA=" width="96" height="63" x="101.64875383463794" y="30.31070567209916" style="" transform="matrix(0.221342, 0, 0, 0.226758, 93.657252, 0.071811)">
+      <title>earthbadge</title>
+    </image>
+    <image href="data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACwBgCdASpgAD8APm0skkYkIiGhMVdoAIANiWUAQgDBAPX/AxPMpesHpP1BNzVLnJ8toqngtR/Ar+I7N2cvQAD+/rzPjwVigpQ45N9g7dwCL/tbf/6Qf9QnJEbS+wksLKcXuxeNrYUt/8Zfd/Z5P9//9vBP4NfKvY2//68E/g18q9h5zSFSgNc5dadyrmRjEO60dGAAAAA=" width="96" height="63" x="101.64875383463794" y="30.31070567209916" style="" transform="matrix(0.221342, 0, 0, 0.226758, 210.097205, 112.179126)">
+      <title>earthbadge</title>
+    </image>
+    <image href="data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACwBgCdASpgAD8APm0skkYkIiGhMVdoAIANiWUAQgDBAPX/AxPMpesHpP1BNzVLnJ8toqngtR/Ar+I7N2cvQAD+/rzPjwVigpQ45N9g7dwCL/tbf/6Qf9QnJEbS+wksLKcXuxeNrYUt/8Zfd/Z5P9//9vBP4NfKvY2//68E/g18q9h5zSFSgNc5dadyrmRjEO60dGAAAAA=" width="96" height="63" x="101.64875383463794" y="30.31070567209916" style="" transform="matrix(0.221342, 0, 0, 0.226758, -20.6164, 113.803882)">
+      <title>earthbadge</title>
+    </image>
+    <image href="data:image/png;base64,UklGRqIAAABXRUJQVlA4IJYAAACwBgCdASpgAD8APm0skkYkIiGhMVdoAIANiWUAQgDBAPX/AxPMpesHpP1BNzVLnJ8toqngtR/Ar+I7N2cvQAD+/rzPjwVigpQ45N9g7dwCL/tbf/6Qf9QnJEbS+wksLKcXuxeNrYUt/8Zfd/Z5P9//9vBP4NfKvY2//68E/g18q9h5zSFSgNc5dadyrmRjEO60dGAAAAA=" width="96" height="63" x="101.64875383463794" y="30.31070567209916" style="" transform="matrix(0.221342, 0, 0, 0.226758, 94.740405, 228.619117)">
+      <title>earthbadge</title>
+    </image>
+  </g>
+  <circle cx="128" cy="128" r="85" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.6">
+    <animate attributeName="r" values="82;88;82" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <g opacity="0.7">
+    <circle cx="90" cy="70" r="2" fill="#FFFFFF">
+      <animate attributeName="cy" values="70;50;70" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="166" cy="90" r="1.5" fill="#FFFFFF">
+      <animate attributeName="cx" values="166;186;166" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="186" cy="166" r="2" fill="#FFFFFF">
+      <animate attributeName="cy" values="166;186;166" dur="3.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.9;0.2" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="70" cy="186" r="1.5" fill="#FFFFFF">
+      <animate attributeName="cx" values="70;50;70" dur="2.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <g opacity="0.5">
+    <animateTransform attributeName="transform" type="rotate" values="0 128 128;360 128 128" dur="6s" repeatCount="indefinite"/>
+    <path d="M 128 40 L 130 45 L 126 45 Z" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 216 128 L 221 130 L 221 126 Z" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite" begin="0.25s"/>
+    </path>
+    <path d="M 128 216 L 130 221 L 126 221 Z" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite" begin="0.5s"/>
+    </path>
+    <path d="M 40 128 L 35 130 L 35 126 Z" fill="#FFFFFF">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="1s" repeatCount="indefinite" begin="0.75s"/>
+    </path>
+  </g>
+</svg>

@@ -6,6 +6,7 @@
 @import './mobile.css';
 @import './search.css';
 @import './home.css';
+@import './profile-themes.css';
 
 :root {
   --foreground-rgb: 0, 0, 0;

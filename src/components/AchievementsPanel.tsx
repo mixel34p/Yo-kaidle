@@ -1,7 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Achievement, getUnlockedAchievements, getLockedAchievements, getAchievementStats } from '@/utils/achievementSystem';
+import { Achievement, getUnlockedAchievements, getLockedAchievements, getAchievementStats, getAchievementName, getAchievementDescription, claimAchievementReward, hasClaimableReward, isRewardClaimed } from '@/utils/achievementSystem';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getCurrentPoints } from '@/utils/economyManager';
+import { AVAILABLE_BACKGROUNDS, getBackgroundName } from '@/utils/backgroundsManager';
+import { AVAILABLE_TRACKS, getTrackName } from '@/utils/jukeboxManager';
+import { AVAILABLE_BADGES, getBadgeName } from '@/utils/badgesManager';
+import { AVAILABLE_FRAMES, getFrameName } from '@/utils/framesManager';
+import { AVAILABLE_TITLES, getTitleName } from '@/utils/titlesManager';
 
 // Componente de icono de puntos personalizable
 const PointsIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
@@ -61,21 +68,65 @@ interface AchievementsPanelProps {
   className?: string;
 }
 
+// Función para obtener nombre de título traducido usando el manager
+const getTitleNameLocal = (titleId: string, language: 'es' | 'en' | 'it'): string => {
+  const title = AVAILABLE_TITLES.find(t => t.id === titleId);
+  return title ? getTitleName(title, language) : titleId;
+};
+
+// Función para obtener nombre de marco usando el manager
+const getFrameNameLocal = (frameId: string, language: 'es' | 'en' | 'it'): string => {
+  const frame = AVAILABLE_FRAMES.find(f => f.id === frameId);
+  return frame ? getFrameName(frame, language) : frameId;
+};
+
 const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' }) => {
-  const [activeTab, setActiveTab] = useState<'unlocked' | 'locked'>('unlocked');
+  const { t, language } = useLanguage();
+  const [activeTab, setActiveTab] = useState<'uncompleted' | 'completed'>('uncompleted');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentPoints, setCurrentPoints] = useState<number>(0);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
+  const [claimingAchievements, setClaimingAchievements] = useState<Set<string>>(new Set());
   
-  const unlockedAchievements = getUnlockedAchievements();
-  const lockedAchievements = getLockedAchievements();
+  const allUnlockedAchievements = getUnlockedAchievements();
+  const allLockedAchievements = getLockedAchievements();
+
+  // Separar logros desbloqueados sin reclamar y logros bloqueados
+  const unlockedButNotClaimed = allUnlockedAchievements.filter(achievement => !isRewardClaimed(achievement.id));
+
+  // "Sin completar" incluye: logros desbloqueados sin reclamar PRIMERO + logros bloqueados
+  const uncompletedAchievements = [
+    ...unlockedButNotClaimed, // Desbloqueados sin reclamar (PRIORIDAD)
+    ...allLockedAchievements  // Logros aún no desbloqueados
+  ];
+
+  // "Completados" solo incluye logros desbloqueados con recompensa reclamada
+  const completedAchievements = allUnlockedAchievements.filter(achievement =>
+    isRewardClaimed(achievement.id)
+  );
   const stats = getAchievementStats();
+
+  // Cargar puntos actuales
+  React.useEffect(() => {
+    setCurrentPoints(getCurrentPoints());
+  }, [refreshKey]);
+
+  // Función para reclamar recompensa
+  const handleClaimReward = (achievementId: string) => {
+    const success = claimAchievementReward(achievementId);
+    if (success) {
+      setCurrentPoints(getCurrentPoints());
+      setRefreshKey(prev => prev + 1); // Forzar re-render
+    }
+  };
   
   const categories = [
-    { id: 'all', name: 'Todos', icon: '🏆' },
-    { id: 'collection', name: 'Colección', icon: '📚' },
-    { id: 'tribe', name: 'Tribus', icon: '👥' },
-    { id: 'game', name: 'Juegos', icon: '🎮' },
-    { id: 'rank', name: 'Rangos', icon: '⭐' },
-    { id: 'special', name: 'Especiales', icon: '✨' }
+    { id: 'all', name: t.allCategories, icon: '🏆' },
+    { id: 'collection', name: t.collectionCategory, icon: '📚' },
+    { id: 'tribe', name: t.tribesCategory, icon: '👥' },
+    { id: 'game', name: t.gamesCategory, icon: '🎮' },
+    { id: 'rank', name: t.ranksCategory, icon: '⭐' },
+    { id: 'special', name: t.specialCategory, icon: '✨' }
   ];
   
   const filterAchievements = (achievements: Achievement[]) => {
@@ -97,14 +148,14 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-            🏆 Logros
+            🏆 {t.achievements}
           </h2>
           <div className="text-right">
             <div className="text-2xl font-bold text-blue-600">
               {stats.unlocked}/{stats.total}
             </div>
             <div className="text-sm text-gray-600">
-              {stats.percentage}% completado
+              {stats.percentage}% {t.completed}
             </div>
           </div>
         </div>
@@ -118,14 +169,10 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
         </div>
         
         {/* Puntos */}
-        <div className="flex justify-between text-sm text-gray-600">
+        <div className="flex justify-center text-sm text-gray-600">
           <span className="flex items-center">
-            <PointsIcon className="w-4 h-4 mr-1" />
-            <span>Ganados: <strong className="text-yellow-600">{stats.earnedPoints}</strong></span>
-          </span>
-          <span className="flex items-center">
-            <PointsIcon className="w-4 h-4 mr-1" />
-            <span>Total: <strong>{stats.totalPoints}</strong></span>
+            <PointsIcon className="w-4 h-4 mr-2" />
+            <span className="text-blue-600 font-bold text-lg">{currentPoints}</span>
           </span>
         </div>
       </div>
@@ -152,39 +199,249 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
       {/* Tabs */}
       <div className="flex border-b border-gray-200">
         <button
-          onClick={() => setActiveTab('unlocked')}
+          onClick={() => setActiveTab('uncompleted')}
           className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-            activeTab === 'unlocked'
+            activeTab === 'uncompleted'
               ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
               : 'text-gray-600 hover:text-gray-800'
           }`}
         >
-          ✅ Desbloqueados ({filterAchievements(unlockedAchievements).length})
+          ⏳ {t.uncompletedAchievements} ({filterAchievements(uncompletedAchievements).length})
         </button>
         <button
-          onClick={() => setActiveTab('locked')}
+          onClick={() => setActiveTab('completed')}
           className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-            activeTab === 'locked'
+            activeTab === 'completed'
               ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
               : 'text-gray-600 hover:text-gray-800'
           }`}
         >
-          🔒 Bloqueados ({filterAchievements(lockedAchievements).length})
+          ✅ {t.completedAchievements} ({filterAchievements(completedAchievements).length})
         </button>
       </div>
       
       {/* Lista de logros */}
       <div className="p-4 max-h-96 overflow-y-auto">
-        {activeTab === 'unlocked' ? (
+        {activeTab === 'uncompleted' ? (
           <div className="space-y-3">
-            {filterAchievements(unlockedAchievements).length === 0 ? (
+            {filterAchievements(uncompletedAchievements).length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <div className="text-4xl mb-2">🎯</div>
-                <p>No hay logros desbloqueados en esta categoría</p>
-                <p className="text-sm">¡Sigue jugando para desbloquear logros!</p>
+                <p>{t.noAchievementsUncompleted}</p>
+                <p className="text-sm">{t.keepPlayingToUnlock}</p>
               </div>
             ) : (
-              filterAchievements(unlockedAchievements).map(achievement => (
+              filterAchievements(uncompletedAchievements).map(achievement => {
+                const isUnlocked = allUnlockedAchievements.some(a => a.id === achievement.id);
+                const isLocked = !isUnlocked;
+
+                return (
+                  <div
+                    key={achievement.id}
+                    className={`flex items-center p-4 rounded-lg relative ${
+                      isLocked
+                        ? 'bg-gray-50 border border-gray-200 opacity-75'
+                        : 'bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 shadow-md'
+                    }`}
+                  >
+                    {/* Badge de "¡Reclamar!" para logros desbloqueados */}
+                    {!isLocked && (
+                      <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse">
+                        ¡{t.claimReward}!
+                      </div>
+                    )}
+                    <div className={`mr-4 ${isLocked ? 'grayscale' : ''}`}>
+                      <AchievementIcon
+                        icon={achievement.icon}
+                        alt={getAchievementName(achievement, language)}
+                        className="w-12 h-12"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className="mb-1">
+                        <h3 className={`font-semibold ${isLocked ? 'text-gray-600' : 'text-gray-800'}`}>
+                          {getAchievementName(achievement, language)}
+                        </h3>
+                      </div>
+                      <p className={`text-sm mb-2 ${isLocked ? 'text-gray-500' : 'text-gray-600'}`}>
+                        {getAchievementDescription(achievement, language)}
+                      </p>
+                    </div>
+                    <div className="text-right flex flex-col items-end gap-2">
+                      {isLocked ? (
+                        <>
+                          <div className="text-gray-500 font-medium text-xs">🔒 {t.achievementUncompleted}</div>
+                          {(achievement.reward?.points || achievement.reward?.background || achievement.reward?.track || achievement.reward?.frame || achievement.reward?.title || achievement.reward?.badge) && (
+                            <div className="bg-gray-100 px-3 py-2 rounded-lg text-center">
+                              <div className="text-xs text-gray-500 mb-1">{t.reward}</div>
+                              {achievement.reward?.points && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <PointsIcon className="w-4 h-4" />
+                                  {achievement.reward.points}
+                                </div>
+                              )}
+                              {achievement.reward?.background && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <span className="text-sm">🖼️</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const bg = AVAILABLE_BACKGROUNDS.find(b => b.id === achievement.reward?.background);
+                                      return bg ? getBackgroundName(bg, language) : 'Fondo';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                              {achievement.reward?.track && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <span className="text-sm">🎵</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const track = AVAILABLE_TRACKS.find(t => t.id === achievement.reward?.track);
+                                      return track ? getTrackName(track, language) : 'Canción';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                              {achievement.reward?.frame && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <span className="text-sm">🔳</span>
+                                  <span className="text-xs">{getFrameNameLocal(achievement.reward.frame, language)}</span>
+                                </div>
+                              )}
+                              {achievement.reward?.title && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <span className="text-sm">👑</span>
+                                  <span className="text-xs">{getTitleNameLocal(achievement.reward.title, language)}</span>
+                                </div>
+                              )}
+                              {achievement.reward?.badge && (
+                                <div className="flex items-center justify-center gap-1 text-gray-600 font-bold">
+                                  <span className="text-sm">🏆</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const badge = AVAILABLE_BADGES.find(b => b.id === achievement.reward?.badge);
+                                      return badge ? getBadgeName(badge, language) : 'Insignia';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <div className="text-orange-600 font-medium text-xs">⏳ {t.achievementUncompleted}</div>
+                          {(achievement.reward?.points || achievement.reward?.background || achievement.reward?.track || achievement.reward?.frame || achievement.reward?.title || achievement.reward?.badge) && (
+                            <div className="bg-yellow-100 px-3 py-2 rounded-lg text-center border border-yellow-200">
+                              <div className="text-xs text-yellow-700 mb-1">{t.reward}</div>
+                              {achievement.reward?.points && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <PointsIcon className="w-4 h-4" />
+                                  {achievement.reward.points}
+                                </div>
+                              )}
+                              {achievement.reward?.background && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <span className="text-sm">🖼️</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const bg = AVAILABLE_BACKGROUNDS.find(b => b.id === achievement.reward?.background);
+                                      return bg ? getBackgroundName(bg, language) : 'Fondo';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                              {achievement.reward?.track && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <span className="text-sm">🎵</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const track = AVAILABLE_TRACKS.find(t => t.id === achievement.reward?.track);
+                                      return track ? getTrackName(track, language) : 'Canción';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                              {achievement.reward?.frame && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <span className="text-sm">🔳</span>
+                                  <span className="text-xs">{getFrameNameLocal(achievement.reward.frame, language)}</span>
+                                </div>
+                              )}
+                              {achievement.reward?.title && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <span className="text-sm">👑</span>
+                                  <span className="text-xs">{getTitleNameLocal(achievement.reward.title, language)}</span>
+                                </div>
+                              )}
+                              {achievement.reward?.badge && (
+                                <div className="flex items-center justify-center gap-1 text-yellow-800 font-bold">
+                                  <span className="text-sm">🏆</span>
+                                  <span className="text-xs">
+                                    {(() => {
+                                      const badge = AVAILABLE_BADGES.find(b => b.id === achievement.reward?.badge);
+                                      return badge ? getBadgeName(badge, language) : 'Insignia';
+                                    })()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          <button
+                            onClick={() => handleClaimReward(achievement.id)}
+                            className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-xs rounded-full font-medium flex items-center gap-1 transition-colors"
+                          >
+                            {achievement.reward?.points ? (
+                              <>
+                                <PointsIcon className="w-3 h-3" />
+                                {t.claimReward} {achievement.reward.points}
+                              </>
+                            ) : achievement.reward?.background ? (
+                              <>
+                                <span className="text-xs">🖼️</span>
+                                {t.claimReward}
+                              </>
+                            ) : achievement.reward?.track ? (
+                              <>
+                                <span className="text-xs">🎵</span>
+                                {t.claimReward}
+                              </>
+                            ) : achievement.reward?.frame ? (
+                              <>
+                                <span className="text-xs">🔳</span>
+                                {t.claimReward}
+                              </>
+                            ) : achievement.reward?.title ? (
+                              <>
+                                <span className="text-xs">👑</span>
+                                {t.claimReward}
+                              </>
+                            ) : achievement.reward?.badge ? (
+                              <>
+                                <span className="text-xs">🏆</span>
+                                {t.claimReward}
+                              </>
+                            ) : (
+                              t.claimReward
+                            )}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filterAchievements(completedAchievements).length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <div className="text-4xl mb-2">🎯</div>
+                <p>{t.noAchievementsCompleted}</p>
+              </div>
+            ) : (
+              filterAchievements(completedAchievements).map(achievement => (
                 <div
                   key={achievement.id}
                   className="flex items-center p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg"
@@ -192,63 +449,21 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
                   <div className="mr-4">
                     <AchievementIcon
                       icon={achievement.icon}
-                      alt={achievement.name}
+                      alt={getAchievementName(achievement, language)}
                       className="w-12 h-12"
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <h3 className="font-semibold text-gray-800">{achievement.name}</h3>
-                      {achievement.reward?.points && (
-                        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium flex items-center">
-                          <PointsIcon className="w-3 h-3 mr-1" />
-                          <span>+{achievement.reward.points}</span>
-                        </span>
-                      )}
+                    <div className="mb-1">
+                      <h3 className="font-semibold text-gray-800">{getAchievementName(achievement, language)}</h3>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{achievement.description}</p>
+                    <p className="text-sm text-gray-600 mb-2">{getAchievementDescription(achievement, language)}</p>
                   </div>
-                  <div className="text-right text-xs text-gray-500">
-                    <div className="text-green-600 font-medium">✅ Desbloqueado</div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {filterAchievements(lockedAchievements).length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <div className="text-4xl mb-2">🎉</div>
-                <p>¡Has desbloqueado todos los logros de esta categoría!</p>
-              </div>
-            ) : (
-              filterAchievements(lockedAchievements).map(achievement => (
-                <div
-                  key={achievement.id}
-                  className="flex items-center p-4 bg-gray-50 border border-gray-200 rounded-lg opacity-75"
-                >
-                  <div className="mr-4 grayscale">
-                    <AchievementIcon
-                      icon={achievement.icon}
-                      alt={achievement.name}
-                      className="w-12 h-12"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <h3 className="font-semibold text-gray-600">{achievement.name}</h3>
-                      {achievement.reward?.points && (
-                        <span className="px-2 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium flex items-center">
-                          <PointsIcon className="w-3 h-3 mr-1" />
-                          <span>+{achievement.reward.points}</span>
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-500 mb-2">{achievement.description}</p>
-                  </div>
-                  <div className="text-right text-xs text-gray-400">
-                    <div>🔒 Bloqueado</div>
+                  <div className="text-right flex flex-col items-end gap-2">
+                    <div className="text-green-600 font-medium text-xs">✅ {t.achievementCompleted}</div>
+                    <span className="px-3 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium">
+                      {t.claimed}
+                    </span>
                   </div>
                 </div>
               ))

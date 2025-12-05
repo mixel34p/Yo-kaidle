@@ -1,0 +1,86 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Marco legendario -->
+  <defs>
+    <radialGradient id="legendaryGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:transparent;stop-opacity:0" />
+      <stop offset="60%" style="stop-color:transparent;stop-opacity:0" />
+      <stop offset="70%" style="stop-color:#9932CC;stop-opacity:0.2" />
+      <stop offset="80%" style="stop-color:#8A2BE2;stop-opacity:0.4" />
+      <stop offset="90%" style="stop-color:#4B0082;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#2E0054;stop-opacity:1" />
+    </radialGradient>
+    
+    <linearGradient id="legendaryInner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.9" />
+      <stop offset="20%" style="stop-color:#FF69B4;stop-opacity:0.8" />
+      <stop offset="40%" style="stop-color:#9932CC;stop-opacity:0.7" />
+      <stop offset="60%" style="stop-color:#4169E1;stop-opacity:0.8" />
+      <stop offset="80%" style="stop-color:#8A2BE2;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#FFD700;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <filter id="legendaryGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <animateTransform id="rotate" attributeName="transform" type="rotate" 
+                      values="0 128 128;360 128 128" dur="10s" repeatCount="indefinite"/>
+  </defs>
+  
+  <!-- Círculo exterior legendario -->
+  <circle cx="128" cy="128" r="128" fill="url(#legendaryGradient)" />
+  
+  <!-- Anillo decorativo principal con animación -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" 
+                      values="0 128 128;360 128 128" dur="8s" repeatCount="indefinite"/>
+    <circle cx="128" cy="128" r="95" fill="none" stroke="url(#legendaryInner)" stroke-width="15" filter="url(#legendaryGlow)" />
+  </g>
+  
+  <!-- Anillo interno estático -->
+  <circle cx="128" cy="128" r="85" fill="none" stroke="#9932CC" stroke-width="3" opacity="0.8" />
+  
+  <!-- Efectos de brillo mágico -->
+  <circle cx="128" cy="128" r="100" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.7" />
+  <circle cx="128" cy="128" r="80" fill="none" stroke="#FF69B4" stroke-width="1" opacity="0.6" />
+  
+  <!-- Estrellas decorativas animadas -->
+  <g>
+    <animateTransform attributeName="transform" type="rotate" 
+                      values="0 128 128;-360 128 128" dur="12s" repeatCount="indefinite"/>
+    <!-- Estrella superior -->
+    <path d="M 128 25 L 132 35 L 142 35 L 134 42 L 137 52 L 128 46 L 119 52 L 122 42 L 114 35 L 124 35 Z" 
+          fill="#FFD700" opacity="0.8" />
+    <!-- Estrella derecha -->
+    <path d="M 231 128 L 235 132 L 245 132 L 237 139 L 240 149 L 231 143 L 222 149 L 225 139 L 217 132 L 227 132 Z" 
+          fill="#FF69B4" opacity="0.8" />
+    <!-- Estrella inferior -->
+    <path d="M 128 231 L 132 235 L 142 235 L 134 242 L 137 252 L 128 246 L 119 252 L 122 242 L 114 235 L 124 235 Z" 
+          fill="#9932CC" opacity="0.8" />
+    <!-- Estrella izquierda -->
+    <path d="M 25 128 L 29 132 L 39 132 L 31 139 L 34 149 L 25 143 L 16 149 L 19 139 L 11 132 L 21 132 Z" 
+          fill="#4169E1" opacity="0.8" />
+  </g>
+  
+  <!-- Partículas brillantes -->
+  <g opacity="0.6">
+    <animateTransform attributeName="transform" type="rotate" 
+                      values="0 128 128;360 128 128" dur="6s" repeatCount="indefinite"/>
+    <circle cx="90" cy="60" r="2" fill="#FFD700">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="166" cy="90" r="1.5" fill="#FF69B4">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="196" cy="166" r="2" fill="#9932CC">
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="90" cy="196" r="1.5" fill="#4169E1">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

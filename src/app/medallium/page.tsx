@@ -22,6 +22,7 @@ import { checkAchievements } from '@/utils/achievementSystem';
 import { calculateAdvancedStats } from '@/utils/advancedStats';
 import AchievementsPanel from '@/components/AchievementsPanel';
 import AdvancedStatsPanel from '@/components/AdvancedStatsPanel';
+import CirclesPanel from '@/components/CirclesPanel';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 // Tipos para la ordenación y filtros
@@ -62,6 +63,7 @@ export default function Medallium() {
   // Estados para nuevos paneles
   const [showAchievements, setShowAchievements] = useState(false);
   const [showAdvancedStats, setShowAdvancedStats] = useState(false);
+  const [showCircles, setShowCircles] = useState(false);
   const [allYokai, setAllYokai] = useState<Yokai[]>([]);
   const [advancedStats, setAdvancedStats] = useState<any>(null);
 
@@ -77,12 +79,12 @@ export default function Medallium() {
         if (storedFavorites) {
           setFavorites(JSON.parse(storedFavorites));
         }
-        
+
         const storedViewMode = localStorage.getItem('medalliumViewMode') as ViewMode | null;
         if (storedViewMode && (storedViewMode === 'grid' || storedViewMode === 'list')) {
           setViewMode(storedViewMode);
         }
-        
+
         const storedUnlockDates = localStorage.getItem('medalliumUnlockDates');
         if (storedUnlockDates) {
           setUnlockDates(JSON.parse(storedUnlockDates));
@@ -91,7 +93,7 @@ export default function Medallium() {
         console.error('Error cargando preferencias del usuario:', error);
       }
     };
-    
+
     loadUserPreferences();
   }, []);
 
@@ -225,7 +227,7 @@ export default function Medallium() {
   useEffect(() => {
     localStorage.setItem('medalliumFavorites', JSON.stringify(favorites));
   }, [favorites]);
-  
+
   // Guardar preferencia de vista en localStorage cuando cambie
   useEffect(() => {
     localStorage.setItem('medalliumViewMode', viewMode);
@@ -243,18 +245,18 @@ export default function Medallium() {
   
   // Alternar favorito
   const toggleFavorite = (yokaiId: number) => {
-    setFavorites(prev => {
+    setFavorites((prev: number[]) => {
       if (prev.includes(yokaiId)) {
-        return prev.filter(id => id !== yokaiId);
+        return prev.filter((id: number) => id !== yokaiId);
       } else {
         return [...prev, yokaiId];
       }
     });
   };
-  
+
   // Cambiar modo de vista
   const toggleViewMode = () => {
-    setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+    setViewMode(viewMode === 'grid' ? 'list' : 'grid');
   };
   
   // Limpiar todos los filtros
@@ -430,6 +432,15 @@ export default function Medallium() {
               title={t.advancedStatistics}
             >
               <span className="text-lg">📊</span>
+            </button>
+
+            {/* Botón de círculos */}
+            <button
+              className={`flex items-center justify-center p-2 rounded-lg transition-colors ${showCircles ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setShowCircles(!showCircles)}
+              title={t.viewCircles}
+            >
+              <span className="text-lg">⭕</span>
             </button>
 
             {/* Menú desplegable de ordenación */}
@@ -822,7 +833,7 @@ export default function Medallium() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-800">🏆 Logros del Medallium</h2>
+              <h2 className="text-xl font-bold text-gray-800">🏆 {t.achievements}</h2>
               <button
                 onClick={() => setShowAchievements(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -842,7 +853,7 @@ export default function Medallium() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <h2 className="text-xl font-bold text-gray-800">📊 Estadísticas Avanzadas</h2>
+              <h2 className="text-xl font-bold text-gray-800">📊 {t.advancedStatistics}</h2>
               <button
                 onClick={() => setShowAdvancedStats(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -852,6 +863,26 @@ export default function Medallium() {
             </div>
             <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
               <AdvancedStatsPanel stats={advancedStats} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Panel de Círculos */}
+      {showCircles && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-800">{t.circles}</h2>
+              <button
+                onClick={() => setShowCircles(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6">
+              <CirclesPanel />
             </div>
           </div>
         </div>

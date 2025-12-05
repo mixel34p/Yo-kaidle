@@ -5,8 +5,11 @@ import { getAllYokai } from '@/lib/supabase';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiSearchProps {
-  onSelect: (yokai: Yokai) => void;
-  disabled: boolean;
+  onSelect?: (yokai: Yokai) => void;
+  onYokaiSelect?: (yokai: Yokai) => void;
+  onTypingChange?: (isTyping: boolean) => void;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
 function getYokaiImageUrl(yokai: Yokai): string {
@@ -14,7 +17,13 @@ function getYokaiImageUrl(yokai: Yokai): string {
   return cleanWikiImageUrl(url);
 }
 
-const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
+const YokaiSearch: React.FC<YokaiSearchProps> = ({
+  onSelect,
+  onYokaiSelect,
+  onTypingChange,
+  disabled = false,
+  placeholder = "Busca un Yo-kai..."
+}) => {
   const { t, language, getTribeTranslation, getYokaiName } = useLanguage();
   const [isMobileKeyboardOpen, setIsMobileKeyboardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,7 +67,13 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
   }, [searchQuery, yokaiList, language, getYokaiName]);
 
   const handleSelect = (yokai: Yokai) => {
-    onSelect(yokai);
+    // Llamar a la función apropiada
+    if (onYokaiSelect) {
+      onYokaiSelect(yokai);
+    } else if (onSelect) {
+      onSelect(yokai);
+    }
+
     setSearchQuery('');
     setIsDropdownOpen(false);
   };
@@ -69,10 +84,22 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({ onSelect, disabled }) => {
         <div className="flex shadow-md rounded-lg overflow-hidden">
           <input
             type="text"
-            placeholder={t.searchPlaceholder}
+            placeholder={placeholder || t.searchPlaceholder}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              // Notificar cambio de escritura
+              if (onTypingChange) {
+                onTypingChange(e.target.value.length > 0);
+              }
+            }}
             onFocus={() => searchQuery.trim() !== '' && setIsDropdownOpen(true)}
+            onBlur={() => {
+              // Notificar que dejó de escribir
+              if (onTypingChange) {
+                onTypingChange(false);
+              }
+            }}
             className="w-full px-4 py-3 border-2 rounded-l-lg focus:outline-none focus:ring-2 transition-all duration-300"
             style={{
               backgroundColor: 'rgba(234, 242, 255, 0.85)',

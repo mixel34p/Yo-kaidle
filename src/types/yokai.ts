@@ -318,6 +318,9 @@ export interface DuelResult {
   targetYokai: Yokai;
 }
 
+
+
+
 // Resultado de una adivinanza en Wordle
 export type GuessResult = {
   isCorrect: boolean;

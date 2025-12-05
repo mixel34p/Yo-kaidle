@@ -1,0 +1,22 @@
+{
+  "circles": [
+    {
+      "id": "legendary_test",
+      "name_es": "Prueba Legendaria",
+      "name_en": "Legendary Test",
+      "name_it": "Test Leggendario",
+      "description_es": "Círculo legendario con múltiples recompensas",
+      "description_en": "Legendary circle with multiple rewards",
+      "description_it": "Cerchio leggendario con ricompense multiple",
+      "yokaiNames": ["Estatiniño"],
+      "category": "legendary",
+      "difficulty": "medium",
+      "icon": "👑",
+      "reward": {
+        "frame": "legendary",
+        "title": "master",
+        "badge": "collector_10"
+      }
+    }
+  ]
+}

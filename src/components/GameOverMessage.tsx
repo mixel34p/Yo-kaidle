@@ -16,6 +16,7 @@ interface GameOverMessageProps {
   onMidnightReached?: () => void; // Nueva prop para manejar el evento de medianoche
   guesses?: Yokai[]; // Intentos realizados por el jugador (array de Yokais)
   maxGuesses?: number; // Número máximo de intentos permitidos
+  pointsEarned?: number; // Puntos ganados en esta partida
 }
 
 const GameOverMessage: React.FC<GameOverMessageProps> = ({
@@ -28,7 +29,8 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   gameStatus = won ? 'won' : 'lost', // Por defecto, usar won para determinar el estado
   onMidnightReached,
   guesses = [],
-  maxGuesses = 6
+  maxGuesses = 6,
+  pointsEarned = 0
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -37,7 +39,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   const [isSharing, setIsSharing] = useState(false); // Para evitar múltiples operaciones de compartir simultáneas
 
   // Hook para traducciones
-  const { t, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
+  const { t, language, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
 
   // Usar los iconos de elementos importados arriba
 
@@ -439,6 +441,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
               : t.lostMessage
             }
           </p>
+
           {gameMode === 'daily' && (
             <p className="text-white text-opacity-75 text-sm mt-1">
               {t.comeBackTomorrow}
@@ -537,17 +540,59 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
             </div>
           </div>
           
+          {/* Puntos ganados en modo diario */}
+          {gameMode === 'daily' && won && pointsEarned > 0 && (
+            <div className="mt-6">
+              <div className="bg-gradient-to-r from-green-400 to-blue-400 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <img
+                    src="/icons/points-icon.png"
+                    alt="Puntos"
+                    className="w-6 h-6"
+                  />
+                  <span className="text-white font-bold text-xl">
+                    +{pointsEarned} {t.points}
+                  </span>
+                </div>
+                <p className="text-white text-opacity-90 text-sm">
+                  {language === 'es' ? 'Por adivinar el Yo-kai del día' : language === 'en' ? 'For guessing the daily Yo-kai' : 'Per aver indovinato lo Yo-kai del giorno'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Timer para el próximo Yo-kai (solo en modo diario y cuando el juego ha terminado) */}
           {gameMode === 'daily' && (gameStatus === 'won' || gameStatus === 'lost') && (
             <div className="mt-6">
-              <NextYokaiTimer 
-                gameStatus={won ? 'won' : 'lost'} 
-                gameMode={gameMode} 
-                onMidnightReached={onMidnightReached} 
+              <NextYokaiTimer
+                gameStatus={won ? 'won' : 'lost'}
+                gameMode={gameMode}
+                onMidnightReached={onMidnightReached}
               />
             </div>
           )}
           
+          {/* Puntos ganados en modo infinito */}
+          {gameMode === 'infinite' && won && pointsEarned > 0 && (
+            <div className="mb-6">
+              <div className="bg-gradient-to-r from-green-400 to-blue-400 rounded-lg p-4 text-center">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <img
+                    src="/icons/points-icon.png"
+                    alt="Puntos"
+                    className="w-6 h-6"
+                  />
+                  <span className="text-white font-bold text-xl">
+                    +{pointsEarned} {t.points}
+                  </span>
+                </div>
+                <p className="text-white text-opacity-90 text-sm">
+                  {language === 'es' ? 'Por adivinar un Yo-kai' : language === 'en' ? 'For guessing a Yo-kai' : 'Per aver indovinato uno Yo-kai'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Botones */}
           <div className="flex flex-col space-y-3">
             {/* Primer fila de botones */}

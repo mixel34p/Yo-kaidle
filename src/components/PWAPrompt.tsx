@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { requestNotificationPermission, showTestNotification } from './NotificationManager';
+import { X } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -11,10 +13,20 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [installPromptDismissed, setInstallPromptDismissed] = useState(false);
+  const [notificationPromptDismissed, setNotificationPromptDismissed] = useState(false);
   useEffect(() => {
+    // Verificar si los prompts fueron previamente cerrados
+    const installDismissed = localStorage.getItem('pwa-install-dismissed') === 'true';
+    const notificationDismissed = localStorage.getItem('pwa-notification-dismissed') === 'true';
+
+    setInstallPromptDismissed(installDismissed);
+    setNotificationPromptDismissed(notificationDismissed);
+
     // Check if notifications are supported and not already granted
-    if ('Notification' in window) {
-      if (Notification.permission !== 'granted') {
+    if ('Notification' in window && !notificationDismissed) {
+      if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         setShowNotificationPrompt(true);
       } else {
         setShowNotificationPrompt(false);
@@ -24,7 +36,10 @@ export default function PWAPrompt() {
     // Handle PWA install prompt
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      if (!installDismissed) {
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        setShowInstallPrompt(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -40,56 +55,92 @@ export default function PWAPrompt() {
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       if (outcome === 'accepted') {
         toast.success('¡Gracias por instalar Yo-kaidle! 🎮');
       }
-      
+
       setDeferredPrompt(null);
+      setShowInstallPrompt(false);
     } catch (err) {
       console.error('Error al instalar la PWA:', err);
     }
   };
+
+  const handleDismissInstall = () => {
+    setShowInstallPrompt(false);
+    setInstallPromptDismissed(true);
+    localStorage.setItem('pwa-install-dismissed', 'true');
+    setDeferredPrompt(null);
+  };
   const handleNotificationPermission = async () => {
     try {
-      const permission = await Notification.requestPermission();
-      
+      const permission = await requestNotificationPermission();
+
       if (permission === 'granted') {
-        toast.success('¡Notificaciones activadas! 🔔');
-        // Register push subscription here if using web push
+        toast.success('¡Notificaciones activadas! Te avisaremos cuando haya un nuevo Yo-kai diario 🔔');
         setShowNotificationPrompt(false);
+
+        // Mostrar notificación de prueba
+        setTimeout(() => {
+          showTestNotification().catch(console.error);
+        }, 2000);
       } else if (permission === 'denied') {
         toast.error('Las notificaciones fueron denegadas 🔕');
-        setShowNotificationPrompt(false); // Ocultamos el botón también si fueron denegadas
+        setShowNotificationPrompt(false);
       }
     } catch (err) {
       console.error('Error al solicitar permisos:', err);
+      toast.error('Error al configurar las notificaciones');
     }
   };
 
-  if (!deferredPrompt && !showNotificationPrompt) return null;
+  const handleDismissNotification = () => {
+    setShowNotificationPrompt(false);
+    setNotificationPromptDismissed(true);
+    localStorage.setItem('pwa-notification-dismissed', 'true');
+  };
+
+  if (!showInstallPrompt && !showNotificationPrompt) return null;
+
   return (
     <div className="fixed bottom-20 left-4 right-4 z-50 flex flex-col gap-2 sm:bottom-4 md:w-auto md:left-4">
-      {deferredPrompt && (
-        <button
-          onClick={handleInstallClick}
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-yellow-400 text-black rounded-lg shadow-lg hover:bg-yellow-500 transition-colors font-medium"
-        >
+      {showInstallPrompt && deferredPrompt && (
+        <div className="relative flex items-center justify-center gap-2 px-4 py-3 bg-yellow-400 text-black rounded-lg shadow-lg font-medium">
           <span className="text-xl">📱</span>
-          <span className="flex-1">Instalar como app</span>
-          <span className="text-sm opacity-75">↓</span>
-        </button>
+          <button
+            onClick={handleInstallClick}
+            className="flex-1 text-left hover:underline"
+          >
+            Instalar como app
+          </button>
+          <button
+            onClick={handleDismissInstall}
+            className="ml-2 p-1 hover:bg-yellow-500 rounded-full transition-colors"
+            title="Cerrar"
+          >
+            <X size={16} className="text-red-600" />
+          </button>
+        </div>
       )}
-      
+
       {showNotificationPrompt && (
-        <button
-          onClick={handleNotificationPermission}
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600 transition-colors font-medium"
-        >
+        <div className="relative flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white rounded-lg shadow-lg font-medium">
           <span className="text-xl">🔔</span>
-          <span className="flex-1">Activar notificaciones</span>
-          <span className="text-sm opacity-75">↓</span>
-        </button>
+          <button
+            onClick={handleNotificationPermission}
+            className="flex-1 text-left hover:underline"
+          >
+            Avisar cuando hay nuevo Yo-kai
+          </button>
+          <button
+            onClick={handleDismissNotification}
+            className="ml-2 p-1 hover:bg-blue-600 rounded-full transition-colors"
+            title="Cerrar"
+          >
+            <X size={16} className="text-red-600" />
+          </button>
+        </div>
       )}
     </div>
   );

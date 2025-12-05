@@ -1,0 +1,50 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Marco de oro -->
+  <defs>
+    <radialGradient id="goldGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:transparent;stop-opacity:0" />
+      <stop offset="65%" style="stop-color:transparent;stop-opacity:0" />
+      <stop offset="75%" style="stop-color:#FFD700;stop-opacity:0.3" />
+      <stop offset="85%" style="stop-color:#FFA500;stop-opacity:0.6" />
+      <stop offset="95%" style="stop-color:#FF8C00;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </radialGradient>
+    
+    <linearGradient id="goldInner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFF99;stop-opacity:0.9" />
+      <stop offset="25%" style="stop-color:#FFD700;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:0.7" />
+      <stop offset="75%" style="stop-color:#FF8C00;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#DAA520;stop-opacity:0.9" />
+    </linearGradient>
+    
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Círculo exterior de oro -->
+  <circle cx="128" cy="128" r="128" fill="url(#goldGradient)" />
+  
+  <!-- Anillo decorativo principal -->
+  <circle cx="128" cy="128" r="95" fill="none" stroke="url(#goldInner)" stroke-width="12" filter="url(#goldGlow)" />
+  <circle cx="128" cy="128" r="85" fill="none" stroke="#FFD700" stroke-width="3" opacity="0.8" />
+  
+  <!-- Efectos de brillo dorado -->
+  <circle cx="128" cy="128" r="100" fill="none" stroke="#FFFF99" stroke-width="1" opacity="0.7" />
+  <circle cx="128" cy="128" r="80" fill="none" stroke="#FFA500" stroke-width="1" opacity="0.5" />
+  
+  <!-- Detalles ornamentales -->
+  <path d="M 128 28 A 100 100 0 0 1 228 128" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.4" />
+  <path d="M 228 128 A 100 100 0 0 1 128 228" fill="none" stroke="#DAA520" stroke-width="1" opacity="0.6" />
+  
+  <!-- Pequeños detalles decorativos -->
+  <circle cx="128" cy="38" r="3" fill="#FFFF99" opacity="0.8" />
+  <circle cx="218" cy="128" r="3" fill="#FFFF99" opacity="0.8" />
+  <circle cx="128" cy="218" r="3" fill="#FFFF99" opacity="0.8" />
+  <circle cx="38" cy="128" r="3" fill="#FFFF99" opacity="0.8" />
+</svg>

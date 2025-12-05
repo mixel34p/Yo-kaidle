@@ -1,4 +1,5 @@
 import { Yokai, GuessResult, GameState, GameMode } from '@/types/yokai';
+import { triggerSocialStatsSync } from '@/hooks/useSocialStats';
 
 export function compareYokai(dailyYokai: Yokai, guessedYokai: Yokai): GuessResult {
   const isCorrect = dailyYokai.id === guessedYokai.id;
@@ -76,7 +77,7 @@ export function saveGameToLocalStorage(gameState: GameState): void {
   if (typeof window !== 'undefined') {
     // Guardamos el estado general actual
     localStorage.setItem('yokaidleGameState', JSON.stringify(gameState));
-    
+
     // También guardamos el último estado para cada modo por separado
     const modeKey = `yokaidle_${gameState.gameMode}_state`;
     localStorage.setItem(modeKey, JSON.stringify(gameState));

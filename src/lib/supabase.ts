@@ -50,7 +50,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   }
 } else {
   // Si las variables están disponibles, crear el cliente normal
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  });
 }
 
 export { supabase };
@@ -252,14 +258,23 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
   }
 }
 
-export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: boolean): Promise<Yokai | null> {
-  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos y tribus
+export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: boolean, eventFilter?: { games?: string[], yokaiIds?: string[], mode: 'include' | 'exclude' }): Promise<Yokai | null> {
+  // Obtiene un Yo-kai aleatorio para el modo infinito, con filtro opcional de juegos, tribus y eventos
   let query = supabase
     .from('yokai')
     .select('*');
 
-  // Si hay filtro de juegos, aplicarlo
-  if (gameSources && gameSources.length > 0) {
+  // Si hay filtro de evento con juegos específicos, usar esos en lugar de gameSources
+  if (eventFilter?.games && eventFilter.games.length > 0) {
+    if (eventFilter.mode === 'include') {
+      // Solo incluir Yo-kai de los juegos del evento
+      query = query.in('game', eventFilter.games);
+    } else {
+      // Excluir Yo-kai de los juegos del evento
+      query = query.not('game', 'in', `(${eventFilter.games.map(g => `'${g}'`).join(',')})`);
+    }
+  } else if (gameSources && gameSources.length > 0) {
+    // Si no hay filtro de evento, usar el filtro normal de juegos
     query = query.in('game', gameSources);
   }
 
@@ -268,13 +283,24 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
     query = query.neq('tribe', 'Boss');
   }
 
+  // Aplicar filtro de evento por IDs específicos si está presente (para casos especiales)
+  if (eventFilter?.yokaiIds && eventFilter.yokaiIds.length > 0) {
+    if (eventFilter.mode === 'include') {
+      // Solo incluir Yo-kai específicos del evento
+      query = query.in('id', eventFilter.yokaiIds);
+    } else {
+      // Excluir Yo-kai específicos del evento
+      query = query.not('id', 'in', `(${eventFilter.yokaiIds.join(',')})`);
+    }
+  }
+
   const { data, error } = await query;
-  
+
   if (error || !data || data.length === 0) {
     console.error('Error fetching random Yo-kai:', error);
     return null;
   }
-  
+
   // Seleccionar uno aleatorio
   const randomIndex = Math.floor(Math.random() * data.length);
   const rawYokai = data[randomIndex];

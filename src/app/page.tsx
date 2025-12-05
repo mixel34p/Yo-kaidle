@@ -18,9 +18,32 @@ import TribeRestrictionsSelector from '@/components/TribeRestrictionsSelector';
 import { saveGameSources, loadGameSources, saveTribeRestrictions, loadTribeRestrictions, TribeRestrictions } from '@/utils/gameSourcePreferences';
 import { loadMedallium, unlockYokai } from '@/utils/medalliumManager';
 import { checkAchievements } from '@/utils/achievementSystem';
+import { checkCircleCompletion } from '@/utils/circlesManager';
 import { getAllYokai } from '@/lib/supabase';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { getCurrentPoints, addPointsForGuess } from '@/utils/economyManager';
+import HintsPanel from '@/components/HintsPanel';
+import ActiveHints from '@/components/ActiveHints';
+import BackgroundsPanel from '@/components/BackgroundsPanel';
+import { initializeBackgrounds } from '@/utils/backgroundsManager';
+import JukeboxPanel from '@/components/JukeboxPanel';
+import SocialAvatar from '@/components/SocialAvatar';
+import EventButton, { useEventVisibility } from '@/components/EventButton';
+import SocialLoginButton from '@/components/SocialLoginButton';
+
+import { useSocialAuth } from '@/contexts/SocialAuthContext';
+import { useSocialStats, triggerSocialStatsSync } from '@/hooks/useSocialStats';
+import { getActiveEvents, getEventFilterForRandomYokai } from '@/utils/eventManager';
+
+
+import {
+  loadHintsState,
+  saveHintsState,
+  useHint,
+  GameHintsState,
+  HintType
+} from '@/utils/hintsManager';
 
 
 const MAX_GUESSES = 6;
@@ -45,7 +68,32 @@ const ENABLED_GAMES: Game[] = AVAILABLE_GAMES.filter(game => !DISABLED_GAMES.inc
 // Componente interno que usa las traducciones
 function HomeContent() {
   // Hook para traducciones
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  // Hook para auth social
+  const { user } = useSocialAuth();
+
+  // Hook para sincronizar estadísticas sociales
+  useSocialStats();
+
+  // Hook para eventos (temporalmente deshabilitado hasta que se implementen Yo-kai de Blasters 2)
+  const { shouldShowEventButton } = useEventVisibility();
+
+  // Función para obtener filtro de evento activo
+  const getEventFilter = async () => {
+    try {
+      const activeEvents = await getActiveEvents();
+      if (activeEvents.length > 0) {
+        const primaryEvent = activeEvents[0];
+        return await getEventFilterForRandomYokai(primaryEvent);
+      }
+    } catch (error) {
+      console.error('Error getting event filter:', error);
+    }
+    return undefined;
+  };
+
+
 
   // Estado para la configuración de juegos
   const [selectedGameSources, setSelectedGameSources] = useState<Game[]>([]);
@@ -53,6 +101,22 @@ function HomeContent() {
 
   // Estado para las restricciones de tribus
   const [tribeRestrictions, setTribeRestrictions] = useState<TribeRestrictions>({ excludeBossTribes: false });
+
+  // Estado para los puntos del usuario
+  const [currentPoints, setCurrentPoints] = useState<number>(0);
+
+  // Estado para las ayudas
+  const [showHintsPanel, setShowHintsPanel] = useState<boolean>(false);
+  const [hintsState, setHintsState] = useState<GameHintsState | null>(null);
+
+  // Estado para puntos ganados en la partida actual
+  const [pointsEarnedThisGame, setPointsEarnedThisGame] = useState<number>(0);
+
+  // Estado para el panel de fondos
+  const [showBackgroundsPanel, setShowBackgroundsPanel] = useState<boolean>(false);
+
+  // Estado para el panel del jukebox
+  const [showJukeboxPanel, setShowJukeboxPanel] = useState<boolean>(false);
   
   // Cargar configuración de juegos guardada
   useEffect(() => {
@@ -72,13 +136,76 @@ function HomeContent() {
     const savedRestrictions = loadTribeRestrictions();
     setTribeRestrictions(savedRestrictions);
   }, []);
+
+  // Cargar puntos actuales
+  useEffect(() => {
+    setCurrentPoints(getCurrentPoints());
+  }, []);
+
+  // Cargar estado de ayudas para la fecha actual
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const currentHintsState = loadHintsState(today);
+    setHintsState(currentHintsState);
+  }, []);
+
+  // Inicializar sistema de fondos
+  useEffect(() => {
+    initializeBackgrounds();
+  }, []);
+
+
+
+  // Actualizar puntos cuando el usuario regrese a la página (por ejemplo, desde el medallium)
+  useEffect(() => {
+    const handleFocus = () => {
+      setCurrentPoints(getCurrentPoints());
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
+  // Función para usar una ayuda
+  const handleUseHint = (hintType: HintType) => {
+    if (!hintsState) return;
+
+    // Determinar qué Yo-kai objetivo se debe usar según el modo de juego
+    const targetYokai = gameState.gameMode === 'daily' ?
+      gameState.dailyYokai :
+      gameState.infiniteYokai || gameState.dailyYokai;
+
+    if (!targetYokai) return;
+
+    const result = useHint(hintType, targetYokai, hintsState);
+
+    if (result.success && result.newState) {
+      setHintsState(result.newState);
+      setCurrentPoints(getCurrentPoints()); // Actualizar puntos
+
+      // Si es intento extra, actualizar maxGuesses
+      if (hintType === 'extra_attempt') {
+        setGameState(prev => ({
+          ...prev,
+          maxGuesses: prev.maxGuesses + 1
+        }));
+      }
+
+      // Mostrar notificación de éxito (opcional)
+      console.log('Ayuda usada:', result.revealedInfo);
+    } else {
+      // Mostrar error (opcional)
+      console.error('Error usando ayuda:', result.error);
+    }
+  };
   
   // El popup de actualizaciones ahora se gestiona en el layout global
   // Reiniciar partida infinita: nuevo yokai y limpiar intentos
   const handleNewInfiniteGame = async () => {
     setLoading(true);
     const today = getTodayDateString();
-    const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
+    const eventFilter = await getEventFilter();
+    const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes, eventFilter);
     if (randomYokai) {
       const newGameState = createNewInfiniteGame(today, randomYokai, gameState);
       setGameState(newGameState);
@@ -86,7 +213,14 @@ function HomeContent() {
       setShowGameOver(false);
       setMessage("");
       setFoodIconTimestamp(Date.now());
+      setPointsEarnedThisGame(0); // Resetear puntos ganados
       saveGameToLocalStorage(newGameState);
+
+      // 🎮 SINCRONIZAR ESTADÍSTICAS SOCIALES AL EMPEZAR NUEVA PARTIDA INFINITA
+      if (user) {
+        console.log('🎮 New infinite game started - syncing social stats');
+        triggerSocialStatsSync();
+      }
     }
     setLoading(false);
   };
@@ -188,10 +322,16 @@ function HomeContent() {
   useEffect(() => {
     if (!loading && (gameState.gameStatus === 'won' || gameState.gameStatus === 'lost')) {
       setShowGameOver(true);
+
+      // 🎮 SINCRONIZAR ESTADÍSTICAS SOCIALES AL TERMINAR PARTIDA
+      if (user) {
+        console.log('🎮 Game finished - syncing social stats immediately');
+        triggerSocialStatsSync();
+      }
     } else if (!loading) {
       setShowGameOver(false);
     }
-  }, [gameState.gameStatus, loading]);
+  }, [gameState.gameStatus, loading, user]);
 
   // Función para verificar si hay un nuevo día y recargar el Yo-kai diario
   const checkForNewDay = async () => {
@@ -363,7 +503,8 @@ function HomeContent() {
           // En modo infinito, si NO hay juego guardado, creamos uno nuevo
           if (!savedGame || savedGame.gameMode !== 'infinite') {
             // Obtener un Yo-kai aleatorio para modo infinito
-            const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes);
+            const eventFilter = await getEventFilter();
+            const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes, eventFilter);
             if (randomYokai) {
               // Usar la función auxiliar para crear un nuevo juego infinito
               const newGameState = createNewInfiniteGame(today, randomYokai, savedGame);
@@ -411,9 +552,10 @@ function HomeContent() {
   // Función para cambiar entre modos de juego
   const handleModeChange = async (newMode: GameMode) => {
     if (newMode === gameState.gameMode) return;
-    
+
     setChangingMode(true);
     setLoading(true);
+    setPointsEarnedThisGame(0); // Resetear puntos ganados al cambiar modo
     
     try {
       // Guardar el estado actual antes de cambiar
@@ -597,14 +739,21 @@ function HomeContent() {
     // Comprobar si el juego ha terminado
     if (result.isCorrect) {
       newGameStatus = 'won';
-      
+
+      // Añadir puntos por adivinar correctamente (solo en modos daily e infinite)
+      if (gameState.gameMode === 'daily' || gameState.gameMode === 'infinite') {
+        const pointsEarned = addPointsForGuess(gameState.gameMode, targetYokai.name);
+        setPointsEarnedThisGame(pointsEarned);
+        setCurrentPoints(getCurrentPoints()); // Actualizar puntos mostrados
+      }
+
       // Actualizar estadísticas según el modo
       if (isDaily) {
         newDailyStats.streak++;
         newDailyStats.maxStreak = Math.max(newDailyStats.streak, newDailyStats.maxStreak);
         newDailyStats.totalPlayed++;
         newDailyStats.totalWins++;
-        
+
         // En modo diario también actualizamos la racha general
         newStreak = newDailyStats.streak;
         newMaxStreak = newDailyStats.maxStreak;
@@ -616,14 +765,25 @@ function HomeContent() {
       
       // Añadir el Yo-kai al Medallium si es acertado
       const medallium = loadMedallium();
-      unlockYokai(medallium, targetYokai);
+      const updatedMedallium = unlockYokai(medallium, targetYokai);
+
+      // Verificar círculos completados
+      const circleResults = checkCircleCompletion(targetYokai, updatedMedallium);
+      const newlyCompletedCircles = circleResults.filter(result =>
+        !result.wasCompleted && result.isNowCompleted
+      );
+
+      if (newlyCompletedCircles.length > 0) {
+        console.log('¡Círculos completados!', newlyCompletedCircles.map(c => c.circleId));
+        // Aquí podrías mostrar una notificación de círculos completados
+      }
 
       // Verificar logros nuevos (async para no bloquear la UI)
       getAllYokai().then(allYokaiData => {
-        const newAchievements = checkAchievements(medallium, allYokaiData);
+        const newAchievements = checkAchievements(updatedMedallium, allYokaiData);
         if (newAchievements.length > 0) {
           // Aquí podrías mostrar una notificación de logros desbloqueados
-          console.log('¡Nuevos logros desbloqueados!', newAchievements.map(a => a.name));
+          console.log('¡Nuevos logros desbloqueados!', newAchievements.map(a => a.name_es));
         }
       }).catch(error => {
         console.error('Error verificando logros:', error);
@@ -672,29 +832,107 @@ function HomeContent() {
     saveGameToLocalStorage(newGameState);
     // Forzar recarga de iconos de comida con un nuevo timestamp
     setFoodIconTimestamp(Date.now());
+
+    // 🎮 SINCRONIZAR ESTADÍSTICAS SOCIALES DESPUÉS DE CADA ADIVINANZA
+    if (user && (newGameStatus === 'won' || newGameStatus === 'lost')) {
+      console.log('🎮 Game ended with guess - syncing social stats immediately');
+      triggerSocialStatsSync();
+    }
   }
 
 return (
     <div className="app-container">
 
     {/* CABECERA */}
-    <header className="mb-6 text-center relative">
-      {/* Selector de idioma en la esquina superior derecha */}
-      <div className="absolute top-0 right-0">
+    <header className="mb-6 text-center relative z-50">
+      {/* Puntos del usuario en la esquina superior izquierda */}
+      <div className="absolute top-0 left-0">
+        <div className="flex items-center bg-blue-100 text-blue-800 px-3 py-2 rounded-lg shadow-sm">
+          <img
+            src="/icons/points-icon.png"
+            alt="Puntos"
+            className="w-5 h-5 mr-2"
+          />
+          <span className="font-bold text-lg">{currentPoints}</span>
+        </div>
+      </div>
+
+      {/* Avatar social y selector de idioma en la esquina superior derecha */}
+      <div className="absolute top-0 right-0 flex items-center gap-2 z-[60]">
+        <SocialAvatar />
+        <SocialLoginButton />
         <LanguageSwitcher />
       </div>
 
-      <div className="flex justify-center mb-4 px-1">
+      {/* Espaciador para separar los elementos superiores del logo */}
+      <div className="h-16"></div>
+
+      {/* Logo */}
+      <div className="flex justify-center mb-4 px-1 relative z-10">
         <img
           src="/images/logo/logo.png"
           alt="Yo-kaidle Logo"
-          className="w-full object-contain drop-shadow-2xl"
+          className="w-full object-contain drop-shadow-2xl relative z-10"
           style={{ maxHeight: 'calc(30vh)' }}
         />
       </div>
       <p className="mt-2 text-gray-600 font-medium">{t.appSubtitle}</p>
     </header>
 
+
+    {/* BOTONES DE PERSONALIZACIÓN */}
+    <div className="mb-4 text-center space-y-2">
+      <div className="flex justify-center gap-3 flex-wrap">
+        <button
+          onClick={() => setShowBackgroundsPanel(true)}
+          className="inline-flex items-center bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-200 transform hover:scale-105 font-medium"
+        >
+          <img
+            src="/icons/menu/backgrounds.png"
+            alt="Backgrounds"
+            className="w-5 h-5 mr-2"
+          />
+          <span>
+            {language === 'es' ? 'Fondos' : language === 'en' ? 'Backgrounds' : 'Sfondi'}
+          </span>
+        </button>
+
+        <button
+          onClick={() => setShowJukeboxPanel(true)}
+          className="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 font-medium"
+        >
+          <img
+            src="/icons/menu/music.png"
+            alt="Music"
+            className="w-5 h-5 mr-2"
+          />
+          <span>
+            {language === 'es' ? 'Jukebox' : language === 'en' ? 'Jukebox' : 'Jukebox'}
+          </span>
+        </button>
+
+        <button
+          onClick={() => window.location.href = '/shop'}
+          className="inline-flex items-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-lg shadow-lg hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 transform hover:scale-105 font-medium"
+        >
+          <img
+            src="/icons/menu/shop.png"
+            alt="Shop"
+            className="w-5 h-5 mr-2"
+          />
+          <span>
+            {language === 'es' ? 'Tienda' : language === 'en' ? 'Shop' : 'Negozio'}
+          </span>
+        </button>
+
+
+
+        {/* Event Button - Now enabled for testing */}
+        {shouldShowEventButton && (
+          <EventButton />
+        )}
+      </div>
+    </div>
 
     {/* REGLAS DEL JUEGO */}
     <GameRules />
@@ -754,6 +992,7 @@ return (
         onMidnightReached={handleMidnightReached}
         guesses={gameState.guesses}
         maxGuesses={gameState.maxGuesses}
+        pointsEarned={pointsEarnedThisGame}
       />
     ))}
 
@@ -816,11 +1055,37 @@ return (
       )}
     </div>
 
+
+
+    {/* BOTÓN DE AYUDAS - Solo en modo diario */}
+    {gameState.gameStatus === 'playing' && gameState.gameMode === 'daily' && hintsState && (
+      <div className="mb-4 text-center">
+        <button
+          onClick={() => setShowHintsPanel(true)}
+          className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-6 py-3 rounded-lg shadow-lg hover:from-yellow-500 hover:to-orange-500 transition-all duration-200 transform hover:scale-105 font-medium"
+        >
+          <img
+            src="/icons/menu/help.png"
+            alt="Help"
+            className="w-6 h-6 mr-2"
+          />
+          <span>
+            {language === 'es' ? 'Usar Ayudas' : language === 'en' ? 'Use Hints' : 'Usa Suggerimenti'}
+          </span>
+        </button>
+      </div>
+    )}
+
+    {/* PISTAS ACTIVAS - Solo en modo diario */}
+    {gameState.gameMode === 'daily' && hintsState && (
+      <ActiveHints hintsState={hintsState} />
+    )}
+
     {/* CUADRÍCULA DE ADIVINANZAS */}
-    <YokaiGrid 
-      guesses={guessResults} 
-      maxGuesses={gameState.maxGuesses} 
-      foodIconTimestamp={foodIconTimestamp} 
+    <YokaiGrid
+      guesses={guessResults}
+      maxGuesses={gameState.maxGuesses}
+      foodIconTimestamp={foodIconTimestamp}
     />
 
     {/* CONTADOR DE INTENTOS Y BÚSQUEDA */}
@@ -1102,6 +1367,32 @@ return (
         </div>
       </div>
     )}
+
+    {/* Panel de Ayudas */}
+    {hintsState && (
+      <HintsPanel
+        isOpen={showHintsPanel}
+        onClose={() => setShowHintsPanel(false)}
+        currentHintsState={hintsState}
+        onUseHint={handleUseHint}
+        gameFinished={gameState.gameStatus !== 'playing'}
+      />
+    )}
+
+    {/* Panel de Fondos */}
+    <BackgroundsPanel
+      isOpen={showBackgroundsPanel}
+      onClose={() => setShowBackgroundsPanel(false)}
+    />
+
+    {/* Panel del Jukebox */}
+    <JukeboxPanel
+      isOpen={showJukeboxPanel}
+      onClose={() => setShowJukeboxPanel(false)}
+    />
+
+
+
 
 
     {/* El pie de página ahora está en el layout */}

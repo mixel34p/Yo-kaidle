@@ -1,0 +1,348 @@
+{
+  "id": "blasters2",
+  "name": {
+    "es": "Evento Yo-kai Watch Blasters 2",
+    "en": "Yo-kai Watch Blasters 2 Event",
+    "it": "Evento Yo-kai Watch Blasters 2"
+  },
+  "description": {
+    "es": "Descubre 30 Yo-kai de Blasters 2 para obtener recompensas exclusivas. ¡Completa misiones especiales y desbloquea contenido único!",
+    "en": "Discover 30 Blasters 2 Yo-kai to earn exclusive rewards. Complete special missions and unlock unique content!",
+    "it": "Scopri 30 Yo-kai di Blasters 2 per ottenere ricompense esclusive. Completa missioni speciali e sblocca contenuti unici!"
+  },
+  "type": "blasters2",
+  "total_progress_required": 30,
+  "progress_unit": {
+    "es": "Yo-kai descubiertos",
+    "en": "Yo-kai discovered",
+    "it": "Yo-kai scoperti"
+  },
+  "game_mode": "infinite",
+  "filter_mode": "include",
+  "theme_color": "#FF6B35",
+  "background_image": "/events/blasters2-bg.jpg",
+  "icon": "⚔️",
+
+  "game_filter": [
+    "YW Blasters 2",
+    "Yo-kai Watch Busters 2",
+    "Blasters 2"
+  ],
+
+  "fallback_games": [
+    "Yo-kai Watch 1",
+    "Yo-kai Watch 2"
+  ],
+  "milestones": [
+    {
+      "id": "blasters2_milestone_1",
+      "progress_required": 5,
+      "name": {
+        "es": "Primer Contacto",
+        "en": "First Contact",
+        "it": "Primo Contatto"
+      },
+      "description": {
+        "es": "Has descubierto tus primeros 5 Yo-kai de Blasters 2",
+        "en": "You've discovered your first 5 Blasters 2 Yo-kai",
+        "it": "Hai scoperto i tuoi primi 5 Yo-kai di Blasters 2"
+      },
+      "is_final": false,
+      "rewards": [
+        {
+          "id": "blasters2_reward_1_points",
+          "type": "points",
+          "amount": 500,
+          "name": {
+            "es": "Puntos",
+            "en": "Points",
+            "it": "Punti"
+          },
+          "description": {
+            "es": "",
+            "en": "",
+            "it": ""
+          },
+          "rarity": "common"
+        },
+        {
+          "id": "blasters2_reward_1_background",
+          "type": "background",
+          "item_id": "blasters2",
+          "name": {
+            "es": "Fondo Blasters 2",
+            "en": "Blasters 2 Background",
+            "it": "Sfondo Blasters 2"
+          },
+          "description": {
+            "es": "",
+            "en": "",
+            "it": ""
+          },
+          "rarity": "common"
+        }
+      ]
+    },
+    {
+      "id": "blasters2_milestone_2",
+      "progress_required": 10,
+      "name": {
+        "es": "Explorador Activo",
+        "en": "Active Explorer",
+        "it": "Esploratore Attivo"
+      },
+      "description": {
+        "es": "Has descubierto 10 Yo-kai de Blasters 2",
+        "en": "You've discovered 10 Blasters 2 Yo-kai",
+        "it": "Hai scoperto 10 Yo-kai di Blasters 2"
+      },
+      "is_final": false,
+      "rewards": [
+        {
+          "id": "blasters2_reward_2_frame-1",
+          "type": "frame",
+          "item_id": "jibanyant",
+          "name": {
+            "es": "Marco Jibanyan-T",
+            "en": "Jibanyan-T Frame",
+            "it": "Cornice Jibanyan-T"
+          },
+          "description": {
+            "es": "Puntos bonus por tu progreso constante",
+            "en": "Bonus points for your steady progress",
+            "it": "Punti bonus per il tuo progresso costante"
+          },
+          "rarity": "common"
+        },
+        {
+          "id": "blasters2_reward_2_frame-2",
+          "type": "frame",
+          "item_id": "komasant",
+          "name": {
+            "es": "Marco Komasan-T",
+            "en": "Komasan-T Frame",
+            "it": "Cornice Komasan-T"
+          },
+          "description": {
+            "es": "Marco especial para exploradores de Blasters 2",
+            "en": "Special frame for Blasters 2 explorers",
+            "it": "Cornice speciale per esploratori di Blasters 2"
+          },
+          "rarity": "uncommon"
+        }
+      ]
+    },
+    {
+      "id": "blasters2_milestone_3",
+      "progress_required": 15,
+      "name": {
+        "es": "Guerrero Intermedio",
+        "en": "Intermediate Warrior",
+        "it": "Guerriero Intermedio"
+      },
+      "description": {
+        "es": "Has descubierto 15 Yo-kai de Blasters 2",
+        "en": "You've discovered 15 Blasters 2 Yo-kai",
+        "it": "Hai scoperto 15 Yo-kai di Blasters 2"
+      },
+      "is_final": false,
+      "rewards": [
+        {
+          "id": "blasters2_reward_3_points",
+          "type": "points",
+          "amount": 1000,
+          "name": {
+            "es": "Recompensa Intermedia",
+            "en": "Intermediate Reward",
+            "it": "Ricompensa Intermedia"
+          },
+          "description": {
+            "es": "Recompensa por llegar a la mitad del evento",
+            "en": "Reward for reaching the middle of the event",
+            "it": "Ricompensa per aver raggiunto la metà dell'evento"
+          },
+          "rarity": "rare"
+        },
+        {
+          "id": "blasters2_reward_3_music",
+          "type": "music",
+          "item_id": "blasters2_battle_theme",
+          "name": {
+            "es": "Tema de Batalla Blasters 2",
+            "en": "Blasters 2 Battle Theme",
+            "it": "Tema di Battaglia Blasters 2"
+          },
+          "description": {
+            "es": "Música épica de batalla de Blasters 2",
+            "en": "Epic battle music from Blasters 2",
+            "it": "Musica epica di battaglia da Blasters 2"
+          },
+          "rarity": "rare"
+        }
+      ]
+    },
+    {
+      "id": "blasters2_milestone_4",
+      "progress_required": 20,
+      "name": {
+        "es": "Veterano de Batalla",
+        "en": "Battle Veteran",
+        "it": "Veterano di Battaglia"
+      },
+      "description": {
+        "es": "Has descubierto 20 Yo-kai de Blasters 2",
+        "en": "You've discovered 20 Blasters 2 Yo-kai",
+        "it": "Hai scoperto 20 Yo-kai di Blasters 2"
+      },
+      "is_final": false,
+      "rewards": [
+        {
+          "id": "blasters2_reward_4_points",
+          "type": "points",
+          "amount": 1500,
+          "name": {
+            "es": "Recompensa de Veterano",
+            "en": "Veteran Reward",
+            "it": "Ricompensa Veterano"
+          },
+          "description": {
+            "es": "Gran recompensa por tu dedicación",
+            "en": "Great reward for your dedication",
+            "it": "Grande ricompensa per la tua dedizione"
+          },
+          "rarity": "epic"
+        },
+        {
+          "id": "blasters2_reward_4_title",
+          "type": "title",
+          "item_id": "blasters2_veteran",
+          "name": {
+            "es": "Veterano de Blasters",
+            "en": "Blasters Veteran",
+            "it": "Veterano di Blasters"
+          },
+          "description": {
+            "es": "Título honorífico para veteranos del evento",
+            "en": "Honorary title for event veterans",
+            "it": "Titolo onorifico per i veterani dell'evento"
+          },
+          "rarity": "epic"
+        }
+      ]
+    },
+    {
+      "id": "blasters2_milestone_5",
+      "progress_required": 25,
+      "name": {
+        "es": "Maestro Explorador",
+        "en": "Master Explorer",
+        "it": "Maestro Esploratore"
+      },
+      "description": {
+        "es": "Has descubierto 25 Yo-kai de Blasters 2",
+        "en": "You've discovered 25 Blasters 2 Yo-kai",
+        "it": "Hai scoperto 25 Yo-kai di Blasters 2"
+      },
+      "is_final": false,
+      "rewards": [
+        {
+          "id": "blasters2_reward_5_points",
+          "type": "points",
+          "amount": 2000,
+          "name": {
+            "es": "Recompensa de Maestro",
+            "en": "Master Reward",
+            "it": "Ricompensa Maestro"
+          },
+          "description": {
+            "es": "Recompensa para maestros del evento",
+            "en": "Reward for event masters",
+            "it": "Ricompensa per i maestri dell'evento"
+          },
+          "rarity": "epic"
+        },
+        {
+          "id": "blasters2_reward_5_background",
+          "type": "background",
+          "item_id": "blasters2_victory",
+          "name": {
+            "es": "Fondo de Victoria",
+            "en": "Victory Background",
+            "it": "Sfondo Vittoria"
+          },
+          "description": {
+            "es": "Fondo épico de victoria de Blasters 2",
+            "en": "Epic victory background from Blasters 2",
+            "it": "Sfondo epico di vittoria da Blasters 2"
+          },
+          "rarity": "epic"
+        }
+      ]
+    },
+    {
+      "id": "blasters2_milestone_6",
+      "progress_required": 30,
+      "name": {
+        "es": "Leyenda de Blasters",
+        "en": "Blasters Legend",
+        "it": "Leggenda di Blasters"
+      },
+      "description": {
+        "es": "¡Has completado el evento descubriendo todos los Yo-kai de Blasters 2!",
+        "en": "You've completed the event by discovering all Blasters 2 Yo-kai!",
+        "it": "Hai completato l'evento scoprendo tutti i Yo-kai di Blasters 2!"
+      },
+      "is_final": true,
+      "rewards": [
+        {
+          "id": "blasters2_reward_6_points",
+          "type": "points",
+          "amount": 3000,
+          "name": {
+            "es": "Recompensa Legendaria",
+            "en": "Legendary Reward",
+            "it": "Ricompensa Leggendaria"
+          },
+          "description": {
+            "es": "Máxima recompensa por completar el evento",
+            "en": "Maximum reward for completing the event",
+            "it": "Ricompensa massima per aver completato l'evento"
+          },
+          "rarity": "legendary"
+        },
+        {
+          "id": "blasters2_reward_6_title",
+          "type": "title",
+          "item_id": "blasters2_legend",
+          "name": {
+            "es": "Leyenda de Blasters 2",
+            "en": "Blasters 2 Legend",
+            "it": "Leggenda di Blasters 2"
+          },
+          "description": {
+            "es": "Título legendario por completar el evento",
+            "en": "Legendary title for completing the event",
+            "it": "Titolo leggendario per aver completato l'evento"
+          },
+          "rarity": "legendary"
+        },
+        {
+          "id": "blasters2_reward_6_frame",
+          "type": "frame",
+          "item_id": "blasters2_legend_frame",
+          "name": {
+            "es": "Marco Legendario de Blasters",
+            "en": "Legendary Blasters Frame",
+            "it": "Cornice Leggendaria di Blasters"
+          },
+          "description": {
+            "es": "Marco exclusivo para leyendas del evento",
+            "en": "Exclusive frame for event legends",
+            "it": "Cornice esclusiva per le leggende dell'evento"
+          },
+          "rarity": "legendary"
+        }
+      ]
+    }
+  ]
+}

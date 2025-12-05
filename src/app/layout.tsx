@@ -1,16 +1,23 @@
 import { Inter } from 'next/font/google'
 import '@/styles/globals.css'
+import '@/styles/profile-themes.css'
 import Footer from '@/components/Footer'
 import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
 import ClientLanguageProvider from '@/components/ClientLanguageProvider'
+import { SocialAuthProvider } from '@/contexts/SocialAuthContext'
 import type { Metadata } from 'next'
 
-// PWAPrompt se importará solo en el cliente
+// PWAPrompt y NotificationManager se importarán solo en el cliente
 import dynamic from 'next/dynamic'
 const PWAPrompt = dynamic(() => import('@/components/PWAPrompt'), {
   ssr: false,
   loading: () => null
 })
+const NotificationManager = dynamic(() => import('@/components/NotificationManager'), {
+  ssr: false,
+  loading: () => null
+})
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -107,11 +114,14 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} overscroll-none`}>
         <ClientLanguageProvider>
-          {/* Componente cliente para el popup de actualizaciones */}          <ClientUpdatesWrapper />          <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
-            {children}
-          </main>
-          <PWAPrompt />
-          <Footer />
+          <SocialAuthProvider>
+            {/* Componente cliente para el popup de actualizaciones */}            <ClientUpdatesWrapper />            <NotificationManager />
+            <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
+              {children}
+            </main>
+            <PWAPrompt />
+            <Footer />
+          </SocialAuthProvider>
         </ClientLanguageProvider>
       </body>
     </html>
