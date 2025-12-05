@@ -7,6 +7,7 @@ import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useProfileCustomization } from '@/hooks/useProfileCustomization';
 import { getBadgeName } from '@/utils/badgesManager';
 import { getTitleName } from '@/hooks/useProfileCustomization';
+import { getFrameName } from '@/utils/framesManager';
 import { ArrowLeft, Save, Star, Crown, Frame, Check, Award, X, Image } from 'lucide-react';
 import { tribeIcons, rankIcons, type Tribe, type Rank } from '@/types/yokai';
 import AvatarWithFrame from '@/components/AvatarWithFrame';
@@ -189,22 +190,20 @@ export default function CustomizeProfilePage() {
         <div className="bg-blue-900/50 rounded-lg p-1 border border-blue-500/30 flex flex-wrap gap-1">
           <button
             onClick={() => setActiveTab('yokai')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-              activeTab === 'yokai'
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${activeTab === 'yokai'
                 ? 'bg-blue-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Star size={16} />
             {t.favoriteYokai}
           </button>
           <button
             onClick={() => setActiveTab('title')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-              activeTab === 'title'
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${activeTab === 'title'
                 ? 'bg-purple-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Crown size={16} />
             {t.profileTitle}
@@ -212,33 +211,30 @@ export default function CustomizeProfilePage() {
 
           <button
             onClick={() => setActiveTab('badges')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-              activeTab === 'badges'
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${activeTab === 'badges'
                 ? 'bg-green-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Award size={16} />
             {t.badges}
           </button>
           <button
             onClick={() => setActiveTab('frame')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-              activeTab === 'frame'
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${activeTab === 'frame'
                 ? 'bg-yellow-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Frame size={16} />
             {t.avatarFrame}
           </button>
           <button
             onClick={() => setActiveTab('banner')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-              activeTab === 'banner'
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${activeTab === 'banner'
                 ? 'bg-cyan-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Image size={16} />
             Banner
@@ -248,12 +244,12 @@ export default function CustomizeProfilePage() {
 
       {/* Contenido de personalización */}
       <div className="bg-blue-900/30 rounded-lg border border-blue-500/30 min-h-[400px] p-6">
-        
+
         {/* Tab: Yo-kai Favorito */}
         {activeTab === 'yokai' && (
           <div>
             <h2 className="text-xl font-bold text-white mb-4">{t.selectFavoriteYokai}</h2>
-            
+
             {unlockedYokai.length === 0 ? (
               <div className="text-center py-12 text-white/60">
                 <Star size={48} className="mx-auto mb-4 opacity-50" />
@@ -265,11 +261,10 @@ export default function CustomizeProfilePage() {
                 {/* Opción "Sin favorito" */}
                 <button
                   onClick={() => updateCustomization({ favoriteYokai: null })}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                    !customization.favoriteYokai
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${!customization.favoriteYokai
                       ? 'border-blue-400 bg-blue-600/30'
                       : 'border-blue-500/30 bg-blue-800/20 hover:border-blue-400/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-16 h-16 mx-auto mb-2 rounded-lg bg-gray-600/50 flex items-center justify-center">
                     <span className="text-2xl">❌</span>
@@ -285,11 +280,10 @@ export default function CustomizeProfilePage() {
                   <button
                     key={yokai.id}
                     onClick={() => updateCustomization({ favoriteYokai: yokai.id })}
-                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${
-                      customization.favoriteYokai === yokai.id
+                    className={`p-3 rounded-lg border-2 transition-all duration-200 ${customization.favoriteYokai === yokai.id
                         ? 'border-purple-400 bg-purple-600/30'
                         : 'border-blue-500/30 bg-blue-800/20 hover:border-blue-400/50'
-                    }`}
+                      }`}
                   >
                     <div className="w-16 h-16 mx-auto mb-2 rounded-lg overflow-hidden bg-blue-600/50 border border-blue-400/30">
                       <img
@@ -344,16 +338,15 @@ export default function CustomizeProfilePage() {
         {activeTab === 'title' && (
           <div>
             <h2 className="text-xl font-bold text-white mb-4">{t.selectTitle}</h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Opción "Sin título" */}
               <button
                 onClick={() => updateCustomization({ profileTitle: null })}
-                className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
-                  !customization.profileTitle
+                className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${!customization.profileTitle
                     ? 'border-purple-400 bg-purple-600/30'
                     : 'border-purple-500/30 bg-purple-800/20 hover:border-purple-400/50'
-                }`}
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -363,8 +356,8 @@ export default function CustomizeProfilePage() {
                     </h3>
                     <p className="text-white/60 text-sm">
                       {language === 'es' ? 'No mostrar título en el perfil' :
-                       language === 'en' ? 'Don\'t show title on profile' :
-                       'Non mostrare titolo nel profilo'}
+                        language === 'en' ? 'Don\'t show title on profile' :
+                          'Non mostrare titolo nel profilo'}
                     </p>
                   </div>
                   {!customization.profileTitle && (
@@ -378,11 +371,10 @@ export default function CustomizeProfilePage() {
                 <button
                   key={title.id}
                   onClick={() => updateCustomization({ profileTitle: title.id })}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
-                    customization.profileTitle === title.id
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${customization.profileTitle === title.id
                       ? 'border-purple-400 bg-purple-600/30'
                       : 'border-purple-500/30 bg-purple-800/20 hover:border-purple-400/50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -429,13 +421,12 @@ export default function CustomizeProfilePage() {
                       }
                     }}
                     disabled={!canSelect}
-                    className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
-                      isSelected
+                    className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${isSelected
                         ? 'border-green-400 bg-green-600/30'
                         : canSelect
-                        ? 'border-green-500/30 bg-green-800/20 hover:border-green-400/50'
-                        : 'border-gray-500/30 bg-gray-800/20 opacity-50 cursor-not-allowed'
-                    }`}
+                          ? 'border-green-500/30 bg-green-800/20 hover:border-green-400/50'
+                          : 'border-gray-500/30 bg-gray-800/20 opacity-50 cursor-not-allowed'
+                      }`}
                     title={getBadgeName(badge, language)}
                   >
                     <div className="flex flex-col items-center gap-2">
@@ -480,17 +471,16 @@ export default function CustomizeProfilePage() {
         {activeTab === 'frame' && (
           <div>
             <h2 className="text-xl font-bold text-white mb-4">{t.selectFrame}</h2>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {availableFrames.map((frame) => (
                 <button
                   key={frame.id}
                   onClick={() => updateCustomization({ avatarFrame: frame.id })}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                    customization.avatarFrame === frame.id
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${customization.avatarFrame === frame.id
                       ? 'border-yellow-400 bg-yellow-600/30'
                       : 'border-yellow-500/30 bg-yellow-800/20 hover:border-yellow-400/50'
-                  }`}
+                    }`}
                 >
                   <div className="mx-auto mb-2">
                     <AvatarWithFrame
@@ -499,7 +489,7 @@ export default function CustomizeProfilePage() {
                       alt="Frame preview"
                     />
                   </div>
-                  <p className="text-white text-xs text-center">{frame.name}</p>
+                  <p className="text-white text-xs text-center">{getFrameName(frame, language as 'es' | 'en' | 'it')}</p>
                   {customization.avatarFrame === frame.id && (
                     <Check size={16} className="text-green-400 mx-auto mt-1" />
                   )}
@@ -520,11 +510,10 @@ export default function CustomizeProfilePage() {
                 <button
                   key={background.id}
                   onClick={() => updateCustomization({ profileBanner: background.id })}
-                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                    customization.profileBanner === background.id
+                  className={`p-4 rounded-lg border-2 transition-all duration-200 ${customization.profileBanner === background.id
                       ? 'border-cyan-400 bg-cyan-600/30'
                       : 'border-cyan-500/30 bg-cyan-800/20 hover:border-cyan-400/50'
-                  }`}
+                    }`}
                 >
                   {/* Preview del fondo */}
                   <div
