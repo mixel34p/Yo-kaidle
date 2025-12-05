@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useFriends, type FriendshipStatus as HookFriendshipStatus } from '@/hooks/useFriends';
@@ -23,6 +24,7 @@ interface FriendButtonProps {
 export default function FriendButton({ targetUserId, targetUsername, theme, compact = false }: FriendButtonProps) {
   const { t } = useLanguage();
   const { user } = useSocialAuth();
+  const router = useRouter();
   const { sendFriendRequest, getFriendshipStatus } = useFriends(user?.id);
 
   const [friendshipStatus, setFriendshipStatus] = useState<HookFriendshipStatus>('none');
@@ -61,11 +63,11 @@ export default function FriendButton({ targetUserId, targetUsername, theme, comp
           break;
         case 'pending_received':
           // Redirigir a página de amigos para aceptar/rechazar
-          window.location.href = '/friends';
+          router.push('/friends');
           break;
         case 'friends':
           // Redirigir a página de amigos para gestionar
-          window.location.href = '/friends';
+          router.push('/friends');
           break;
       }
     } catch (error) {
@@ -127,7 +129,7 @@ export default function FriendButton({ targetUserId, targetUsername, theme, comp
 
   return (
     <div className={`friend-button-container theme-${theme.primaryColor}`}>
-      
+
       {/* Botón principal de amistad */}
       <button
         onClick={handleFriendAction}

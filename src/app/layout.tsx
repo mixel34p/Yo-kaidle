@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 import ClientUpdatesWrapper from '../components/ClientUpdatesWrapper'
 import ClientLanguageProvider from '@/components/ClientLanguageProvider'
 import { SocialAuthProvider } from '@/contexts/SocialAuthContext'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 
 // PWAPrompt y NotificationManager se importarán solo en el cliente
 import dynamic from 'next/dynamic'
@@ -26,7 +26,6 @@ export const metadata: Metadata = {
   description: 'Wordle inspirado en la franquicia de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
   keywords: 'Yo-kai Watch, juego, adivinanza, Yo-kai, diario, wordle, puzzle',
   manifest: '/manifest.json',
-  themeColor: '#ffcc00',
   openGraph: {
     title: 'Yo-kaidle - Wordle de Yo-kai Watch',
     description: 'Wordle inspirado en la franquicia de Yo-kai Watch.',
@@ -51,10 +50,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://yokaidle.vercel.app'
-  },  verification: {
+  }, verification: {
     google: '4ZhECbls7bJiq7jnLXlWJhtTlFLGoWa8s69XTEKrmi8'
   },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
   applicationName: 'Yo-kaidle',
   appleWebApp: {
     capable: true,
@@ -75,24 +73,29 @@ export const metadata: Metadata = {
   }
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffcc00' },
+    { media: '(prefers-color-scheme: dark)', color: '#ffcc00' },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}) {  return (
+}) {
+  return (
     <html lang="es">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
-        <meta name="application-name" content="Yo-kaidle" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Yo-kaidle" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#ffcc00" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#ffcc00" media="(prefers-color-scheme: dark)" />
+
         <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-        <script src="/register-sw.js" defer />        <script 
+        <script src="/register-sw.js" defer />        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({

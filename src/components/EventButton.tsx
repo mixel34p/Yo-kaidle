@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Calendar, Star, Trophy, Zap } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useActiveEvents } from '@/hooks/useEventSystem';
@@ -14,6 +15,7 @@ interface EventButtonProps {
 export default function EventButton({ className = '' }: EventButtonProps) {
   const { language } = useLanguage();
   const { activeEvents, loading } = useActiveEvents();
+  const router = useRouter();
   const [selectedEvent, setSelectedEvent] = useState<EventConfiguration | null>(null);
 
   // Translations
@@ -60,9 +62,9 @@ export default function EventButton({ className = '' }: EventButtonProps) {
   const handleEventClick = () => {
     // Ir directamente al evento sin modal
     if (primaryEvent.id === 'blasters2') {
-      window.location.href = '/event-blasters2';
+      router.push('/event-blasters2');
     } else {
-      window.location.href = `/event/${primaryEvent.id}`;
+      router.push(`/event/${primaryEvent.id}`);
     }
   };
 
@@ -199,7 +201,7 @@ export function EventList({ className = '' }: { className?: string }) {
           <Star className="text-yellow-400" />
           {t.activeEvents}
         </h3>
-        
+
         {activeEvents.map((event) => (
           <div
             key={event.id}
@@ -208,7 +210,7 @@ export function EventList({ className = '' }: { className?: string }) {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div 
+                <div
                   className="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
                   style={{ backgroundColor: event.theme_color + '40' }}
                 >
@@ -223,7 +225,7 @@ export function EventList({ className = '' }: { className?: string }) {
                   </p>
                 </div>
               </div>
-              
+
               <button
                 className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
                 onClick={(e) => {
@@ -235,7 +237,7 @@ export function EventList({ className = '' }: { className?: string }) {
                 {t.participate}
               </button>
             </div>
-            
+
             {/* Progress indicator could go here */}
             <div className="mt-3 flex items-center gap-2 text-sm text-white/60">
               <Trophy size={14} />
@@ -248,8 +250,8 @@ export function EventList({ className = '' }: { className?: string }) {
       {/* Event Game Mode Modal */}
       {selectedEvent && (
         <div className="fixed inset-0 z-50">
-          <EventGameMode 
-            event={selectedEvent} 
+          <EventGameMode
+            event={selectedEvent}
             onClose={() => setSelectedEvent(null)}
           />
         </div>
@@ -261,7 +263,7 @@ export function EventList({ className = '' }: { className?: string }) {
 // Hook for checking if events should be visible
 export function useEventVisibility() {
   const { activeEvents, loading } = useActiveEvents();
-  
+
   return {
     hasActiveEvents: activeEvents.length > 0,
     shouldShowEventButton: !loading && activeEvents.length > 0,

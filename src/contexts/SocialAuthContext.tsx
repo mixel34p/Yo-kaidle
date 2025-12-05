@@ -98,7 +98,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
+          redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : '/auth/callback'
         }
       });
 

@@ -10,13 +10,13 @@ let supabase: SupabaseClient;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase environment variables are missing. Using fallback client for build process.');
-  
+
   // Usamos createClient con URLs placeholder para asegurar compatibilidad de tipos
   supabase = createClient(
-    supabaseUrl || 'https://placeholder-url.supabase.co', 
+    supabaseUrl || 'https://placeholder-url.supabase.co',
     supabaseAnonKey || 'placeholder-key'
   );
-  
+
   // En modo de build, podemos hacer un override de ciertos métodos para evitar errores
   if (typeof window === 'undefined') {
     // Durante el build de Next.js, interceptaremos las llamadas relevantes
@@ -50,13 +50,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
   }
 } else {
   // Si las variables están disponibles, crear el cliente normal
-  supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    }
-  });
+  if (typeof window === 'undefined') {
+    // En el servidor (build time o SSR), no necesitamos opciones de auth persistente
+    supabase = createClient(supabaseUrl, supabaseAnonKey);
+  } else {
+    // En el cliente, habilitamos la persistencia y detección de sesión
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+      }
+    });
+  }
 }
 
 export { supabase };
@@ -66,12 +72,12 @@ export async function getAllYokai(): Promise<Yokai[]> {
   const { data, error } = await supabase
     .from('yokai')
     .select('*');
-  
+
   if (error) {
     console.error('Error fetching Yo-kai:', error);
     return [];
   }
-  
+
   return data as Yokai[];
 }
 
@@ -81,12 +87,12 @@ export async function getYokaiById(id: number): Promise<Yokai | null> {
     .select('*')
     .eq('id', id)
     .single();
-  
+
   if (error) {
     console.error('Error fetching Yo-kai by ID:', error);
     return null;
   }
-  
+
   return data as Yokai;
 }
 
@@ -96,36 +102,36 @@ export async function getYokaiByName(name: string): Promise<Yokai | null> {
     .select('*')
     .ilike('name', name)
     .single();
-  
+
   if (error) {
     console.error('Error fetching Yo-kai by name:', error);
     return null;
   }
-  
+
   return data as Yokai;
 }
 
 // Función para limpiar URLs de la Wiki
 export function cleanWikiImageUrl(url: string): string {
   if (!url) return '';
-  
+
   // Si es una URL de wikia.nocookie.net, limpiamos los parámetros y redimensionamientos
   if (url.includes('wikia.nocookie.net') || url.includes('static.wikia.nocookie.net')) {
     // Quitar los parámetros de consulta (?cb=...)
     let cleanUrl = url.split('?')[0];
-    
+
     // Manejar el formato específico de URLs de Wikia
     if (cleanUrl.includes('/revision/')) {
       // Detectar el formato específico con /youkai-watch/images/X/XX/Nombre.png/revision/latest
       const pathRegex = /\/[\w-]+\/images\/[\w]\/[\w]{2}\/([\w-]+\.(png|jpg|jpeg|gif))\/revision/i;
       const pathMatch = cleanUrl.match(pathRegex);
-      
+
       if (pathMatch && pathMatch[1]) {
         // Reconstruir la URL sin la parte /revision/latest
         const basePath = cleanUrl.split('/images/')[0];
         const imagePath = cleanUrl.split('/images/')[1];
         const imageFile = pathMatch[1];
-        
+
         // Reconstruir como: base/images/X/XX/Nombre.png
         const imagePathParts = imagePath.split('/');
         cleanUrl = `${basePath}/images/${imagePathParts[0]}/${imagePathParts[1]}/${imageFile}`;
@@ -137,13 +143,13 @@ export function cleanWikiImageUrl(url: string): string {
         }
       }
     }
-    
+
     // Quitar /scale-to-width-down/XX/ si existe
     cleanUrl = cleanUrl.replace(/\/scale-to-width-down\/\d+/g, '');
-    
+
     return cleanUrl;
   }
-  
+
   return url;
 }
 
@@ -200,25 +206,25 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
     // Seleccionar el Yo-kai del día usando la semilla pseudoaleatoria
     const index = seed % data.length;
     let rawYokai = data[index]; // Usar let en lugar de const para poder reasignar
-    
+
     if (!rawYokai) {
       console.error('Failed to select a daily Yo-kai');
       return null;
     }
-    
+
     // Validar que el Yo-kai tenga los campos requeridos
     if (!rawYokai.name || !rawYokai.tribe || !rawYokai.rank) {
       console.error('Selected Yo-kai is missing required fields:', rawYokai);
       // En caso de error, seleccionar otro Yo-kai como respaldo
       const backupIndex = (index + 1) % data.length;
       rawYokai = data[backupIndex];
-      
+
       if (!rawYokai || !rawYokai.name) {
         console.error('Backup Yo-kai also invalid');
         return null;
       }
     }
-    
+
     // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
     // y validación para cada campo
     const yokai: Yokai = {
@@ -233,7 +239,7 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
       favoriteFood: rawYokai.favorite_food || 'None',
       imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image || ''
     };
-    
+
     // Si la imagen viene de wikia, limpiarla
     if (yokai.imageurl) {
       yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
@@ -247,10 +253,10 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
     if (yokai.image) {
       yokai.image = cleanWikiImageUrl(yokai.image);
     }
-    
+
     // Registro para depuración (solo en desarrollo)
     console.log(`Daily Yo-kai selected for ${date}: ${yokai.name} (ID: ${yokai.id}, Seed: ${seed}, Index: ${index})`);
-    
+
     return yokai as Yokai;
   } catch (error) {
     console.error('Unexpected error in getDailyYokai:', error);
@@ -304,10 +310,10 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
   // Seleccionar uno aleatorio
   const randomIndex = Math.floor(Math.random() * data.length);
   const rawYokai = data[randomIndex];
-  
+
   console.log('Random Yokai raw data:', JSON.stringify(rawYokai));
   console.log('Raw favorite_food value:', rawYokai.favorite_food);
-  
+
   // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
   const yokai: Yokai = {
     id: rawYokai.id,
@@ -321,14 +327,14 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
     favoriteFood: rawYokai.favorite_food, // Mapeo explícito de favorite_food a favoriteFood
     imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image
   };
-  
+
   console.log('Mapped Yokai structure:', JSON.stringify(yokai));
-  
+
   // Si no existe el campo "imageurl", pero sí existe "img", lo copiamos
   if (!yokai.imageurl && yokai.img) {
     yokai.imageurl = yokai.img;
   }
-  
+
   // Si la imagen viene de wikia, limpiarla
   if (yokai.imageurl) {
     yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
@@ -342,6 +348,6 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
   if (yokai.image) {
     yokai.image = cleanWikiImageUrl(yokai.image);
   }
-  
+
   return yokai as Yokai;
 }
