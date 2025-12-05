@@ -13,8 +13,8 @@
         "Jibanyan",
         "Komasan"
       ],
-      "category": "classic",
-      "difficulty": "medium",
+      "category": "story",
+      "difficulty": "easy",
       "icon": "⭐",
       "reward": {
         "points": 500
