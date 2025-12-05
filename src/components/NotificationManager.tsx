@@ -58,16 +58,6 @@ export default function NotificationManager() {
           badge: '/icons/icon-192.png',
           tag: 'daily-yokai',
           requireInteraction: false,
-          actions: [
-            {
-              action: 'play',
-              title: '🎮 Jugar ahora'
-            },
-            {
-              action: 'dismiss',
-              title: '❌ Más tarde'
-            }
-          ],
           data: {
             url: '/',
             timestamp: Date.now(),
@@ -99,7 +89,7 @@ export const requestNotificationPermission = async (): Promise<NotificationPermi
   }
 
   const permission = await Notification.requestPermission();
-  
+
   if (permission === 'granted' && 'serviceWorker' in navigator) {
     // Programar notificaciones cuando se conceden los permisos
     navigator.serviceWorker.ready.then((registration) => {
