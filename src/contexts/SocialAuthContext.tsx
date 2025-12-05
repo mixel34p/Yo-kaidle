@@ -43,44 +43,70 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const isLoadingProfile = React.useRef(false); // Semáforo para evitar llamadas concurrentes
 
   // Cargar perfil de usuario
   const loadUserProfile = async (currentUser: User) => {
-    console.time('UserProfileLoad');
-    try {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
+    // Si ya se está cargando el perfil, no hacer nada para evitar condiciones de carrera
+    if (isLoadingProfile.current) {
+      console.log('⏳ Profile load already in progress, skipping duplicate call');
+      return;
+    }
 
-      if (error) {
-        console.error('Error loading user profile:', error);
-        return;
-      }
+    isLoadingProfile.current = true;
+    console.time('UserProfileLoad');
+
+    try {
+      // Promesa de carga de datos
+      const loadPromise = async () => {
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) throw error;
+        return data;
+      };
+
+      // Promesa de timeout (5 segundos)
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Profile load timed out')), 5000);
+      });
+
+      // Competición entre carga y timeout
+      const data = await Promise.race([loadPromise(), timeoutPromise]) as UserProfile;
 
       // Sincronizar avatar si ha cambiado en Discord
       const newAvatarUrl = currentUser.user_metadata?.avatar_url;
       if (newAvatarUrl && data.avatar_url !== newAvatarUrl) {
         console.log('🔄 Syncing Discord avatar...');
-        const { error: updateError } = await supabase
+        // Esta operación es secundaria, no bloqueamos si falla
+        supabase
           .from('user_profiles')
           .update({ avatar_url: newAvatarUrl })
-          .eq('id', currentUser.id);
+          .eq('id', currentUser.id)
+          .then(({ error: updateError }) => {
+            if (!updateError) {
+              console.log('✅ Avatar synced successfully');
+              setProfile(prev => prev ? { ...prev, avatar_url: newAvatarUrl } : null);
+            } else {
+              console.error('❌ Error syncing avatar:', updateError);
+            }
+          });
 
-        if (!updateError) {
-          console.log('✅ Avatar synced successfully');
-          data.avatar_url = newAvatarUrl; // Actualizar estado local
-        } else {
-          console.error('❌ Error syncing avatar:', updateError);
-        }
+        data.avatar_url = newAvatarUrl; // Actualizar localmente inmediatamente
       }
 
       setProfile(data);
     } catch (error) {
       console.error('Error in loadUserProfile:', error);
+      // No lanzamos error para que la UI pueda continuar aunque falle el perfil
     } finally {
       console.timeEnd('UserProfileLoad');
+      isLoadingProfile.current = false;
+      // IMPORTANTE: Asegurar que loading se falsea aquí si esta función bloqueaba la UI
+      // Pero en este diseño, loading se controla fuera. 
     }
   };
 
