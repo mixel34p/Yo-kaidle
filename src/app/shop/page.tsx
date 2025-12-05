@@ -33,90 +33,90 @@ type TabType = 'shop' | 'codes';
 
 // Traducciones específicas de la tienda
 const shopTexts = {
-    es: {
-      shop: 'Tienda',
-      codes: 'Códigos',
-      featuredItems: 'Artículos Destacados',
-      allItems: 'Todos los Artículos',
-      promoCodes: 'Códigos Promocionales',
-      enterCode: 'Ingresa tu código:',
-      redeemCode: 'Canjear Código',
-      validCode: '¡Código válido!',
-      rewards: 'Recompensas:',
-      exampleCodes: 'Códigos de ejemplo para probar:',
-      buy: 'Comprar',
-      insufficientPoints: 'Puntos insuficientes',
-      loginRequired: 'Inicia sesión',
-      loginToBuy: 'Debes iniciar sesión para comprar',
-      loginToRedeem: 'Debes iniciar sesión para canjear códigos',
-      notAuthenticated: 'No has iniciado sesión',
-      canViewOnly: 'Puedes ver la tienda, pero necesitas iniciar sesión para comprar artículos y canjear códigos.',
-      goToLogin: 'Ir a Iniciar Sesión',
-      backToGame: 'Volver al Juego',
-      shopTitle: 'Tienda Yo-kaidle',
-      loading: 'Cargando tienda...',
-      validating: 'Validando código...',
-      redeeming: 'Canjeando...'
-    },
-    en: {
-      shop: 'Shop',
-      codes: 'Codes',
-      featuredItems: 'Featured Items',
-      allItems: 'All Items',
-      promoCodes: 'Promo Codes',
-      enterCode: 'Enter your code:',
-      redeemCode: 'Redeem Code',
-      validCode: 'Valid code!',
-      rewards: 'Rewards:',
-      recentPurchases: 'Recent Purchases',
-      redeemedCodes: 'Redeemed Codes',
-      noPurchases: 'No purchases yet',
-      noCodes: 'No codes redeemed yet',
-      exampleCodes: 'Example codes to try:',
-      buy: 'Buy',
-      insufficientPoints: 'Insufficient points',
-      loginRequired: 'Login',
-      loginToBuy: 'You must login to purchase',
-      loginToRedeem: 'You must login to redeem codes',
-      notAuthenticated: 'Not logged in',
-      canViewOnly: 'You can view the shop, but need to login to purchase items and redeem codes.',
-      goToLogin: 'Go to Login',
-      backToGame: 'Back to Game',
-      shopTitle: 'Yo-kaidle Shop',
-      loading: 'Loading shop...',
-      validating: 'Validating code...',
-      redeeming: 'Redeeming...'
-    },
-    it: {
-      shop: 'Negozio',
-      codes: 'Codici',
-      featuredItems: 'Articoli in Evidenza',
-      allItems: 'Tutti gli Articoli',
-      promoCodes: 'Codici Promozionali',
-      enterCode: 'Inserisci il tuo codice:',
-      redeemCode: 'Riscatta Codice',
-      validCode: 'Codice valido!',
-      rewards: 'Ricompense:',
-      recentPurchases: 'Acquisti Recenti',
-      redeemedCodes: 'Codici Riscattati',
-      noPurchases: 'Nessun acquisto ancora',
-      noCodes: 'Nessun codice riscattato ancora',
-      exampleCodes: 'Codici di esempio da provare:',
-      buy: 'Acquista',
-      insufficientPoints: 'Punti insufficienti',
-      loginRequired: 'Accedi',
-      loginToBuy: 'Devi accedere per acquistare',
-      loginToRedeem: 'Devi accedere per riscattare codici',
-      notAuthenticated: 'Non hai effettuato l\'accesso',
-      canViewOnly: 'Puoi visualizzare il negozio, ma devi accedere per acquistare articoli e riscattare codici.',
-      goToLogin: 'Vai al Login',
-      backToGame: 'Torna al Gioco',
-      shopTitle: 'Negozio Yo-kaidle',
-      loading: 'Caricamento negozio...',
-      validating: 'Validazione codice...',
-      redeeming: 'Riscattando...'
-    }
-  };
+  es: {
+    shop: 'Tienda',
+    codes: 'Códigos',
+    featuredItems: 'Artículos Destacados',
+    allItems: 'Todos los Artículos',
+    promoCodes: 'Códigos Promocionales',
+    enterCode: 'Ingresa tu código:',
+    redeemCode: 'Canjear Código',
+    validCode: '¡Código válido!',
+    rewards: 'Recompensas:',
+    exampleCodes: 'Códigos de ejemplo para probar:',
+    buy: 'Comprar',
+    insufficientPoints: 'Puntos insuficientes',
+    loginRequired: 'Inicia sesión',
+    loginToBuy: 'Debes iniciar sesión para comprar',
+    loginToRedeem: 'Debes iniciar sesión para canjear códigos',
+    notAuthenticated: 'No has iniciado sesión',
+    canViewOnly: 'Puedes ver la tienda, pero necesitas iniciar sesión para comprar artículos y canjear códigos.',
+    goToLogin: 'Ir a Iniciar Sesión',
+    backToGame: 'Volver al Juego',
+    shopTitle: 'Tienda Yo-kaidle',
+    loading: 'Cargando tienda...',
+    validating: 'Validando código...',
+    redeeming: 'Canjeando...'
+  },
+  en: {
+    shop: 'Shop',
+    codes: 'Codes',
+    featuredItems: 'Featured Items',
+    allItems: 'All Items',
+    promoCodes: 'Promo Codes',
+    enterCode: 'Enter your code:',
+    redeemCode: 'Redeem Code',
+    validCode: 'Valid code!',
+    rewards: 'Rewards:',
+    recentPurchases: 'Recent Purchases',
+    redeemedCodes: 'Redeemed Codes',
+    noPurchases: 'No purchases yet',
+    noCodes: 'No codes redeemed yet',
+    exampleCodes: 'Example codes to try:',
+    buy: 'Buy',
+    insufficientPoints: 'Insufficient points',
+    loginRequired: 'Login',
+    loginToBuy: 'You must login to purchase',
+    loginToRedeem: 'You must login to redeem codes',
+    notAuthenticated: 'Not logged in',
+    canViewOnly: 'You can view the shop, but need to login to purchase items and redeem codes.',
+    goToLogin: 'Go to Login',
+    backToGame: 'Back to Game',
+    shopTitle: 'Yo-kaidle Shop',
+    loading: 'Loading shop...',
+    validating: 'Validating code...',
+    redeeming: 'Redeeming...'
+  },
+  it: {
+    shop: 'Negozio',
+    codes: 'Codici',
+    featuredItems: 'Articoli in Evidenza',
+    allItems: 'Tutti gli Articoli',
+    promoCodes: 'Codici Promozionali',
+    enterCode: 'Inserisci il tuo codice:',
+    redeemCode: 'Riscatta Codice',
+    validCode: 'Codice valido!',
+    rewards: 'Ricompense:',
+    recentPurchases: 'Acquisti Recenti',
+    redeemedCodes: 'Codici Riscattati',
+    noPurchases: 'Nessun acquisto ancora',
+    noCodes: 'Nessun codice riscattato ancora',
+    exampleCodes: 'Codici di esempio da provare:',
+    buy: 'Acquista',
+    insufficientPoints: 'Punti insufficienti',
+    loginRequired: 'Accedi',
+    loginToBuy: 'Devi accedere per acquistare',
+    loginToRedeem: 'Devi accedere per riscattare codici',
+    notAuthenticated: 'Non hai effettuato l\'accesso',
+    canViewOnly: 'Puoi visualizzare il negozio, ma devi accedere per acquistare articoli e riscattare codici.',
+    goToLogin: 'Vai al Login',
+    backToGame: 'Torna al Gioco',
+    shopTitle: 'Negozio Yo-kaidle',
+    loading: 'Caricamento negozio...',
+    validating: 'Validazione codice...',
+    redeeming: 'Riscattando...'
+  }
+};
 
 // Componente para las cards de artículos
 interface ItemCardProps {
@@ -161,11 +161,14 @@ function ItemCard({ item, onPurchase, canAfford, isAuthenticated, purchaseLoadin
   const getItemDisplayName = (itemType: string, itemId: string) => {
     switch (itemType) {
       case 'frame':
-        return getFrameName(itemId, language);
+        const frame = getFrameById(itemId);
+        return frame ? getFrameName(frame, language as 'es' | 'en' | 'it') : itemId;
       case 'background':
-        return getBackgroundName(itemId, language);
+        const bg = getBackgroundById(itemId);
+        return bg ? getBackgroundName(bg, language as 'es' | 'en' | 'it') : itemId;
       case 'track':
-        return getTrackName(itemId, language);
+        const track = getTrackById(itemId);
+        return track ? getTrackName(track, language as 'es' | 'en' | 'it') : itemId;
       default:
         return itemId;
     }
@@ -214,11 +217,10 @@ function ItemCard({ item, onPurchase, canAfford, isAuthenticated, purchaseLoadin
         <button
           onClick={() => onPurchase(item.id, getItemDisplayName(item.item_type, item.item_id))}
           disabled={!isAuthenticated || !canAfford(item.final_price) || purchaseLoading === item.id}
-          className={`w-full py-1.5 px-2 rounded-lg text-xs font-bold transition-all duration-200 ${
-            isAuthenticated && canAfford(item.final_price)
+          className={`w-full py-1.5 px-2 rounded-lg text-xs font-bold transition-all duration-200 ${isAuthenticated && canAfford(item.final_price)
               ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg transform hover:scale-105'
               : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-          }`}
+            }`}
         >
           {purchaseLoading === item.id ? (
             <Loader2 className="w-3 h-3 animate-spin mx-auto" />
@@ -325,7 +327,7 @@ export default function ShopPage() {
     setPurchaseLoading(itemId);
     try {
       const result = await buyItem(itemId);
-      
+
       if (result.success) {
         setNotification({ type: 'success', message: `¡${itemName} comprado exitosamente!` });
       } else {
@@ -356,11 +358,11 @@ export default function ShopPage() {
 
     try {
       const result = await redeemCode(promoCodeInput.trim());
-      
+
       if (result.success) {
-        setNotification({ 
-          type: 'success', 
-          message: `¡Código canjeado! ${formatRewards(result.rewards_applied || {}).join(', ')}` 
+        setNotification({
+          type: 'success',
+          message: `¡Código canjeado! ${formatRewards(result.rewards_applied || {}).join(', ')}`
         });
         setPromoCodeInput('');
       } else {
@@ -424,11 +426,14 @@ export default function ShopPage() {
   const getItemDisplayName = (itemType: string, itemId: string) => {
     switch (itemType) {
       case 'frame':
-        return getFrameName(itemId, language);
+        const frame = getFrameById(itemId);
+        return frame ? getFrameName(frame, language as 'es' | 'en' | 'it') : itemId;
       case 'background':
-        return getBackgroundName(itemId, language);
+        const bg = getBackgroundById(itemId);
+        return bg ? getBackgroundName(bg, language as 'es' | 'en' | 'it') : itemId;
       case 'track':
-        return getTrackName(itemId, language);
+        const track = getTrackById(itemId);
+        return track ? getTrackName(track, language as 'es' | 'en' | 'it') : itemId;
       default:
         return itemId;
     }
@@ -479,11 +484,10 @@ export default function ShopPage() {
 
       {/* Notification */}
       {notification && (
-        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-          notification.type === 'success' 
-            ? 'bg-green-600 text-white' 
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${notification.type === 'success'
+            ? 'bg-green-600 text-white'
             : 'bg-red-600 text-white'
-        }`}>
+          }`}>
           <div className="flex items-center gap-2">
             {notification.type === 'success' ? <Check size={20} /> : <X size={20} />}
             <span>{notification.message}</span>
@@ -546,22 +550,20 @@ export default function ShopPage() {
         <div className="flex w-full max-w-md sm:max-w-none bg-gradient-to-r from-blue-900/60 to-purple-900/60 rounded-xl sm:rounded-2xl p-1 sm:p-2 border border-blue-400/30 backdrop-blur-sm shadow-2xl">
           <button
             onClick={() => setActiveTab('shop')}
-            className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${
-              activeTab === 'shop'
+            className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${activeTab === 'shop'
                 ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/25'
                 : 'text-white/70 hover:text-white hover:bg-white/10'
-            }`}
+              }`}
           >
             <ShoppingBag size={18} className="sm:w-[22px] sm:h-[22px]" />
             <span className="font-bold text-sm sm:text-base">{st.shop}</span>
           </button>
           <button
             onClick={() => setActiveTab('codes')}
-            className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${
-              activeTab === 'codes'
+            className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${activeTab === 'codes'
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/25'
                 : 'text-white/70 hover:text-white hover:bg-white/10'
-            }`}
+              }`}
           >
             <Gift size={18} className="sm:w-[22px] sm:h-[22px]" />
             <span className="font-bold text-sm sm:text-base">{st.codes}</span>
@@ -659,11 +661,10 @@ export default function ShopPage() {
                         <button
                           onClick={() => handlePurchase(item.id, getItemDisplayName(item.item_type, item.item_id))}
                           disabled={!isAuthenticated || !canAfford(item.final_price) || purchaseLoading === item.id}
-                          className={`w-full py-3 px-6 sm:py-4 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base relative overflow-hidden ${
-                            isAuthenticated && canAfford(item.final_price)
+                          className={`w-full py-3 px-6 sm:py-4 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base relative overflow-hidden ${isAuthenticated && canAfford(item.final_price)
                               ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl'
                               : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                          }`}
+                            }`}
                         >
                           {isAuthenticated && canAfford(item.final_price) && (
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
@@ -791,8 +792,8 @@ export default function ShopPage() {
                   </h3>
                   <p className="text-white/60">
                     {language === 'es' ? 'Ya tienes todos los artículos disponibles' :
-                     language === 'en' ? 'You already have all available items' :
-                     'Hai già tutti gli articoli disponibili'}
+                      language === 'en' ? 'You already have all available items' :
+                        'Hai già tutti gli articoli disponibili'}
                   </p>
                 </div>
               )}
@@ -832,11 +833,10 @@ export default function ShopPage() {
               )}
 
               {validationResult && !isValidating && (
-                <div className={`mb-4 p-3 rounded-lg border ${
-                  validationResult.is_valid
+                <div className={`mb-4 p-3 rounded-lg border ${validationResult.is_valid
                     ? 'bg-green-900/30 border-green-500/30 text-green-400'
                     : 'bg-red-900/30 border-red-500/30 text-red-400'
-                }`}>
+                  }`}>
                   {validationResult.is_valid ? (
                     <div>
                       <div className="flex items-center gap-2 mb-2">
@@ -866,11 +866,10 @@ export default function ShopPage() {
               <button
                 onClick={handleRedeemCode}
                 disabled={!isAuthenticated || !validationResult?.is_valid || isRedeeming || !promoCodeInput.trim()}
-                className={`w-full py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-bold transition-all text-sm sm:text-base ${
-                  isAuthenticated && validationResult?.is_valid && !isRedeeming
+                className={`w-full py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-bold transition-all text-sm sm:text-base ${isAuthenticated && validationResult?.is_valid && !isRedeeming
                     ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg'
                     : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
-                }`}
+                  }`}
               >
                 {isRedeeming ? (
                   <div className="flex items-center justify-center gap-2">
