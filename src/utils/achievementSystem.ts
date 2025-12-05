@@ -230,7 +230,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 5 Yo-kai',
     icon: '📝',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 5,
+    condition: (context) => context.medallium.totalUnlocked >= 5,
     reward: { points: 25 }
   },
   {
@@ -243,7 +243,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 10 Yo-kai',
     icon: '📚',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 10,
+    condition: (context) => context.medallium.totalUnlocked >= 10,
     reward: {
       points: 50
     }
@@ -258,7 +258,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 25 Yo-kai',
     icon: '📖',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 25,
+    condition: (context) => context.medallium.totalUnlocked >= 25,
     reward: { points: 100 }
   },
   {
@@ -271,7 +271,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 50 Yo-kai',
     icon: '🔥',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 50,
+    condition: (context) => context.medallium.totalUnlocked >= 50,
     reward: {
       points: 300
     }
@@ -286,7 +286,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 75 Yo-kai',
     icon: '⭐',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 75,
+    condition: (context) => context.medallium.totalUnlocked >= 75,
     reward: { points: 500 }
   },
   {
@@ -299,7 +299,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 100 Yo-kai',
     icon: '👑',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 100,
+    condition: (context) => context.medallium.totalUnlocked >= 100,
     reward: {
       points: 700
     }
@@ -314,7 +314,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 150 Yo-kai',
     icon: '🏆',
     category: 'collection',
-    condition: (medallium) => medallium.totalUnlocked >= 150,
+    condition: (context) => context.medallium.totalUnlocked >= 150,
     reward: { points: 1000 }
   },
 
@@ -329,9 +329,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Coraggiosa',
     icon: '/images/tribes/Brave.PNG',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const braveYokai = allYokai.filter(y => y.tribe === 'Brave');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const braveYokai = context.allYokai.filter(y => y.tribe === 'Brave');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedBrave = unlockedYokai.filter(y => y.tribe === 'Brave');
       return braveYokai.length > 0 && unlockedBrave.length === braveYokai.length;
     },
@@ -347,9 +347,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Misteriosa',
     icon: '/images/tribes/mysterious.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const mysteriousYokai = allYokai.filter(y => y.tribe === 'Mysterious');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const mysteriousYokai = context.allYokai.filter(y => y.tribe === 'Mysterious');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedMysterious = unlockedYokai.filter(y => y.tribe === 'Mysterious');
       return mysteriousYokai.length > 0 && unlockedMysterious.length === mysteriousYokai.length;
     },
@@ -365,9 +365,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Robusta',
     icon: '/images/tribes/tough.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const toughYokai = allYokai.filter(y => y.tribe === 'Tough');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const toughYokai = context.allYokai.filter(y => y.tribe === 'Tough');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedTough = unlockedYokai.filter(y => y.tribe === 'Tough');
       return toughYokai.length > 0 && unlockedTough.length === toughYokai.length;
     },
@@ -383,9 +383,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Affascinante',
     icon: '/images/tribes/charming.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const charmingYokai = allYokai.filter(y => y.tribe === 'Charming');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const charmingYokai = context.allYokai.filter(y => y.tribe === 'Charming');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedCharming = unlockedYokai.filter(y => y.tribe === 'Charming');
       return charmingYokai.length > 0 && unlockedCharming.length === charmingYokai.length;
     },
@@ -401,9 +401,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Cordiale',
     icon: '/images/tribes/heartful.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const heartfulYokai = allYokai.filter(y => y.tribe === 'Heartful');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const heartfulYokai = context.allYokai.filter(y => y.tribe === 'Heartful');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedHeartful = unlockedYokai.filter(y => y.tribe === 'Heartful');
       return heartfulYokai.length > 0 && unlockedHeartful.length === heartfulYokai.length;
     },
@@ -419,9 +419,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Ombrosa',
     icon: '/images/tribes/shady.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const shadyYokai = allYokai.filter(y => y.tribe === 'Shady');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const shadyYokai = context.allYokai.filter(y => y.tribe === 'Shady');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedShady = unlockedYokai.filter(y => y.tribe === 'Shady');
       return shadyYokai.length > 0 && unlockedShady.length === shadyYokai.length;
     },
@@ -437,9 +437,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Inquietante',
     icon: '/images/tribes/eerie.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const eerieYokai = allYokai.filter(y => y.tribe === 'Eerie');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const eerieYokai = context.allYokai.filter(y => y.tribe === 'Eerie');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedEerie = unlockedYokai.filter(y => y.tribe === 'Eerie');
       return eerieYokai.length > 0 && unlockedEerie.length === eerieYokai.length;
     },
@@ -455,9 +455,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Scivolosa',
     icon: '/images/tribes/slippery.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const slipperyYokai = allYokai.filter(y => y.tribe === 'Slippery');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const slipperyYokai = context.allYokai.filter(y => y.tribe === 'Slippery');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedSlippery = unlockedYokai.filter(y => y.tribe === 'Slippery');
       return slipperyYokai.length > 0 && unlockedSlippery.length === slipperyYokai.length;
     },
@@ -473,9 +473,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa la tribù Malvagia',
     icon: '/images/tribes/wicked.png',
     category: 'tribe',
-    condition: (medallium, allYokai) => {
-      const wickedYokai = allYokai.filter(y => y.tribe === 'Wicked');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const wickedYokai = context.allYokai.filter(y => y.tribe === 'Wicked');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedWicked = unlockedYokai.filter(y => y.tribe === 'Wicked');
       return wickedYokai.length > 0 && unlockedWicked.length === wickedYokai.length;
     },
@@ -493,9 +493,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa Yo-kai Watch 1',
     icon: '/images/games/yw1.png',
     category: 'game',
-    condition: (medallium, allYokai) => {
-      const yw1Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 1');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const yw1Yokai = context.allYokai.filter(y => y.game === 'Yo-kai Watch 1');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedYw1 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 1');
       return yw1Yokai.length > 0 && unlockedYw1.length === yw1Yokai.length;
     },
@@ -511,9 +511,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa Yo-kai Watch 2',
     icon: '/images/games/yw2.png',
     category: 'game',
-    condition: (medallium, allYokai) => {
-      const yw2Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 2');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const yw2Yokai = context.allYokai.filter(y => y.game === 'Yo-kai Watch 2');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedYw2 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 2');
       return yw2Yokai.length > 0 && unlockedYw2.length === yw2Yokai.length;
     },
@@ -529,9 +529,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa Yo-kai Watch 3',
     icon: '/images/games/yw3.png',
     category: 'game',
-    condition: (medallium, allYokai) => {
-      const yw3Yokai = allYokai.filter(y => y.game === 'Yo-kai Watch 3');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const yw3Yokai = context.allYokai.filter(y => y.game === 'Yo-kai Watch 3');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedYw3 = unlockedYokai.filter(y => y.game === 'Yo-kai Watch 3');
       return yw3Yokai.length > 0 && unlockedYw3.length === yw3Yokai.length;
     },
@@ -547,9 +547,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa Yo-kai Watch Blasters',
     icon: '/images/games/ywb.png',
     category: 'game',
-    condition: (medallium, allYokai) => {
-      const blastersYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const blastersYokai = context.allYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedBlasters = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Blasters');
       return blastersYokai.length > 0 && unlockedBlasters.length === blastersYokai.length;
     },
@@ -565,9 +565,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Completa Yo-kai Watch Sangokushi',
     icon: '/images/games/ykws.png',
     category: 'game',
-    condition: (medallium, allYokai) => {
-      const sangokushiYokai = allYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const sangokushiYokai = context.allYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const unlockedSangokushi = unlockedYokai.filter(y => y.game === 'Yo-kai Watch Sangokushi');
       return sangokushiYokai.length > 0 && unlockedSangokushi.length === sangokushiYokai.length;
     },
@@ -585,8 +585,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 10 Yo-kai di rango E',
     icon: '/images/ranks/rank-e.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const eRankYokai = unlockedYokai.filter(y => y.rank === 'E');
       return eRankYokai.length >= 10;
     },
@@ -602,8 +602,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 15 Yo-kai di rango D',
     icon: '/images/ranks/rank-d.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const dRankYokai = unlockedYokai.filter(y => y.rank === 'D');
       return dRankYokai.length >= 15;
     },
@@ -619,8 +619,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 20 Yo-kai di rango C',
     icon: '/images/ranks/rank-c.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const cRankYokai = unlockedYokai.filter(y => y.rank === 'C');
       return cRankYokai.length >= 20;
     },
@@ -636,8 +636,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 15 Yo-kai di rango B',
     icon: '/images/ranks/rank-b.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const bRankYokai = unlockedYokai.filter(y => y.rank === 'B');
       return bRankYokai.length >= 15;
     },
@@ -653,8 +653,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 10 Yo-kai di rango A',
     icon: '/images/ranks/rank-a.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const aRankYokai = unlockedYokai.filter(y => y.rank === 'A');
       return aRankYokai.length >= 10;
     },
@@ -670,8 +670,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca 5 Yo-kai di rango S',
     icon: '/images/ranks/rank-s.png',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const sRankYokai = unlockedYokai.filter(y => y.rank === 'S');
       return sRankYokai.length >= 5;
     },
@@ -689,8 +689,8 @@ export const ACHIEVEMENTS: Achievement[] = [
     description_it: 'Sblocca almeno 5 Yo-kai di ogni rango',
     icon: '⭐',
     category: 'rank',
-    condition: (medallium, allYokai) => {
-      const unlockedYokai = getUnlockedYokaiFromMedallium(medallium);
+    condition: (context) => {
+      const unlockedYokai = getUnlockedYokaiFromMedallium(context.medallium);
       const ranks = ['E', 'D', 'C', 'B', 'A', 'S'];
 
       return ranks.every(rank => {

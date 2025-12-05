@@ -29,6 +29,9 @@ export const AVAILABLE_TITLES: TitleData[] = [
     name_es: 'Maestro del Reloj',
     name_en: 'Clock Master',
     name_it: 'Insegnante di orologio',
+    description_es: 'Desbloqueado al completar el Medallium',
+    description_en: 'Unlocked by completing the Medallium',
+    description_it: 'Sbloccato completando il Medallium',
     unlockMethod: 'achievement',
     unlockRequirement: 'allyokai'
   },
@@ -37,6 +40,9 @@ export const AVAILABLE_TITLES: TitleData[] = [
     name_es: 'Unionsexual',
     name_en: 'Unionsexual',
     name_it: 'Unionsexual',
+    description_es: 'Título especial',
+    description_en: 'Special title',
+    description_it: 'Titolo speciale',
     unlockMethod: 'special'
   },
   {
@@ -44,6 +50,9 @@ export const AVAILABLE_TITLES: TitleData[] = [
     name_es: '@everyone',
     name_en: '@everyone',
     name_it: '@everyone',
+    description_es: 'Miembro del servidor de Discord',
+    description_en: 'Discord server member',
+    description_it: 'Membro del server Discord',
     unlockMethod: 'special'
   },
   {
@@ -51,6 +60,9 @@ export const AVAILABLE_TITLES: TitleData[] = [
     name_es: 'Nyan',
     name_en: 'Nyan',
     name_it: 'Nyan',
+    description_es: 'Título especial',
+    description_en: 'Special title',
+    description_it: 'Titolo speciale',
     unlockMethod: 'special'
   },
   {
@@ -58,6 +70,9 @@ export const AVAILABLE_TITLES: TitleData[] = [
     name_es: '¡Oh mis Remolinos!',
     name_en: 'Oh my swirls!',
     name_it: 'Oh miei turbini!',
+    description_es: 'Fan de Komasan',
+    description_en: 'Komasan fan',
+    description_it: 'Fan di Komasan',
     unlockMethod: 'special'
   },
 ];
@@ -121,7 +136,7 @@ export function unlockTitle(titleId: string): boolean {
   if (!title) return false;
 
   const titlesState = loadTitles();
-  
+
   // Si ya está desbloqueado, no hacer nada
   if (titlesState.unlockedTitles[titleId]) {
     return false;
@@ -146,7 +161,7 @@ export function isTitleUnlocked(titleId: string): boolean {
 // Obtener todos los títulos con su estado de desbloqueo
 export function getAllTitlesWithStatus(): (TitleData & { unlocked: boolean; unlockedAt?: string })[] {
   const titlesState = loadTitles();
-  
+
   return AVAILABLE_TITLES.map(title => ({
     ...title,
     unlocked: !!titlesState.unlockedTitles[title.id],
@@ -188,7 +203,7 @@ export function getTitleById(titleId: string): TitleData | null {
 // FUNCIÓN DE DEBUG: Desbloquear todos los títulos
 export function debugUnlockAllTitles(): void {
   const titlesState = loadTitles();
-  
+
   AVAILABLE_TITLES.forEach(title => {
     if (!titlesState.unlockedTitles[title.id]) {
       titlesState.unlockedTitles[title.id] = {

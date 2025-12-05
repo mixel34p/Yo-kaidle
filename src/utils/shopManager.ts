@@ -3,7 +3,7 @@
 
 import { supabase } from '@/lib/supabase';
 import { addPoints, getCurrentPoints, spendPoints } from './economyManager';
-import { unlockBackground } from './backgroundsManager';
+import { unlockBackground, BackgroundId } from './backgroundsManager';
 import { unlockTrack } from './jukeboxManager';
 import { unlockFrame } from './framesManager';
 import { unlockTitle } from './titlesManager';
@@ -182,7 +182,7 @@ async function checkIfItemUnlocked(itemType: string, itemId: string): Promise<bo
         return isFrameUnlocked(itemId);
       case 'background':
         const { isBackgroundUnlocked } = await import('./backgroundsManager');
-        return isBackgroundUnlocked(itemId);
+        return isBackgroundUnlocked(itemId as BackgroundId);
       case 'track':
         const { isTrackUnlocked } = await import('./jukeboxManager');
         return isTrackUnlocked(itemId);
@@ -361,11 +361,11 @@ async function unlockYokaiFromCode(yokaiNames: string[]): Promise<void> {
   // TODO: Implementar desbloqueo de Yo-kai desde códigos
   // Esto requerirá integración con el sistema de medallium
   console.log('🎁 Yo-kai desbloqueados por código:', yokaiNames);
-  
+
   // Por ahora solo guardamos en localStorage como referencia
   const unlockedByCode = JSON.parse(localStorage.getItem('yokai-unlocked-by-code') || '[]');
   const newUnlocked = [...unlockedByCode, ...yokaiNames];
-  localStorage.setItem('yokai-unlocked-by-code', JSON.stringify([...new Set(newUnlocked)]));
+  localStorage.setItem('yokai-unlocked-by-code', JSON.stringify(Array.from(new Set(newUnlocked))));
 }
 
 // Obtener historial de compras del usuario

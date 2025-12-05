@@ -9,6 +9,16 @@ import { getRandomYokai } from '@/lib/supabase';
 import type { EventConfiguration } from '@/types/events';
 import type { Yokai } from '@/types/yokai';
 
+// For static export - known event IDs
+export function generateStaticParams() {
+  return [
+    { eventId: 'blasters2' },
+    { eventId: 'halloween2024' },
+    { eventId: 'christmas2024' },
+    { eventId: 'anniversary' },
+  ];
+}
+
 export default function EventPage() {
   const params = useParams();
   const router = useRouter();
@@ -116,7 +126,7 @@ export default function EventPage() {
       setGameLoading(true);
       const eventFilter = await getEventFilterForRandomYokai(eventConfig);
       const yokai = await getRandomYokai(undefined, true, eventFilter);
-      
+
       if (yokai) {
         setCurrentYokai(yokai);
         setGuess('');
@@ -186,7 +196,7 @@ export default function EventPage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
       {/* Background pattern del evento */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{ 
+        <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 25% 25%, ${event.theme_color}40 0%, transparent 50%), radial-gradient(circle at 75% 75%, ${event.theme_color}40 0%, transparent 50%)`,
           backgroundSize: '100px 100px'
         }} />
@@ -203,14 +213,14 @@ export default function EventPage() {
               <ArrowLeft size={20} />
               {t.backToMenu}
             </button>
-            
+
             <div className="text-center">
               <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                 <span className="text-3xl">{event.icon}</span>
                 {event.name[language] || event.name.es}
               </h1>
             </div>
-            
+
             <div className="w-24" />
           </div>
         </div>
@@ -227,10 +237,10 @@ export default function EventPage() {
                 </span>
                 <span className="text-white/70">{Math.round(getProgressPercentage())}%</span>
               </div>
-              
+
               {/* Barra de progreso */}
               <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full transition-all duration-500 relative"
                   style={{ width: `${getProgressPercentage()}%` }}
                 >
@@ -244,17 +254,16 @@ export default function EventPage() {
               {event.milestones.map((milestone, index) => {
                 const isCompleted = progress >= milestone.progress_required;
                 const isCurrent = nextMilestone?.id === milestone.id;
-                
+
                 return (
                   <div
                     key={milestone.id}
-                    className={`flex-shrink-0 p-3 rounded-lg border transition-all ${
-                      isCompleted
+                    className={`flex-shrink-0 p-3 rounded-lg border transition-all ${isCompleted
                         ? 'bg-green-500/20 border-green-400/50'
                         : isCurrent
-                        ? 'bg-yellow-500/20 border-yellow-400/50'
-                        : 'bg-white/10 border-white/20'
-                    }`}
+                          ? 'bg-yellow-500/20 border-yellow-400/50'
+                          : 'bg-white/10 border-white/20'
+                      }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-white font-bold text-sm">
@@ -291,16 +300,16 @@ export default function EventPage() {
                 <div className="text-center mb-6">
                   <div className="w-48 h-48 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-4 border border-white/30">
                     {currentYokai.imageurl ? (
-                      <img 
-                        src={currentYokai.imageurl} 
-                        alt="Yo-kai" 
+                      <img
+                        src={currentYokai.imageurl}
+                        alt="Yo-kai"
                         className="w-40 h-40 object-contain rounded-xl"
                       />
                     ) : (
                       <div className="text-6xl">👻</div>
                     )}
                   </div>
-                  
+
                   {/* Info del Yo-kai (solo después de responder) */}
                   {showResult && (
                     <div className="text-white/80 text-sm space-y-1">
@@ -327,7 +336,7 @@ export default function EventPage() {
                         autoFocus
                       />
                     </div>
-                    
+
                     <button
                       type="submit"
                       disabled={!guess.trim()}
@@ -342,12 +351,12 @@ export default function EventPage() {
                     <div className={`text-2xl font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
                       {isCorrect ? t.correct : t.incorrect}
                     </div>
-                    
+
                     <div className="text-white">
                       <p className="text-xl font-semibold">{currentYokai.name}</p>
                       <p className="text-white/70">{t.attempts}: {attempts}</p>
                     </div>
-                    
+
                     <div className="flex gap-4 justify-center">
                       {!isCorrect && (
                         <button
@@ -360,7 +369,7 @@ export default function EventPage() {
                           {t.tryAgain}
                         </button>
                       )}
-                      
+
                       <button
                         onClick={handleNext}
                         className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-2 px-6 rounded-lg font-bold transition-all duration-200 flex items-center gap-2"
