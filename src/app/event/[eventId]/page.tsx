@@ -2,16 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-
-// Generate static params for known events
-export async function generateStaticParams() {
-  return [
-    { eventId: 'blasters2' },
-    { eventId: 'halloween2024' },
-    { eventId: 'christmas2024' },
-    { eventId: 'anniversary' }
-  ];
-}
 import { ArrowLeft, Trophy, Star, Zap, Target, Gift } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getEventById, getEventFilterForRandomYokai } from '@/utils/eventManager';
