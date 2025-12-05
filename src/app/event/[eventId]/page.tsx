@@ -9,16 +9,6 @@ import { getRandomYokai } from '@/lib/supabase';
 import type { EventConfiguration } from '@/types/events';
 import type { Yokai } from '@/types/yokai';
 
-// For static export - known event IDs
-export function generateStaticParams() {
-  return [
-    { eventId: 'blasters2' },
-    { eventId: 'halloween2024' },
-    { eventId: 'christmas2024' },
-    { eventId: 'anniversary' },
-  ];
-}
-
 export default function EventPage() {
   const params = useParams();
   const router = useRouter();
@@ -259,10 +249,10 @@ export default function EventPage() {
                   <div
                     key={milestone.id}
                     className={`flex-shrink-0 p-3 rounded-lg border transition-all ${isCompleted
-                        ? 'bg-green-500/20 border-green-400/50'
-                        : isCurrent
-                          ? 'bg-yellow-500/20 border-yellow-400/50'
-                          : 'bg-white/10 border-white/20'
+                      ? 'bg-green-500/20 border-green-400/50'
+                      : isCurrent
+                        ? 'bg-yellow-500/20 border-yellow-400/50'
+                        : 'bg-white/10 border-white/20'
                       }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
