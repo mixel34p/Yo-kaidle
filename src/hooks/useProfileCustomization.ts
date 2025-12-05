@@ -43,6 +43,7 @@ export interface UnlockedTitle {
   description_es: string;
   description_en: string;
   description_it: string;
+  unlockMethod: 'default' | 'achievement' | 'circle' | 'purchase' | 'special';
   unlocked: boolean;
 }
 
@@ -160,7 +161,7 @@ export function useProfileCustomization(userId?: string) {
     try {
       // Cargar datos del juego
       const gameState = loadGameFromLocalStorage();
-      
+
       const medallium = loadMedallium();
       const yokaiUnlockedCount = Object.values(medallium.unlockedYokai).length;
 
