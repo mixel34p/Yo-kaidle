@@ -45,17 +45,34 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
   const [loading, setLoading] = useState(true);
 
   // Cargar perfil de usuario
-  const loadUserProfile = async (userId: string) => {
+  const loadUserProfile = async (currentUser: User) => {
     try {
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('id', userId)
+        .eq('id', currentUser.id)
         .single();
 
       if (error) {
         console.error('Error loading user profile:', error);
         return;
+      }
+
+      // Sincronizar avatar si ha cambiado en Discord
+      const newAvatarUrl = currentUser.user_metadata?.avatar_url;
+      if (newAvatarUrl && data.avatar_url !== newAvatarUrl) {
+        console.log('🔄 Syncing Discord avatar...');
+        const { error: updateError } = await supabase
+          .from('user_profiles')
+          .update({ avatar_url: newAvatarUrl })
+          .eq('id', currentUser.id);
+
+        if (!updateError) {
+          console.log('✅ Avatar synced successfully');
+          data.avatar_url = newAvatarUrl; // Actualizar estado local
+        } else {
+          console.error('❌ Error syncing avatar:', updateError);
+        }
       }
 
       setProfile(data);
@@ -89,7 +106,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
         if (mounted) {
           setUser(session?.user ?? null);
           if (session?.user) {
-            await loadUserProfile(session.user.id);
+            await loadUserProfile(session.user);
           }
         }
       } catch (error) {
@@ -114,7 +131,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       setUser(session?.user ?? null);
 
       if (session?.user) {
-        await loadUserProfile(session.user.id);
+        await loadUserProfile(session.user);
       } else {
         setProfile(null);
       }
