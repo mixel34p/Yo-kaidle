@@ -15,7 +15,6 @@ export default function CustomizationDisplay({ userId, compact = false }: Custom
     loading,
     getFavoriteYokaiDetails,
     getCurrentTitleDetails,
-    getCurrentThemeDetails,
     getCurrentFrameDetails,
     hasCustomization
   } = useUserCustomization(userId);
@@ -26,7 +25,6 @@ export default function CustomizationDisplay({ userId, compact = false }: Custom
 
   const favoriteYokai = getFavoriteYokaiDetails();
   const currentTitle = getCurrentTitleDetails();
-  const currentTheme = getCurrentThemeDetails();
   const currentFrame = getCurrentFrameDetails();
 
   if (compact) {
@@ -41,7 +39,7 @@ export default function CustomizationDisplay({ userId, compact = false }: Custom
         {currentTitle && currentTitle.id !== 'default' && (
           <div className="flex items-center gap-1 text-yellow-300">
             <Crown size={12} />
-            <span className="truncate max-w-24">{currentTitle.name}</span>
+            <span className="truncate max-w-24">{currentTitle.name_es}</span>
           </div>
         )}
       </div>
@@ -54,7 +52,7 @@ export default function CustomizationDisplay({ userId, compact = false }: Custom
         <Palette size={16} className="text-purple-400" />
         Personalización
       </h3>
-      
+
       <div className="space-y-3">
         {/* Yo-kai Favorito */}
         {favoriteYokai && (
@@ -95,31 +93,12 @@ export default function CustomizationDisplay({ userId, compact = false }: Custom
                 <Crown size={14} />
                 <span className="font-medium">Título</span>
               </div>
-              <p className="text-white text-sm truncate">{currentTitle.name}</p>
-              <p className="text-white/60 text-xs">{currentTitle.description}</p>
+              <p className="text-white text-sm truncate">{currentTitle.name_es}</p>
+              <p className="text-white/60 text-xs">{currentTitle.description_es}</p>
             </div>
           </div>
         )}
 
-        {/* Tema Personalizado */}
-        {currentTheme && currentTheme.id !== 'default' && (
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-              <Palette size={16} className="text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1 text-blue-300 text-sm">
-                <Palette size={14} />
-                <span className="font-medium">Tema</span>
-              </div>
-              <p className="text-white text-sm truncate">{currentTheme.name}</p>
-              <div className="flex items-center gap-1 mt-1">
-                <div className={`w-3 h-3 rounded-full bg-${currentTheme.primaryColor}-500`}></div>
-                <div className={`w-3 h-3 rounded-full bg-${currentTheme.secondaryColor}-500`}></div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Marco Personalizado */}
         {currentFrame && currentFrame.id !== 'default' && (
