@@ -16,9 +16,8 @@
       "category": "classic",
       "difficulty": "medium",
       "icon": "⭐",
-      "points": 500,
       "reward": {
-        "background": "yokai"
+        "points": 500
       }
     }
   ]
