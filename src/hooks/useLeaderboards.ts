@@ -60,10 +60,10 @@ export function useLeaderboards(userId?: string) {
       if (yokaiError) throw yokaiError;
 
       // Obtener todos los IDs únicos de usuarios
-      const allUserIds = [...new Set([
+      const allUserIds = Array.from(new Set([
         ...bestStreakStats.map(s => s.id),
         ...yokaiStats.map(s => s.id)
-      ])];
+      ]));
 
       // Cargar perfiles de todos los usuarios
       const { data: profiles, error: profilesError } = await supabase
@@ -123,7 +123,7 @@ export function useLeaderboards(userId?: string) {
       if (userId) {
         const bestStreakRank = processedBestStreak.findIndex(entry => entry.id === userId) + 1;
         const yokaiRank = processedYokaiUnlocked.findIndex(entry => entry.id === userId) + 1;
-        
+
         setUserRanks({
           bestStreak: bestStreakRank > 0 ? bestStreakRank : null,
           yokaiUnlocked: yokaiRank > 0 ? yokaiRank : null
