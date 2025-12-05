@@ -40,6 +40,7 @@ export interface TitleDetails {
   description_es: string;
   description_en: string;
   description_it: string;
+  unlockMethod: 'default' | 'achievement' | 'circle' | 'purchase' | 'special';
 }
 
 
@@ -175,7 +176,8 @@ export function useUserCustomization(userId?: string) {
       name_it: title.name_it,
       description_es: title.description_es,
       description_en: title.description_en,
-      description_it: title.description_it
+      description_it: title.description_it,
+      unlockMethod: title.unlockMethod
     } : null;
   }, [customization.profileTitle]);
 
