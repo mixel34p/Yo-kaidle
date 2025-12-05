@@ -1,5 +1,5 @@
 // Sistema de gestion de fondos para Yo-kaidle
-export type BackgroundId = 'default' | 'yokai_pattern' | 'night_sky' | 'cherry_blossoms' | 'digital_grid' | 'mystical_forest' | 'yo-kaipad' | 'enma' | 'jibanyanbg';
+export type BackgroundId = 'default' | 'yokai_pattern' | 'night_sky' | 'cherry_blossoms' | 'digital_grid' | 'mystical_forest' | 'yo-kaipad' | 'yo-kaipad2' | 'yo-kaipad3' | 'yo-kaipad4' | 'enma' | 'jibanyanbg' | 'komasanbg' | 'nightbg' | 'dark' | 'nyc' | 'school' | 'yokai' | 'blasters2';
 
 export type UnlockMethod = 'default' | 'achievement' | 'purchase' | 'event' | 'special' | 'circle';
 
@@ -318,7 +318,7 @@ export function loadBackgroundsState(): BackgroundsState {
   } catch (error) {
     console.error('Error loading backgrounds state:', error);
   }
-  
+
   return {
     unlockedBackgrounds: ['default'],
     currentBackground: 'default',
@@ -355,16 +355,16 @@ export function isBackgroundUnlocked(backgroundId: BackgroundId): boolean {
 
 export function unlockBackground(backgroundId: BackgroundId): boolean {
   const state = loadBackgroundsState();
-  
+
   if (state.unlockedBackgrounds.includes(backgroundId)) {
     return false;
   }
-  
+
   const newState: BackgroundsState = {
     ...state,
     unlockedBackgrounds: [...state.unlockedBackgrounds, backgroundId]
   };
-  
+
   saveBackgroundsState(newState);
   return true;
 }
@@ -373,44 +373,44 @@ export function applyBackground(backgroundId: BackgroundId): boolean {
   if (!isBackgroundUnlocked(backgroundId)) {
     return false;
   }
-  
+
   const state = loadBackgroundsState();
   const newState: BackgroundsState = {
     ...state,
     currentBackground: backgroundId
   };
-  
+
   saveBackgroundsState(newState);
-  
+
   const background = AVAILABLE_BACKGROUNDS.find(bg => bg.id === backgroundId);
   if (background) {
     applyBackgroundToDOM(background);
   }
-  
+
   return true;
 }
 
 export function applyBackgroundToDOM(background: Background): void {
   const body = document.body;
-  
+
   body.style.backgroundImage = '';
   body.style.backgroundColor = '';
   body.style.backgroundSize = '';
   body.style.backgroundRepeat = '';
   body.style.backgroundPosition = '';
   body.style.backgroundAttachment = '';
-  
+
   Object.entries(background.style).forEach(([property, value]) => {
     if (value) {
       (body.style as any)[property] = value;
     }
   });
-  
+
   body.className = body.className.replace(/bg-\w+/g, '');
   body.classList.add(`bg-${background.id}`);
-  
+
   body.offsetHeight;
-  
+
   console.log(`Fondo aplicado: ${background.name_es}`, background.style);
 }
 
@@ -421,7 +421,7 @@ export function initializeBackgrounds(): void {
       applyBackgroundToDOM(currentBackground);
       console.log(`Sistema de fondos inicializado con: ${currentBackground.name_es}`);
     };
-    
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', applyCurrentBackground);
     } else {
@@ -446,6 +446,11 @@ export function getBackgroundDescription(background: Background, language: 'es' 
     case 'es':
     default: return background.description_es;
   }
+}
+
+// Obtener fondo por ID
+export function getBackgroundById(backgroundId: string): Background | null {
+  return AVAILABLE_BACKGROUNDS.find(bg => bg.id === backgroundId) || null;
 }
 
 export function debugUnlockAllBackgrounds(): void {
