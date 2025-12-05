@@ -80,7 +80,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         await loadUserProfile(session.user.id);
       } else {

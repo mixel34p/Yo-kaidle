@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { User, LogOut, Settings, RefreshCw } from 'lucide-react';
 import AvatarWithFrame from '@/components/AvatarWithFrame';
@@ -11,16 +11,15 @@ export default function UserAvatar() {
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Verificar si los contextos están disponibles
-  let user, profile, signOut, syncLocalDataToCloud, language;
+  let user, profile, signOut, language;
 
   try {
-    const authContext = useAuth();
+    const authContext = useSocialAuth();
     const langContext = useLanguage();
 
     user = authContext?.user;
     profile = authContext?.profile;
     signOut = authContext?.signOut;
-    syncLocalDataToCloud = authContext?.syncLocalDataToCloud;
     language = langContext?.language;
   } catch (error) {
     console.error('Error accessing contexts:', error);
@@ -59,7 +58,8 @@ export default function UserAvatar() {
   const handleSync = async () => {
     setIsSyncing(true);
     try {
-      await syncLocalDataToCloud();
+      // TODO: Implement sync functionality if needed
+      console.log('Sync not implemented in SocialAuthContext');
     } catch (error) {
       console.error('Error syncing data:', error);
     } finally {
@@ -130,7 +130,7 @@ export default function UserAvatar() {
             >
               <RefreshCw size={16} className={`text-blue-300 ${isSyncing ? 'animate-spin' : ''}`} />
               <span className="text-sm">
-                {isSyncing 
+                {isSyncing
                   ? (language === 'es' ? 'Sincronizando...' : 'Syncing...')
                   : (language === 'es' ? 'Sincronizar datos' : 'Sync data')
                 }
