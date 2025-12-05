@@ -1,5 +1,5 @@
 {
-  "version": "1.1.1",
+  "version": "2.0.0",
   "previousVersions": [
     {
       "version": "1.0.0",
@@ -55,6 +55,27 @@
           "items": [
             "Se han traducido todos los Yo-kais al inglés.",
             "(Faltan algunos y da menús por traducir)"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "releaseDate": "2025-12-05",
+      "title": "Primera actualización del Yo-kaidle.`.",
+      "features": [
+        {
+          "category": "Sistema de perfiles y leaderboard.",
+          "color": "red",
+          "items": [
+            "Se han introducido perfiles y leaderboard."
+          ]
+        },
+        {
+          "category": "Personalización añadida.",
+          "color": "gray",
+          "items": [
+            "Se ha introducido la personalización del fondo y la personalización del perfil."
           ]
         }
       ]
