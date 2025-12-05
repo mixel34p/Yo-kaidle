@@ -29,7 +29,7 @@ export default function LeaderboardsPage() {
   const router = useRouter();
   const { t } = useLanguage();
   const { user } = useSocialAuth();
-  
+
   const [activeTab, setActiveTab] = useState<LeaderboardType>('bestStreak');
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData>({
     bestStreak: [],
@@ -72,10 +72,10 @@ export default function LeaderboardsPage() {
         if (yokaiError) throw yokaiError;
 
         // Obtener todos los IDs únicos de usuarios
-        const allUserIds = [...new Set([
+        const allUserIds = Array.from(new Set([
           ...bestStreakStats.map(s => s.id),
           ...yokaiStats.map(s => s.id)
-        ])];
+        ]));
 
         // Cargar perfiles de todos los usuarios
         const { data: profiles, error: profilesError } = await supabase
@@ -135,7 +135,7 @@ export default function LeaderboardsPage() {
         if (user) {
           const bestStreakRank = processedBestStreak.findIndex(entry => entry.id === user.id) + 1;
           const yokaiRank = processedYokaiUnlocked.findIndex(entry => entry.id === user.id) + 1;
-          
+
           setUserRanks({
             bestStreak: bestStreakRank > 0 ? bestStreakRank : null,
             yokaiUnlocked: yokaiRank > 0 ? yokaiRank : null
@@ -223,22 +223,20 @@ export default function LeaderboardsPage() {
         <div className="bg-blue-900/50 rounded-lg p-1 border border-blue-500/30">
           <button
             onClick={() => setActiveTab('bestStreak')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${
-              activeTab === 'bestStreak'
+            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${activeTab === 'bestStreak'
                 ? 'bg-yellow-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Flame size={20} />
             {t.bestStreakRanking}
           </button>
           <button
             onClick={() => setActiveTab('yokaiUnlocked')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${
-              activeTab === 'yokaiUnlocked'
+            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${activeTab === 'yokaiUnlocked'
                 ? 'bg-purple-600 text-white shadow-lg'
                 : 'text-white/70 hover:text-white hover:bg-blue-800/50'
-            }`}
+              }`}
           >
             <Star size={20} />
             {t.yokaiUnlockedRanking}
@@ -266,9 +264,8 @@ export default function LeaderboardsPage() {
             {currentData.map((entry, index) => (
               <div
                 key={entry.id}
-                className={`p-4 flex items-center gap-4 hover:bg-blue-800/30 transition-colors cursor-pointer ${
-                  user?.id === entry.id ? 'bg-green-900/20 border-l-4 border-green-500' : ''
-                }`}
+                className={`p-4 flex items-center gap-4 hover:bg-blue-800/30 transition-colors cursor-pointer ${user?.id === entry.id ? 'bg-green-900/20 border-l-4 border-green-500' : ''
+                  }`}
                 onClick={() => handleViewProfile(entry.username)}
               >
                 {/* Ranking */}
