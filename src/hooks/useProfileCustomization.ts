@@ -51,8 +51,14 @@ export interface UnlockedTitle {
 
 export interface UnlockedFrame {
   id: string;
-  name: string;
+  name_es: string;
+  name_en: string;
+  name_it: string;
+  description_es: string;
+  description_en: string;
+  description_it: string;
   image: string;
+  unlockMethod: 'default' | 'achievement' | 'circle' | 'purchase' | 'special';
   unlocked: boolean;
 }
 
