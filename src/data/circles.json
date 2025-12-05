@@ -1,18 +1,20 @@
 {
   "circles": [
     {
-      "id": "og",
-      "name_es": "Trio OG",
-      "name_en": "OG Trio",
-      "name_it": "OG Trio",
-      "description_es": "Un círculo poderoso que desafía tu conexión con los Yo-kai.",
-      "description_en": "A powerful circle that tests your connection with the Yo-kai.",
-      "description_it": "Un cerchio potente che mette alla prova la tua connessione con gli Yo-kai.",
-      "yokaiNames": ["Jibanyan", "Komasan", "Whisper"],
-      "category": "advanced",
-      "difficulty": "hard",
-      "icon": "🔮",
-      "points": 800
+      "id": "og_500",
+      "name_es": "Clásicos OG",
+      "name_en": "OG Classics",
+      "name_it": "Classici OG",
+      "description_es": "Los Yo-kai originales que iniciaron la leyenda.",
+      "description_en": "The original Yo-kai that started the legend.",
+      "description_it": "Gli Yo-kai originali che hanno dato inizio alla leggenda.",
+      "yokaiNames": ["Whisper", "Jibanyan", "Komasan"],
+      "category": "classic",
+      "difficulty": "medium",
+      "icon": "⭐",
+      "points": 500,
+      "reward": {
+      }
     }
   ]
 }
