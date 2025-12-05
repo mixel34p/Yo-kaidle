@@ -67,7 +67,7 @@ function createAchievementContext(medallium: MedalliumData, allYokai: Yokai[]): 
   return {
     medallium,
     allYokai,
-    gameStats: loadGameStats(),
+    gameStats: loadGameStats() ?? undefined,
     economy: loadEconomy()
   };
 }
@@ -461,7 +461,7 @@ export const ACHIEVEMENTS: Achievement[] = [
       const unlockedSlippery = unlockedYokai.filter(y => y.tribe === 'Slippery');
       return slipperyYokai.length > 0 && unlockedSlippery.length === slipperyYokai.length;
     },
-    reward: { badge: 'slippery'}
+    reward: { badge: 'slippery' }
   },
   {
     id: 'tribe_wicked_complete',
@@ -698,10 +698,10 @@ export const ACHIEVEMENTS: Achievement[] = [
         return rankYokai.length >= 5;
       });
     },
-    reward: { 
-		points: 500,
-		background: 'yokai' 
-	},
+    reward: {
+      points: 500,
+      background: 'yokai'
+    },
     hidden: false
   },
   {
@@ -717,10 +717,10 @@ export const ACHIEVEMENTS: Achievement[] = [
     condition: (context) => {
       return context.medallium.totalUnlocked === context.allYokai.length;
     },
-    reward: { 
-	 points: 2000,
-	 title: 'clockmaster'
-	},
+    reward: {
+      points: 2000,
+      title: 'clockmaster'
+    },
   },
 
   // === LOGROS DE RENDIMIENTO ===
@@ -735,9 +735,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🔥',
     category: 'performance',
     condition: (context) => (context.gameStats?.maxStreak || 0) >= 5,
-    reward: { 
-		points: 100
-	}
+    reward: {
+      points: 100
+    }
   },
   {
     id: 'streak_10',
@@ -750,9 +750,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🔥',
     category: 'performance',
     condition: (context) => (context.gameStats?.maxStreak || 0) >= 10,
-    reward: { 
-	 points: 250
-	}
+    reward: {
+      points: 250
+    }
   },
   {
     id: 'streak_25',
@@ -765,10 +765,10 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🔥',
     category: 'performance',
     condition: (context) => (context.gameStats?.maxStreak || 0) >= 25,
-    reward: { 
-	  points: 500,
-	  badge: "streak"
-	}
+    reward: {
+      points: 500,
+      badge: "streak"
+    }
   },
   {
     id: 'daily_dedication',
@@ -781,9 +781,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '📅',
     category: 'performance',
     condition: (context) => (context.gameStats?.dailyStats.totalPlayed || 0) >= 30,
-    reward: { 
-		points: 200
-	}
+    reward: {
+      points: 200
+    }
   },
   {
     id: 'infinite_explorer',
@@ -796,9 +796,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '♾️',
     category: 'performance',
     condition: (context) => (context.gameStats?.infiniteStats.totalPlayed || 0) >= 100,
-    reward: { 
-	  points: 300
-	}
+    reward: {
+      points: 300
+    }
   },
   {
     id: 'victory_hunter',
@@ -811,9 +811,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '🏆',
     category: 'performance',
     condition: (context) => (context.gameStats?.totalWins || 0) >= 50,
-    reward: { 
-		points: 250
-	}
+    reward: {
+      points: 250
+    }
   },
   {
     id: 'daily_perfectionist',
@@ -826,9 +826,9 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: '⭐',
     category: 'performance',
     condition: (context) => (context.gameStats?.dailyStats.totalWins || 0) >= 25,
-    reward: { 
-		points: 200
-	}
+    reward: {
+      points: 200
+    }
   },
 
   // === LOGROS ECONÓMICOS ===
@@ -940,7 +940,7 @@ export function loadAchievements(): AchievementProgress {
 
 export function saveAchievements(achievements: AchievementProgress): void {
   if (typeof window === 'undefined') return;
-  
+
   try {
     localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
   } catch (error) {
@@ -985,15 +985,15 @@ export function getAchievementStats(): {
   const total = ACHIEVEMENTS.length;
   const unlocked = Object.values(progress).filter(p => p.unlocked).length;
   const percentage = total > 0 ? Math.round((unlocked / total) * 100) : 0;
-  
-  const totalPoints = ACHIEVEMENTS.reduce((sum, achievement) => 
+
+  const totalPoints = ACHIEVEMENTS.reduce((sum, achievement) =>
     sum + (achievement.reward?.points || 0), 0
   );
-  
+
   const earnedPoints = ACHIEVEMENTS
     .filter(achievement => progress[achievement.id]?.unlocked)
     .reduce((sum, achievement) => sum + (achievement.reward?.points || 0), 0);
-  
+
   return {
     total,
     unlocked,
