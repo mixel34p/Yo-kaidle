@@ -66,19 +66,51 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
 
   // Inicializar auth
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        loadUserProfile(session.user.id);
+    let mounted = true;
+
+    // Timeout de seguridad para evitar carga infinita
+    const safetyTimeout = setTimeout(() => {
+      if (mounted && loading) {
+        console.warn('⚠️ Auth loading timed out - forcing loading to false');
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    }, 5000); // 5 segundos de timeout
+
+    const initAuth = async () => {
+      try {
+        // Get initial session
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error('Error getting session:', error);
+          throw error;
+        }
+
+        if (mounted) {
+          setUser(session?.user ?? null);
+          if (session?.user) {
+            await loadUserProfile(session.user.id);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+          clearTimeout(safetyTimeout);
+        }
+      }
+    };
+
+    initAuth();
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+
+      console.log('Auth state changed:', event);
       setUser(session?.user ?? null);
 
       if (session?.user) {
@@ -89,7 +121,11 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      clearTimeout(safetyTimeout);
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Login con Discord
