@@ -46,6 +46,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
 
   // Cargar perfil de usuario
   const loadUserProfile = async (currentUser: User) => {
+    console.time('UserProfileLoad');
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -78,6 +79,8 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       setProfile(data);
     } catch (error) {
       console.error('Error in loadUserProfile:', error);
+    } finally {
+      console.timeEnd('UserProfileLoad');
     }
   };
 
@@ -88,12 +91,13 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
     // Timeout de seguridad para evitar carga infinita
     const safetyTimeout = setTimeout(() => {
       if (mounted && loading) {
-        console.warn('⚠️ Auth loading timed out - forcing loading to false');
+        console.warn('⚠️ Auth loading timed out - forcing loading to false (after 12s)');
         setLoading(false);
       }
-    }, 5000); // 5 segundos de timeout
+    }, 12000); // 12 segundos de timeout
 
     const initAuth = async () => {
+      console.time('AuthInit');
       try {
         // Get initial session
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -112,6 +116,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       } catch (error) {
         console.error('Error initializing auth:', error);
       } finally {
+        console.timeEnd('AuthInit');
         if (mounted) {
           setLoading(false);
           clearTimeout(safetyTimeout);
