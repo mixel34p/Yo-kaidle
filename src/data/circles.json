@@ -1,22 +1,18 @@
 {
   "circles": [
     {
-      "id": "legendary_test",
-      "name_es": "Prueba Legendaria",
-      "name_en": "Legendary Test",
-      "name_it": "Test Leggendario",
-      "description_es": "Círculo legendario con múltiples recompensas",
-      "description_en": "Legendary circle with multiple rewards",
-      "description_it": "Cerchio leggendario con ricompense multiple",
-      "yokaiNames": ["Estatiniño"],
-      "category": "legendary",
-      "difficulty": "medium",
-      "icon": "👑",
-      "reward": {
-        "frame": "legendary",
-        "title": "master",
-        "badge": "collector_10"
-      }
+      "id": "og",
+      "name_es": "Trio OG",
+      "name_en": "OG Trio",
+      "name_it": "OG Trio",
+      "description_es": "Un círculo poderoso que desafía tu conexión con los Yo-kai.",
+      "description_en": "A powerful circle that tests your connection with the Yo-kai.",
+      "description_it": "Un cerchio potente che mette alla prova la tua connessione con gli Yo-kai.",
+      "yokaiNames": ["Jibanyan", "Komasan", "Whisper"],
+      "category": "advanced",
+      "difficulty": "hard",
+      "icon": "🔮",
+      "points": 800
     }
   ]
 }
