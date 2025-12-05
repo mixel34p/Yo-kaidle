@@ -10,11 +10,11 @@ interface Translations {
   appTitle: string;
   appSubtitle: string;
   appDescription: string;
-  
+
   // Navigation
   play: string;
   medallium: string;
-  
+
   // Search
   searchPlaceholder: string;
   tribe: string;
@@ -22,7 +22,7 @@ interface Translations {
   element: string;
   food: string;
   game: string;
-  
+
   // Game Rules
   howToPlay: string;
   gameRules: string;
@@ -38,12 +38,12 @@ interface Translations {
   clarification2: string;
   clarification3: string;
   clarification4: string;
-  
+
   // Game Modes
   daily: string;
   infinite: string;
   configuration: string;
-  
+
   // Game Over
   congratulations: string;
   betterLuck: string;
@@ -58,7 +58,7 @@ interface Translations {
   tribeLabel: string;
   gameLabel: string;
   shareFooter: string;
-  
+
   // Footer
   copyright: string;
   trademark: string;
@@ -95,7 +95,7 @@ interface Translations {
   incorrectIdentification: string;
   tryAgainExplorer: string;
   explorerData: string;
-  name: string;
+  explorerName: string;
   continueExploration: string;
   treasureMap: string;
   yokaiToFind: string;
@@ -373,17 +373,17 @@ const translations: Record<Language, Translations> = {
     appTitle: 'Yo-kaidle',
     appSubtitle: 'Un wordle de Yo-kai Watch.',
     appDescription: 'Wordle inspirado en la franquicia de Yo-kai Watch. ¡Demuestra tus conocimientos sobre los Yo-kai y completa tu Medallium!',
-    
+
     play: 'Jugar',
     medallium: 'Mi Medallium',
-    
+
     searchPlaceholder: 'Buscar un Yo-kai...',
     tribe: 'Tribu',
     rank: 'Rango',
     element: 'Elemento',
     food: 'Comida',
     game: 'Juego',
-    
+
     howToPlay: '¿Cómo jugar?',
     gameRules: 'Reglas del juego',
     rule1: 'Adivina el Yo-kai diario en 6 intentos o menos.',
@@ -398,11 +398,11 @@ const translations: Record<Language, Translations> = {
     clarification2: 'Los Yo-kais usan las características del primer juego en el que aparecen. (Salvo los de Sangokushi, que se adaptan al 3)',
     clarification3: 'No se toma en cuenta a la versión obtenible de los bosses y los bosses que no tienen ningún rango oficial son Rango S.',
     clarification4: 'El juego está aún en fase de desarrollo y puede contener errores. Puedes reportarlos en el discord.',
-    
+
     daily: 'Diario',
     infinite: 'Infinito',
     configuration: 'Configuración',
-    
+
     congratulations: '¡Felicidades!',
     betterLuck: '¡Mejor suerte la próxima vez!',
     wonMessage: '¡Has adivinado el Yo-kai!',
@@ -416,7 +416,7 @@ const translations: Record<Language, Translations> = {
     tribeLabel: 'Tribu',
     gameLabel: 'Juego',
     shareFooter: 'Pruébalo tu mismo: https://yokaidle.vercel.app',
-    
+
     copyright: '© 2025 Yo-kaidle',
     trademark: 'Yo-kai Watch es una marca registrada de Level-5 y LEVEL-5 Inc.',
     createdBy: 'Creado por',
@@ -451,7 +451,7 @@ const translations: Record<Language, Translations> = {
     incorrectIdentification: '¡Identificación Incorrecta!',
     tryAgainExplorer: 'Inténtalo de nuevo, explorador',
     explorerData: 'Datos del Explorador',
-    name: 'Nombre',
+    explorerName: 'Nombre',
     continueExploration: 'Continuar Exploración',
     treasureMap: 'Mapa del Tesoro',
     yokaiToFind: 'Yo-kai por encontrar',
@@ -725,17 +725,17 @@ const translations: Record<Language, Translations> = {
     appTitle: 'Yo-kaidle',
     appSubtitle: 'A Yo-kai Watch wordle game.',
     appDescription: 'Wordle inspired by the Yo-kai Watch franchise. Show your knowledge about Yo-kai and complete your Medallium!',
-    
+
     play: 'Play',
     medallium: 'My Medallium',
-    
+
     searchPlaceholder: 'Search for a Yo-kai...',
     tribe: 'Tribe',
     rank: 'Rank',
     element: 'Element',
     food: 'Food',
     game: 'Game',
-    
+
     howToPlay: 'How to play?',
     gameRules: 'Game Rules',
     rule1: 'Guess the daily Yo-kai in 6 attempts or less.',
@@ -750,11 +750,11 @@ const translations: Record<Language, Translations> = {
     clarification2: 'Yo-kai use characteristics from the first game they appear in. (Except Sangokushi ones, which adapt to 3)',
     clarification3: 'The obtainable version of bosses is not taken into account and bosses without an official rank are Rank S.',
     clarification4: 'The game is still in development and may contain errors. You can report them on discord.',
-    
+
     daily: 'Daily',
     infinite: 'Infinite',
     configuration: 'Configuration',
-    
+
     congratulations: 'Congratulations!',
     betterLuck: 'Better luck next time!',
     wonMessage: 'You guessed the Yo-kai!',
@@ -768,7 +768,7 @@ const translations: Record<Language, Translations> = {
     tribeLabel: 'Tribe',
     gameLabel: 'Game',
     shareFooter: 'Try it yourself: https://yokaidle.vercel.app',
-    
+
     copyright: '© 2025 Yo-kaidle',
     trademark: 'Yo-kai Watch is a registered trademark of Level-5 and LEVEL-5 Inc.',
     createdBy: 'Created by',
@@ -803,7 +803,7 @@ const translations: Record<Language, Translations> = {
     incorrectIdentification: 'Incorrect Identification!',
     tryAgainExplorer: 'Try again, explorer',
     explorerData: 'Explorer Data',
-    name: 'Name',
+    explorerName: 'Name',
     continueExploration: 'Continue Exploration',
     treasureMap: 'Treasure Map',
     yokaiToFind: 'Yo-kai to find',
@@ -1160,7 +1160,7 @@ const translations: Record<Language, Translations> = {
     incorrectIdentification: 'Identificazione Sbagliata!',
     tryAgainExplorer: 'Riprova, esploratore',
     explorerData: 'Dati dell\'Esploratore',
-    name: 'Nome',
+    explorerName: 'Nome',
     continueExploration: 'Continua Esplorazione',
     treasureMap: 'Mappa del Tesoro',
     yokaiToFind: 'Yo-kai da trovare',
