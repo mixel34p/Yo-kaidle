@@ -1,24 +1,24 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  getShopItems, 
-  getFeaturedItems, 
-  purchaseItem, 
-  validatePromoCode, 
+import {
+  getShopItems,
+  getFeaturedItems,
+  purchaseItem,
+  validatePromoCode,
   redeemPromoCode,
   getUserPurchases,
   getUserRedemptions,
-  type ShopItem, 
-  type CodeValidationResult, 
-  type PurchaseResult, 
+  type ShopItem,
+  type CodeValidationResult,
+  type PurchaseResult,
   type RedemptionResult,
   type PromoCodeRewards
 } from '@/utils/shopManager';
 import { getCurrentPoints } from '@/utils/economyManager';
-import { getFrameName } from '@/utils/framesManager';
-import { getBackgroundName } from '@/utils/backgroundsManager';
-import { getTrackName } from '@/utils/jukeboxManager';
+import { getFrameName, getFrameById } from '@/utils/framesManager';
+import { getBackgroundName, getBackgroundById } from '@/utils/backgroundsManager';
+import { getTrackName, getTrackById } from '@/utils/jukeboxManager';
 
 export interface UseShopReturn {
   // Estado
@@ -27,19 +27,19 @@ export interface UseShopReturn {
   userPoints: number;
   loading: boolean;
   error: string | null;
-  
+
   // Funciones de compra
   buyItem: (itemId: number) => Promise<PurchaseResult>;
   canAfford: (price: number) => boolean;
-  
+
   // Funciones de códigos
   validateCode: (code: string) => Promise<CodeValidationResult>;
   redeemCode: (code: string) => Promise<RedemptionResult>;
-  
+
   // Historial
   userPurchases: any[];
   userRedemptions: any[];
-  
+
   // Utilidades
   refreshShop: () => Promise<void>;
   refreshPoints: () => void;
@@ -105,13 +105,13 @@ export function useShop(userId?: string): UseShopReturn {
 
     try {
       const result = await purchaseItem(userId, itemId);
-      
+
       if (result.success) {
         // Actualizar puntos y recargar datos
         refreshPoints();
         await loadShopData();
       }
-      
+
       return result;
     } catch (error) {
       console.error('Error buying item:', error);
@@ -142,13 +142,13 @@ export function useShop(userId?: string): UseShopReturn {
 
     try {
       const result = await redeemPromoCode(userId, code);
-      
+
       if (result.success) {
         // Actualizar puntos y recargar datos
         refreshPoints();
         await loadShopData();
       }
-      
+
       return result;
     } catch (error) {
       console.error('Error redeeming code:', error);
@@ -175,7 +175,7 @@ export function useShop(userId?: string): UseShopReturn {
     };
 
     window.addEventListener('storage', handleStorageChange);
-    
+
     // También escuchar cambios internos
     const interval = setInterval(refreshPoints, 1000);
 
@@ -192,19 +192,19 @@ export function useShop(userId?: string): UseShopReturn {
     userPoints,
     loading,
     error,
-    
+
     // Funciones de compra
     buyItem,
     canAfford,
-    
+
     // Funciones de códigos
     validateCode,
     redeemCode,
-    
+
     // Historial
     userPurchases,
     userRedemptions,
-    
+
     // Utilidades
     refreshShop,
     refreshPoints
@@ -248,12 +248,12 @@ export function usePromoCodes(userId?: string) {
     setIsRedeeming(true);
     try {
       const result = await redeemPromoCode(userId, code);
-      
+
       if (result.success) {
         // Limpiar validación después del canje exitoso
         setValidationResult(null);
       }
-      
+
       return result;
     } catch (error) {
       console.error('Error redeeming code:', error);
@@ -289,21 +289,24 @@ export function formatRewards(rewards: PromoCodeRewards, language: 'es' | 'en' |
 
   if (rewards.frames && rewards.frames.length > 0) {
     rewards.frames.forEach(frameId => {
-      const name = getFrameName(frameId, language);
+      const frame = getFrameById(frameId);
+      const name = frame ? getFrameName(frame, language) : frameId;
       formatted.push(`🔳 ${name}`);
     });
   }
 
   if (rewards.backgrounds && rewards.backgrounds.length > 0) {
     rewards.backgrounds.forEach(bgId => {
-      const name = getBackgroundName(bgId, language);
+      const bg = getBackgroundById(bgId);
+      const name = bg ? getBackgroundName(bg, language) : bgId;
       formatted.push(`🖼️ ${name}`);
     });
   }
 
   if (rewards.tracks && rewards.tracks.length > 0) {
     rewards.tracks.forEach(trackId => {
-      const name = getTrackName(trackId, language);
+      const track = getTrackById(trackId);
+      const name = track ? getTrackName(track, language) : trackId;
       formatted.push(`🎵 ${name}`);
     });
   }
