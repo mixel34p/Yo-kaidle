@@ -66,7 +66,7 @@ export default function SocialAvatar() {
 
       {/* Dropdown menu */}
       {isMenuOpen && (
-        <div className="absolute top-full right-0 mt-2 w-64 bg-blue-900/95 backdrop-blur-sm border border-blue-500/30 rounded-lg shadow-xl z-[80]">
+        <div className="absolute top-full right-0 mt-2 w-56 sm:w-64 max-w-[calc(100vw-1rem)] bg-blue-900/95 backdrop-blur-sm border border-blue-500/30 rounded-lg shadow-xl z-[80]">
           {/* User info */}
           <div className="p-4 border-b border-blue-500/30">
             <div className="flex items-center gap-3">
@@ -76,9 +76,9 @@ export default function SocialAvatar() {
                 size="sm"
                 alt={profile.username}
               />
-              <div>
-                <p className="text-white font-semibold">{profile.username}</p>
-                <p className="text-blue-200 text-xs">
+              <div className="min-w-0 flex-1">
+                <p className="text-white font-semibold truncate">{profile.username}</p>
+                <p className="text-blue-200 text-xs truncate">
                   {t.connectedWithDiscord}
                 </p>
               </div>
@@ -96,9 +96,9 @@ export default function SocialAvatar() {
               <img
                 src="/icons/social/profile.png"
                 alt="Profile"
-                className="w-4 h-4"
+                className="w-4 h-4 flex-shrink-0"
               />
-              <span className="text-sm">
+              <span className="text-sm truncate">
                 {t.viewMyProfile}
               </span>
             </Link>
@@ -112,9 +112,9 @@ export default function SocialAvatar() {
               <img
                 src="/icons/social/leaderboards.png"
                 alt="Leaderboards"
-                className="w-4 h-4"
+                className="w-4 h-4 flex-shrink-0"
               />
-              <span className="text-sm">
+              <span className="text-sm truncate">
                 {t.leaderboards}
               </span>
             </Link>
@@ -128,9 +128,9 @@ export default function SocialAvatar() {
               <img
                 src="/icons/social/personalization.png"
                 alt="Personalization"
-                className="w-4 h-4"
+                className="w-4 h-4 flex-shrink-0"
               />
-              <span className="text-sm">
+              <span className="text-sm truncate">
                 {t.customizeProfile}
               </span>
             </Link>
@@ -144,9 +144,9 @@ export default function SocialAvatar() {
               <img
                 src="/icons/social/friends.png"
                 alt="Friends"
-                className="w-4 h-4"
+                className="w-4 h-4 flex-shrink-0"
               />
-              <span className="text-sm">
+              <span className="text-sm truncate">
                 {t.friends}
               </span>
             </Link>
@@ -159,8 +159,8 @@ export default function SocialAvatar() {
               onClick={handleSignOut}
               className="w-full flex items-center gap-3 p-3 text-left text-red-300 hover:bg-red-900/30 rounded-lg transition-colors"
             >
-              <LogOut size={16} className="text-red-400" />
-              <span className="text-sm">
+              <LogOut size={16} className="text-red-400 flex-shrink-0" />
+              <span className="text-sm truncate">
                 {t.signOut}
               </span>
             </button>
