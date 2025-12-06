@@ -218,8 +218,8 @@ function ItemCard({ item, onPurchase, canAfford, isAuthenticated, purchaseLoadin
           onClick={() => onPurchase(item.id, getItemDisplayName(item.item_type, item.item_id))}
           disabled={!isAuthenticated || !canAfford(item.final_price) || purchaseLoading === item.id}
           className={`w-full py-1.5 px-2 rounded-lg text-xs font-bold transition-all duration-200 ${isAuthenticated && canAfford(item.final_price)
-              ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg transform hover:scale-105'
-              : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+            ? 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg transform hover:scale-105'
+            : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
             }`}
         >
           {purchaseLoading === item.id ? (
@@ -485,8 +485,8 @@ export default function ShopPage() {
       {/* Notification */}
       {notification && (
         <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${notification.type === 'success'
-            ? 'bg-green-600 text-white'
-            : 'bg-red-600 text-white'
+          ? 'bg-green-600 text-white'
+          : 'bg-red-600 text-white'
           }`}>
           <div className="flex items-center gap-2">
             {notification.type === 'success' ? <Check size={20} /> : <X size={20} />}
@@ -551,8 +551,8 @@ export default function ShopPage() {
           <button
             onClick={() => setActiveTab('shop')}
             className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${activeTab === 'shop'
-                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/25'
-                : 'text-white/70 hover:text-white hover:bg-white/10'
+              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/25'
+              : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
           >
             <ShoppingBag size={18} className="sm:w-[22px] sm:h-[22px]" />
@@ -561,8 +561,8 @@ export default function ShopPage() {
           <button
             onClick={() => setActiveTab('codes')}
             className={`flex items-center justify-center gap-1 sm:gap-3 px-3 py-2 sm:px-8 sm:py-4 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 flex-1 sm:flex-none ${activeTab === 'codes'
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/25'
-                : 'text-white/70 hover:text-white hover:bg-white/10'
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/25'
+              : 'text-white/70 hover:text-white hover:bg-white/10'
               }`}
           >
             <Gift size={18} className="sm:w-[22px] sm:h-[22px]" />
@@ -662,8 +662,8 @@ export default function ShopPage() {
                           onClick={() => handlePurchase(item.id, getItemDisplayName(item.item_type, item.item_id))}
                           disabled={!isAuthenticated || !canAfford(item.final_price) || purchaseLoading === item.id}
                           className={`w-full py-3 px-6 sm:py-4 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 text-sm sm:text-base relative overflow-hidden ${isAuthenticated && canAfford(item.final_price)
-                              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl'
-                              : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+                            ? 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl'
+                            : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
                             }`}
                         >
                           {isAuthenticated && canAfford(item.final_price) && (
@@ -816,7 +816,7 @@ export default function ShopPage() {
                   type="text"
                   value={promoCodeInput}
                   onChange={(e) => handlePromoCodeChange(e.target.value)}
-                  placeholder="Ej: WELCOME2024"
+                  placeholder="Ej: WELCOME"
                   className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-blue-800/50 border border-blue-500/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-400 uppercase text-sm sm:text-base"
                   maxLength={20}
                 />
@@ -834,8 +834,8 @@ export default function ShopPage() {
 
               {validationResult && !isValidating && (
                 <div className={`mb-4 p-3 rounded-lg border ${validationResult.is_valid
-                    ? 'bg-green-900/30 border-green-500/30 text-green-400'
-                    : 'bg-red-900/30 border-red-500/30 text-red-400'
+                  ? 'bg-green-900/30 border-green-500/30 text-green-400'
+                  : 'bg-red-900/30 border-red-500/30 text-red-400'
                   }`}>
                   {validationResult.is_valid ? (
                     <div>
@@ -867,8 +867,8 @@ export default function ShopPage() {
                 onClick={handleRedeemCode}
                 disabled={!isAuthenticated || !validationResult?.is_valid || isRedeeming || !promoCodeInput.trim()}
                 className={`w-full py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-bold transition-all text-sm sm:text-base ${isAuthenticated && validationResult?.is_valid && !isRedeeming
-                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg'
-                    : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg'
+                  : 'bg-gray-600/50 text-gray-400 cursor-not-allowed'
                   }`}
               >
                 {isRedeeming ? (
