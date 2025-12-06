@@ -816,7 +816,7 @@ export default function ShopPage() {
                   type="text"
                   value={promoCodeInput}
                   onChange={(e) => handlePromoCodeChange(e.target.value)}
-                  placeholder="Ej: WELCOME"
+                  placeholder="Ej: YOKAIDLE"
                   className="w-full px-3 py-2 sm:px-4 sm:py-3 bg-blue-800/50 border border-blue-500/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-400 uppercase text-sm sm:text-base"
                   maxLength={20}
                 />

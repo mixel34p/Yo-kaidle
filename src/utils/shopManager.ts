@@ -357,15 +357,44 @@ async function applyPromoRewards(rewards: PromoCodeRewards): Promise<boolean> {
 }
 
 // Función para desbloquear Yo-kai desde códigos (implementar después)
+// Función para desbloquear Yo-kai desde códigos
 async function unlockYokaiFromCode(yokaiNames: string[]): Promise<void> {
-  // TODO: Implementar desbloqueo de Yo-kai desde códigos
-  // Esto requerirá integración con el sistema de medallium
-  console.log('🎁 Yo-kai desbloqueados por código:', yokaiNames);
+  try {
+    // Importar dinámicamente para evitar ciclos de dependencia si los hubiera
+    const { loadMedallium, unlockYokai } = await import('./medalliumManager');
+    const { getYokaiByName } = await import('@/lib/supabase');
 
-  // Por ahora solo guardamos en localStorage como referencia
-  const unlockedByCode = JSON.parse(localStorage.getItem('yokai-unlocked-by-code') || '[]');
-  const newUnlocked = [...unlockedByCode, ...yokaiNames];
-  localStorage.setItem('yokai-unlocked-by-code', JSON.stringify(Array.from(new Set(newUnlocked))));
+    let medallium = loadMedallium();
+    let updated = false;
+
+    console.log('🎁 Procesando desbloqueo de Yo-kai por código:', yokaiNames);
+
+    for (const name of yokaiNames) {
+      try {
+        // Buscar el Yo-kai en la base de datos
+        const yokai = await getYokaiByName(name);
+
+        if (yokai) {
+          console.log(`✅ Yo-kai encontrado: ${yokai.name}, desbloqueando...`);
+          // Desbloquear en el medallium local
+          medallium = unlockYokai(medallium, yokai);
+          updated = true;
+        } else {
+          console.warn(`⚠️ No se encontró el Yo-kai con nombre: ${name}`);
+        }
+      } catch (err) {
+        console.error(`Error al procesar Yo-kai ${name}:`, err);
+      }
+    }
+
+    if (updated) {
+      console.log('💾 Medallium actualizado con nuevos Yo-kai');
+      // No necesitamos guardar explícitamente porque unlockYokai ya lo hace,
+      // pero si hiciéramos cambios en lote podríamos optimizarlo en el futuro.
+    }
+  } catch (error) {
+    console.error('Error in unlockYokaiFromCode:', error);
+  }
 }
 
 // Obtener historial de compras del usuario
