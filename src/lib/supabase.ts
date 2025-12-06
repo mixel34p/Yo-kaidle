@@ -222,7 +222,8 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
     const { data, error } = await supabase
       .from('yokai')
       .select('*')
-      .neq('tribe', 'Boss'); // Excluir yokais de la tribu Boss en modo diario
+      .neq('tribe', 'Boss') // Excluir yokais de la tribu Boss en modo diario
+      .neq('game', 'Yo-kai Watch Busters 2'); // Excluir yokais de Busters 2
 
     if (error) {
       console.error('Error fetching Yo-kai from Supabase:', error.message);

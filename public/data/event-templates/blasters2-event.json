@@ -22,13 +22,9 @@
   "theme_color": "#FF6B35",
   "background_image": "/events/blasters2-bg.jpg",
   "icon": "⚔️",
-
   "game_filter": [
-    "YW Blasters 2",
-    "Yo-kai Watch Busters 2",
-    "Blasters 2"
+    "Yo-kai Watch Busters 2"
   ],
-
   "fallback_games": [
     "Yo-kai Watch 1",
     "Yo-kai Watch 2"
