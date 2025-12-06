@@ -1,17 +1,18 @@
 {
   "circles": [
     {
-      "id": "og_500",
-      "name_es": "Clásicos OG",
-      "name_en": "OG Classics",
-      "name_it": "Classici OG",
-      "description_es": "Los Yo-kai originales que iniciaron la leyenda.",
-      "description_en": "The original Yo-kai that started the legend.",
-      "description_it": "Gli Yo-kai originali che hanno dato inizio alla leggenda.",
+      "id": "protagonist",
+      "name_es": "Protagonista",
+      "name_en": "Protagonist",
+      "name_it": "Protagonista",
+      "description_es": "Los Yo-kai protagonistas que iniciaron la leyenda.",
+      "description_en": "The original Yo-kai protagonists that started the legend.",
+      "description_it": "Gli Yo-kai protagonisti che hanno dato inizio alla leggenda.",
       "yokaiNames": [
         "Whisper",
         "Jibanyan",
-        "Komasan"
+        "Komasan",
+        "Usapyon"
       ],
       "category": "story",
       "difficulty": "easy",
