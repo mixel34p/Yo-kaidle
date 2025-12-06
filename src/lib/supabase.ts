@@ -65,6 +65,37 @@ if (!supabaseUrl || !supabaseAnonKey) {
   }
 }
 
+// Función para normalizar datos de Yo-kai (convertir de snake_case a camelCase)
+function normalizeYokaiData(rawYokai: any): Yokai {
+  if (!rawYokai) return {} as Yokai;
+
+  // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
+  const yokai: Yokai = {
+    id: rawYokai.id || 0,
+    name: rawYokai.name || 'Unknown Yo-kai',
+    tribe: rawYokai.tribe || 'Mysterious',
+    rank: rawYokai.rank || 'E',
+    element: rawYokai.element || 'None',
+    game: rawYokai.game || 'Yo-kai Watch 1',
+    weight: rawYokai.weight || 0,
+    medalNumber: rawYokai.medalnumber || rawYokai.medal_number || 0,
+    favoriteFood: rawYokai.favorite_food || 'None',
+    imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image || ''
+  };
+
+  // Si no existe el campo "imageurl", pero sí existe "img", lo copiamos
+  if (!yokai.imageurl && rawYokai.img) {
+    yokai.imageurl = rawYokai.img;
+  }
+
+  // Si la imagen viene de wikia, limpiarla
+  if (yokai.imageurl) {
+    yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
+  }
+
+  return yokai;
+}
+
 export { supabase };
 
 // Funciones para interactuar con los datos de Yo-kai en Supabase
@@ -78,7 +109,7 @@ export async function getAllYokai(): Promise<Yokai[]> {
     return [];
   }
 
-  return data as Yokai[];
+  return (data || []).map(normalizeYokaiData);
 }
 
 export async function getYokaiById(id: number): Promise<Yokai | null> {
@@ -93,7 +124,7 @@ export async function getYokaiById(id: number): Promise<Yokai | null> {
     return null;
   }
 
-  return data as Yokai;
+  return normalizeYokaiData(data);
 }
 
 export async function getYokaiByName(name: string): Promise<Yokai | null> {
@@ -108,7 +139,7 @@ export async function getYokaiByName(name: string): Promise<Yokai | null> {
     return null;
   }
 
-  return data as Yokai;
+  return normalizeYokaiData(data);
 }
 
 // Función para limpiar URLs de la Wiki
@@ -225,39 +256,12 @@ export async function getDailyYokai(date: string): Promise<Yokai | null> {
       }
     }
 
-    // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
-    // y validación para cada campo
-    const yokai: Yokai = {
-      id: rawYokai.id || 0,
-      name: rawYokai.name || 'Unknown Yo-kai',
-      tribe: rawYokai.tribe || 'Mysterious',
-      rank: rawYokai.rank || 'E',
-      element: rawYokai.element || 'None',
-      game: rawYokai.game || 'Yo-kai Watch 1',
-      weight: rawYokai.weight || 0,
-      medalNumber: rawYokai.medalnumber || rawYokai.medal_number || 0,
-      favoriteFood: rawYokai.favorite_food || 'None',
-      imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image || ''
-    };
-
-    // Si la imagen viene de wikia, limpiarla
-    if (yokai.imageurl) {
-      yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
-    }
-    if (yokai.image_url) {
-      yokai.image_url = cleanWikiImageUrl(yokai.image_url);
-    }
-    if (yokai.img) {
-      yokai.img = cleanWikiImageUrl(yokai.img);
-    }
-    if (yokai.image) {
-      yokai.image = cleanWikiImageUrl(yokai.image);
-    }
+    const yokai = normalizeYokaiData(rawYokai);
 
     // Registro para depuración (solo en desarrollo)
     console.log(`Daily Yo-kai selected for ${date}: ${yokai.name} (ID: ${yokai.id}, Seed: ${seed}, Index: ${index})`);
 
-    return yokai as Yokai;
+    return yokai;
   } catch (error) {
     console.error('Unexpected error in getDailyYokai:', error);
     return null;
@@ -312,42 +316,10 @@ export async function getRandomYokai(gameSources?: Game[], excludeBossTribes?: b
   const rawYokai = data[randomIndex];
 
   console.log('Random Yokai raw data:', JSON.stringify(rawYokai));
-  console.log('Raw favorite_food value:', rawYokai.favorite_food);
 
-  // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
-  const yokai: Yokai = {
-    id: rawYokai.id,
-    name: rawYokai.name,
-    tribe: rawYokai.tribe,
-    rank: rawYokai.rank,
-    element: rawYokai.element,
-    game: rawYokai.game,
-    weight: rawYokai.weight,
-    medalNumber: rawYokai.medalnumber || rawYokai.medal_number,
-    favoriteFood: rawYokai.favorite_food, // Mapeo explícito de favorite_food a favoriteFood
-    imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image
-  };
+  const yokai = normalizeYokaiData(rawYokai);
 
   console.log('Mapped Yokai structure:', JSON.stringify(yokai));
 
-  // Si no existe el campo "imageurl", pero sí existe "img", lo copiamos
-  if (!yokai.imageurl && yokai.img) {
-    yokai.imageurl = yokai.img;
-  }
-
-  // Si la imagen viene de wikia, limpiarla
-  if (yokai.imageurl) {
-    yokai.imageurl = cleanWikiImageUrl(yokai.imageurl);
-  }
-  if (yokai.image_url) {
-    yokai.image_url = cleanWikiImageUrl(yokai.image_url);
-  }
-  if (yokai.img) {
-    yokai.img = cleanWikiImageUrl(yokai.img);
-  }
-  if (yokai.image) {
-    yokai.image = cleanWikiImageUrl(yokai.image);
-  }
-
-  return yokai as Yokai;
+  return yokai;
 }
