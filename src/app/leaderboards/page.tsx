@@ -207,11 +207,11 @@ export default function LeaderboardsPage() {
 
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+        <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
           <img
             src="/icons/social/leaderboards.png"
             alt="Leaderboards"
-            className="w-8 h-8"
+            className="w-6 h-6 sm:w-8 sm:h-8"
           />
           {t.globalLeaderboards}
         </h1>
@@ -223,23 +223,23 @@ export default function LeaderboardsPage() {
         <div className="bg-blue-900/50 rounded-lg p-1 border border-blue-500/30">
           <button
             onClick={() => setActiveTab('bestStreak')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${activeTab === 'bestStreak'
-                ? 'bg-yellow-600 text-white shadow-lg'
-                : 'text-white/70 hover:text-white hover:bg-blue-800/50'
+            className={`flex items-center gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-200 ${activeTab === 'bestStreak'
+              ? 'bg-yellow-600 text-white shadow-lg'
+              : 'text-white/70 hover:text-white hover:bg-blue-800/50'
               }`}
           >
-            <Flame size={20} />
-            {t.bestStreakRanking}
+            <Flame size={16} className="sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">{t.bestStreakRanking}</span>
           </button>
           <button
             onClick={() => setActiveTab('yokaiUnlocked')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-200 ${activeTab === 'yokaiUnlocked'
-                ? 'bg-purple-600 text-white shadow-lg'
-                : 'text-white/70 hover:text-white hover:bg-blue-800/50'
+            className={`flex items-center gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-200 ${activeTab === 'yokaiUnlocked'
+              ? 'bg-purple-600 text-white shadow-lg'
+              : 'text-white/70 hover:text-white hover:bg-blue-800/50'
               }`}
           >
-            <Star size={20} />
-            {t.yokaiUnlockedRanking}
+            <Star size={16} className="sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">{t.yokaiUnlockedRanking}</span>
           </button>
         </div>
       </div>
@@ -264,22 +264,22 @@ export default function LeaderboardsPage() {
             {currentData.map((entry, index) => (
               <div
                 key={entry.id}
-                className={`p-4 flex items-center gap-4 hover:bg-blue-800/30 transition-colors cursor-pointer ${user?.id === entry.id ? 'bg-green-900/20 border-l-4 border-green-500' : ''
+                className={`p-2 sm:p-4 flex items-center gap-2 sm:gap-4 hover:bg-blue-800/30 transition-colors cursor-pointer ${user?.id === entry.id ? 'bg-green-900/20 border-l-4 border-green-500' : ''
                   }`}
                 onClick={() => handleViewProfile(entry.username)}
               >
                 {/* Ranking */}
-                <div className="flex-shrink-0 w-12 text-center">
+                <div className="flex-shrink-0 w-8 sm:w-12 text-center">
                   {index < 3 ? (
                     <div className="flex items-center justify-center">
                       <img
                         src={`/icons/leaderboard/${index + 1}.png`}
                         alt={`Position ${index + 1}`}
-                        className="w-8 h-8"
+                        className="w-6 h-6 sm:w-8 sm:h-8"
                       />
                     </div>
                   ) : (
-                    <div className="text-white/60 font-bold text-lg">
+                    <div className="text-white/60 font-bold text-base sm:text-lg">
                       #{entry.rank}
                     </div>
                   )}
@@ -296,18 +296,18 @@ export default function LeaderboardsPage() {
                 </div>
 
                 {/* Username */}
-                <div className="flex-1">
-                  <h3 className="text-white font-semibold text-lg">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-white font-semibold text-base sm:text-lg truncate">
                     {entry.username}
                   </h3>
                 </div>
 
                 {/* Score */}
                 <div className="flex-shrink-0 text-right">
-                  <div className="text-2xl font-bold text-white">
+                  <div className="text-lg sm:text-2xl font-bold text-white">
                     {activeTab === 'bestStreak' ? entry.best_streak : entry.yokai_unlocked}
                   </div>
-                  <div className="text-white/60 text-sm">
+                  <div className="text-white/60 text-xs sm:text-sm">
                     {activeTab === 'bestStreak' ? t.consecutiveDays : 'Yo-kais'}
                   </div>
                 </div>
