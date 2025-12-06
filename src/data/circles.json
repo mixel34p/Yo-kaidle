@@ -19,6 +19,31 @@
       "reward": {
         "points": 500
       }
+    },
+    {
+      "id": "enma",
+      "name_es": "Linaje Enma",
+      "name_en": "Enma Lineage",
+      "name_it": "Linea Enma",
+      "description_es": "Los Yo-kai que pertenecen al linaje de Enma.",
+      "description_en": "The Yo-kai that belong to Enma's lineage.",
+      "description_it": "Gli Yo-kai che appartengono alla linea di Enma.",
+      "yokaiNames": [
+        "Gran Enma",
+        "Enma Ancestral",
+        "Enma Solar",
+        "Gran Enma Iluminado",
+        "Enma Infinito",
+        "Enma Umbrio"
+      ],
+      "category": "story",
+      "difficulty": "hard",
+      "icon": "⭐",
+      "reward": {
+        "frame": "enma",
+        "background": "enma",
+        "points": 500
+      }
     }
   ]
 }

@@ -7,13 +7,13 @@ export type EventStatus = 'inactive' | 'active' | 'completed' | 'expired';
 
 export type EventType = 'blasters2' | 'seasonal' | 'special' | 'collaboration';
 
-export type RewardType = 
-  | 'points' 
-  | 'background' 
-  | 'badge' 
-  | 'frame' 
-  | 'title' 
-  | 'music' 
+export type RewardType =
+  | 'points'
+  | 'background'
+  | 'badge'
+  | 'frame'
+  | 'title'
+  | 'music'
   | 'yokai'
   | 'avatar_item';
 
@@ -43,24 +43,24 @@ export interface EventConfiguration {
   description: Record<string, string>;
   type: EventType;
   status: EventStatus;
-  
+
   // Progress configuration
   total_progress_required: number;
   progress_unit: string; // e.g., "Yo-kai discovered", "battles won"
-  
+
   // Game configuration
   game_mode: 'infinite' | 'daily' | 'special';
   yokai_filter?: string[]; // Array of Yo-kai IDs to include/exclude
   filter_mode: 'include' | 'exclude'; // Whether to include only these Yo-kai or exclude them
-  
+
   // Visual configuration
   theme_color: string;
   background_image?: string;
   icon: string;
-  
+
   // Milestones and rewards
   milestones: EventMilestone[];
-  
+
   // Metadata
   created_at: string;
   updated_at: string;
@@ -178,19 +178,19 @@ export interface UseEventSystemReturn {
   playerProgress: Record<string, PlayerEventProgress>;
   loading: boolean;
   error: string | null;
-  
+
   // Event management
   createEvent: (payload: CreateEventPayload) => Promise<EventConfiguration>;
   updateEvent: (id: string, payload: UpdateEventPayload) => Promise<EventConfiguration>;
   deleteEvent: (id: string) => Promise<void>;
   activateEvent: (id: string) => Promise<void>;
   deactivateEvent: (id: string) => Promise<void>;
-  
+
   // Player progress
   getPlayerProgress: (eventId: string) => PlayerEventProgress | null;
   updateProgress: (eventId: string, progress: number) => Promise<void>;
   claimReward: (eventId: string, rewardId: string) => Promise<void>;
-  
+
   // Utility functions
   canParticipate: (eventId: string) => boolean;
   getNextMilestone: (eventId: string) => EventMilestone | null;

@@ -831,6 +831,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     }
   },
 
+  /*
   // === LOGROS ECONÓMICOS ===
   {
     id: 'first_purchase',
@@ -910,6 +911,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     condition: (context) => (context.economy?.points || 0) >= 1000,
     reward: { points: 200, badge: 'wealthy' }
   }
+  */
 ];
 
 // Funciones para manejar logros
