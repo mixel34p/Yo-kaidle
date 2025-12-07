@@ -1,13 +1,13 @@
-export type Tribe = 
-  | 'Charming' 
-  | 'Mysterious' 
-  | 'Tough' 
-  | 'Heartful' 
-  | 'Shady' 
-  | 'Eerie' 
-  | 'Slippery' 
-  | 'Wicked' 
-  | 'Boss' 
+export type Tribe =
+  | 'Charming'
+  | 'Mysterious'
+  | 'Tough'
+  | 'Heartful'
+  | 'Shady'
+  | 'Eerie'
+  | 'Slippery'
+  | 'Wicked'
+  | 'Boss'
   | 'Enma'
   | 'Brave'
   | 'Wandroid';
@@ -42,12 +42,12 @@ export const tribeIcons: Record<Tribe, string> = {
   'Wandroid': '/images/tribes/Wandroid.png'
 };
 
-export type Game = 
-  | 'Yo-kai Watch 1' 
-  | 'Yo-kai Watch 2' 
-  | 'Yo-kai Watch 3' 
-  | 'Yo-kai Watch 4' 
-  | 'Yo-kai Watch Blasters' 
+export type Game =
+  | 'Yo-kai Watch 1'
+  | 'Yo-kai Watch 2'
+  | 'Yo-kai Watch 3'
+  | 'Yo-kai Watch 4'
+  | 'Yo-kai Watch Blasters'
   | 'Yo-kai Watch Busters 2'
   | 'Yo-kai Watch Sangokushi';
 
@@ -61,14 +61,14 @@ export const gameLogos: Record<Game, string> = {
   'Yo-kai Watch Sangokushi': '/images/games/ykws.png'
 };
 
-export type Rank = 
-  | 'E' 
-  | 'D' 
-  | 'C' 
-  | 'B' 
-  | 'A' 
-  | 'S' 
-  | 'SS' 
+export type Rank =
+  | 'E'
+  | 'D'
+  | 'C'
+  | 'B'
+  | 'A'
+  | 'S'
+  | 'SS'
   | 'SSS';
 
 export const rankIcons: Record<Rank, string> = {
@@ -93,46 +93,46 @@ export const rankColors: Record<Rank, string> = {
   'SSS': '#9932CC'  // Púrpura
 };
 
-export type Element = 
-  | 'Fire' 
-  | 'Water' 
-  | 'Lightning' 
-  | 'Earth' 
-  | 'Wind' 
-  | 'Ice' 
-  | 'Drain' 
-  | 'Restoration' 
+export type Element =
+  | 'Fire'
+  | 'Water'
+  | 'Lightning'
+  | 'Earth'
+  | 'Wind'
+  | 'Ice'
+  | 'Drain'
+  | 'Restoration'
   | 'None';
 
-export type FavoriteFood = 
-  | 'Rice Balls' 
-  | 'Bread' 
-  | 'Candy' 
-  | 'Milk' 
-  | 'Juice' 
-  | 'Hamburgers' 
-  | 'Chinese Food' 
-  | 'Ramen' 
-  | 'Veggies' 
-  | 'Meat' 
-  | 'Seafood' 
-  | 'Sushi' 
-  | 'Curry' 
-  | 'Sweets' 
-  | 'Doughnuts' 
-  | 'Donuts' 
-  | 'Oden' 
-  | 'Soba' 
-  | 'Snacks' 
-  | 'Chocobars' 
-  | 'Ice Cream' 
-  | 'Pizza' 
-  | 'Hot Dogs' 
-  | 'Pasta' 
-  | 'Tempura' 
-  | 'Sushi-Tempura' 
+export type FavoriteFood =
+  | 'Rice Balls'
+  | 'Bread'
+  | 'Candy'
+  | 'Milk'
+  | 'Juice'
+  | 'Hamburgers'
+  | 'Chinese Food'
+  | 'Ramen'
+  | 'Veggies'
+  | 'Meat'
+  | 'Seafood'
+  | 'Sushi'
+  | 'Curry'
+  | 'Sweets'
+  | 'Doughnuts'
+  | 'Donuts'
+  | 'Oden'
+  | 'Soba'
+  | 'Snacks'
+  | 'Chocobars'
+  | 'Ice Cream'
+  | 'Pizza'
+  | 'Hot Dogs'
+  | 'Pasta'
+  | 'Tempura'
+  | 'Sushi-Tempura'
   | 'Sukiyaki'
-  | 'Mega Tasty Bars' 
+  | 'Mega Tasty Bars'
   | 'None';
 
 export const elementTranslations: Record<Element, string> = {

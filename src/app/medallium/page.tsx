@@ -295,7 +295,13 @@ export default function Medallium() {
   };
 
   return (
-    <div className="medallium-container pb-20 px-4 md:px-6 max-w-7xl mx-auto">
+    <div
+      className="medallium-container pb-20 px-4 md:px-6 max-w-7xl mx-auto min-h-screen"
+      style={{
+        backgroundImage: 'radial-gradient(#e5e7eb 1px, transparent 1px)',
+        backgroundSize: '20px 20px'
+      }}
+    >
       {/* Cabecera con título y botón de volver mejorado */}
       <header className="mb-6">
         <div className="relative flex items-center justify-center py-3">
@@ -647,17 +653,23 @@ export default function Medallium() {
 
           {/* Modo cuadrícula */}
           {viewMode === 'grid' && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div
+              className="grid gap-4 sm:gap-6"
+              style={{
+                gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))'
+              }}
+            >
               {filteredYokai.map((yokai) => (
-                <MedalliumCard
-                  key={yokai.id}
-                  yokai={yokai}
-                  view={viewMode}
-                  onClick={handleYokaiClick}
-                  isFavorite={favorites?.includes(yokai.id)}
-                  onToggleFavorite={toggleFavorite}
-                  unlockedDate={getUnlockDate(yokai.id)}
-                />
+                <div key={yokai.id} className="aspect-[3/4]">
+                  <MedalliumCard
+                    yokai={yokai}
+                    view={viewMode}
+                    onClick={handleYokaiClick}
+                    isFavorite={favorites?.includes(yokai.id)}
+                    onToggleFavorite={toggleFavorite}
+                    unlockedDate={getUnlockDate(yokai.id)}
+                  />
+                </div>
               ))}
             </div>
           )}
