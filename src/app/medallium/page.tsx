@@ -654,9 +654,9 @@ export default function Medallium() {
           {/* Modo cuadrícula */}
           {viewMode === 'grid' && (
             <div
-              className="grid gap-4 sm:gap-6"
+              className="grid gap-2 sm:gap-4 md:gap-6"
               style={{
-                gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))'
+                gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))'
               }}
             >
               {filteredYokai.map((yokai) => (
