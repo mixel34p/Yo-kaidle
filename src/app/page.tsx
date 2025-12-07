@@ -1060,28 +1060,32 @@ function HomeContent() {
 
 
       {/* BOTÓN DE AYUDAS - Solo en modo diario */}
-      {gameState.gameStatus === 'playing' && gameState.gameMode === 'daily' && hintsState && (
-        <div className="mb-4 text-center">
-          <button
-            onClick={() => setShowHintsPanel(true)}
-            className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-6 py-3 rounded-lg shadow-lg hover:from-yellow-500 hover:to-orange-500 transition-all duration-200 transform hover:scale-105 font-medium"
-          >
-            <img
-              src="/icons/menu/help.png"
-              alt="Help"
-              className="w-6 h-6 mr-2"
-            />
-            <span>
-              {language === 'es' ? 'Usar Ayudas' : language === 'en' ? 'Use Hints' : 'Usa Suggerimenti'}
-            </span>
-          </button>
-        </div>
-      )}
+      {
+        gameState.gameStatus === 'playing' && gameState.gameMode === 'daily' && hintsState && (
+          <div className="mb-4 text-center">
+            <button
+              onClick={() => setShowHintsPanel(true)}
+              className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-6 py-3 rounded-lg shadow-lg hover:from-yellow-500 hover:to-orange-500 transition-all duration-200 transform hover:scale-105 font-medium"
+            >
+              <img
+                src="/icons/menu/help.png"
+                alt="Help"
+                className="w-6 h-6 mr-2"
+              />
+              <span>
+                {language === 'es' ? 'Usar Ayudas' : language === 'en' ? 'Use Hints' : 'Usa Suggerimenti'}
+              </span>
+            </button>
+          </div>
+        )
+      }
 
       {/* PISTAS ACTIVAS - Solo en modo diario */}
-      {gameState.gameMode === 'daily' && hintsState && (
-        <ActiveHints hintsState={hintsState} />
-      )}
+      {
+        gameState.gameMode === 'daily' && hintsState && (
+          <ActiveHints hintsState={hintsState} />
+        )
+      }
 
       {/* CUADRÍCULA DE ADIVINANZAS */}
       <YokaiGrid
@@ -1101,179 +1105,144 @@ function HomeContent() {
       </div>
 
       {/* MENSAJE DE FINAL DE PARTIDA Y BOTÓN DE ESTADÍSTICAS */}
-      {gameState.gameStatus !== 'playing' && !showGameOver && (
-        <div className="text-center mt-6 p-4 bg-gradient-to-r from-blue-600/80 to-blue-800/80 rounded-lg shadow-md border border-blue-300/30 backdrop-blur-sm text-white">
-          <button
-            className="btn-primary transform hover:scale-105 transition-transform"
-            onClick={() => setShowStats(true)}
-          >
-            {t.showStats}
-          </button>
-        </div>
-      )}
+      {
+        gameState.gameStatus !== 'playing' && !showGameOver && (
+          <div className="text-center mt-6 p-4 bg-gradient-to-r from-blue-600/80 to-blue-800/80 rounded-lg shadow-md border border-blue-300/30 backdrop-blur-sm text-white">
+            <button
+              className="btn-primary transform hover:scale-105 transition-transform"
+              onClick={() => setShowStats(true)}
+            >
+              {t.showStats}
+            </button>
+          </div>
+        )
+      }
 
       {/* ESTADÍSTICAS */}
-      {showStats && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="relative max-w-md w-11/12 rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-100 animate-fadeIn"
-            style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(66, 196, 255, 0.4)', color: 'white' }}>
-            {/* Cabecera con fondo de gradiente */}
-            <div className="p-6 text-center" style={{ background: 'linear-gradient(135deg, var(--dark-blue), var(--secondary-color))' }}>
-              <h2 className="text-3xl font-bold text-white drop-shadow-md mb-2">{t.statistics.toUpperCase()}</h2>
-              <p className="text-white text-opacity-90 text-lg">{t.yourProgress}</p>
-            </div>
-            <div className="p-6">
-              {/* Selector de modo para estadísticas */}
-              <div className="mb-6">
-                <div className="flex p-1 rounded-lg shadow-inner" style={{ background: 'rgba(15, 82, 152, 0.3)', backdropFilter: 'blur(4px)' }}>
-                  <button
-                    onClick={() => handleModeChange('daily')}
-                    className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${gameState.gameMode === 'daily'
-                      ? 'text-white shadow-md transform scale-105'
-                      : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
-                      }`}
-                    style={gameState.gameMode === 'daily' ? { background: 'linear-gradient(135deg, var(--primary-color), #FF6384)' } : {}}
-                  >
-                    <div className="flex items-center justify-center">
-                      <img
-                        src="/icons/game-modes/daily-mode.png"
-                        alt="Modo diario"
-                        className="w-6 h-6 mr-2 object-contain"
-                        onError={(e) => {
-                          // Fallback al icono SVG si la imagen no se encuentra
-                          e.currentTarget.style.display = 'none';
-                          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                          svg.setAttribute('class', 'w-6 h-6 mr-2');
-                          svg.setAttribute('fill', 'none');
-                          svg.setAttribute('stroke', 'currentColor');
-                          svg.setAttribute('viewBox', '0 0 24 24');
-                          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                          path.setAttribute('strokeLinecap', 'round');
-                          path.setAttribute('strokeLinejoin', 'round');
-                          path.setAttribute('strokeWidth', '2');
-                          path.setAttribute('d', 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z');
-                          svg.appendChild(path);
-                          e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
-                        }}
-                      />
-                      <span>{t.daily}</span>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => handleModeChange('infinite')}
-                    className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${gameState.gameMode === 'infinite'
-                      ? 'text-white shadow-md transform scale-105'
-                      : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
-                      }`}
-                    style={gameState.gameMode === 'infinite' ? { background: 'linear-gradient(135deg, var(--secondary-color), #1E75D3)' } : {}}
-                  >
-                    <div className="flex items-center justify-center">
-                      <img
-                        src="/icons/game-modes/infinite-mode.png"
-                        alt="Modo infinito"
-                        className="w-6 h-6 mr-2 object-contain"
-                        onError={(e) => {
-                          // Fallback al icono SVG si la imagen no se encuentra
-                          e.currentTarget.style.display = 'none';
-                          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                          svg.setAttribute('class', 'w-6 h-6 mr-2');
-                          svg.setAttribute('fill', 'none');
-                          svg.setAttribute('stroke', 'currentColor');
-                          svg.setAttribute('viewBox', '0 0 24 24');
-                          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                          path.setAttribute('strokeLinecap', 'round');
-                          path.setAttribute('strokeLinejoin', 'round');
-                          path.setAttribute('strokeWidth', '2');
-                          path.setAttribute('d', 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4');
-                          svg.appendChild(path);
-                          e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
-                        }}
-                      />
-                      <span>{t.infinite}</span>
-                    </div>
-                  </button>
-                </div>
+      {
+        showStats && (
+          <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="relative max-w-md w-11/12 rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-100 animate-fadeIn"
+              style={{ background: 'rgba(15, 82, 152, 0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(66, 196, 255, 0.4)', color: 'white' }}>
+              {/* Cabecera con fondo de gradiente */}
+              <div className="p-6 text-center" style={{ background: 'linear-gradient(135deg, var(--dark-blue), var(--secondary-color))' }}>
+                <h2 className="text-3xl font-bold text-white drop-shadow-md mb-2">{t.statistics.toUpperCase()}</h2>
+                <p className="text-white text-opacity-90 text-lg">{t.yourProgress}</p>
               </div>
-              <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>
-                {gameState.gameMode === 'daily' ? t.dailyModeStats : t.infiniteModeStats}
-              </h3>
-              {/* Estadísticas con iconos y datos */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                {/* Juegos jugados */}
-                <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                  <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
-                    <img
-                      src="/icons/stats/games-played.png"
-                      alt="Partidas"
-                      className="w-8 h-8 object-contain"
-                      onError={(e) => {
-                        // Fallback al icono SVG si la imagen no se encuentra
-                        e.currentTarget.style.display = 'none';
-                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                        svg.setAttribute('class', 'w-6 h-6');
-                        svg.setAttribute('fill', 'currentColor');
-                        svg.setAttribute('viewBox', '0 0 20 20');
-                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                        path.setAttribute('d', 'M9 2a1 1 0 000 2h2a1 1 0 100-2H9z');
-                        svg.appendChild(path);
-                        e.currentTarget.parentElement!.appendChild(svg);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <p className="stat-value font-bold text-xl">
-                      {gameState.gameMode === 'daily'
-                        ? gameState.dailyStats.totalPlayed
-                        : gameState.infiniteStats.totalPlayed}
-                    </p>
-                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.gamesPlayed.toUpperCase()}</p>
+              <div className="p-6">
+                {/* Selector de modo para estadísticas */}
+                <div className="mb-6">
+                  <div className="flex p-1 rounded-lg shadow-inner" style={{ background: 'rgba(15, 82, 152, 0.3)', backdropFilter: 'blur(4px)' }}>
+                    <button
+                      onClick={() => handleModeChange('daily')}
+                      className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${gameState.gameMode === 'daily'
+                        ? 'text-white shadow-md transform scale-105'
+                        : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
+                        }`}
+                      style={gameState.gameMode === 'daily' ? { background: 'linear-gradient(135deg, var(--primary-color), #FF6384)' } : {}}
+                    >
+                      <div className="flex items-center justify-center">
+                        <img
+                          src="/icons/game-modes/daily-mode.png"
+                          alt="Modo diario"
+                          className="w-6 h-6 mr-2 object-contain"
+                          onError={(e) => {
+                            // Fallback al icono SVG si la imagen no se encuentra
+                            e.currentTarget.style.display = 'none';
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'w-6 h-6 mr-2');
+                            svg.setAttribute('fill', 'none');
+                            svg.setAttribute('stroke', 'currentColor');
+                            svg.setAttribute('viewBox', '0 0 24 24');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('strokeLinecap', 'round');
+                            path.setAttribute('strokeLinejoin', 'round');
+                            path.setAttribute('strokeWidth', '2');
+                            path.setAttribute('d', 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z');
+                            svg.appendChild(path);
+                            e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
+                          }}
+                        />
+                        <span>{t.daily}</span>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => handleModeChange('infinite')}
+                      className={`flex-1 py-2 px-4 rounded-lg transition-all duration-300 font-medium ${gameState.gameMode === 'infinite'
+                        ? 'text-white shadow-md transform scale-105'
+                        : 'text-white text-opacity-70 hover:bg-opacity-30 hover:bg-white'
+                        }`}
+                      style={gameState.gameMode === 'infinite' ? { background: 'linear-gradient(135deg, var(--secondary-color), #1E75D3)' } : {}}
+                    >
+                      <div className="flex items-center justify-center">
+                        <img
+                          src="/icons/game-modes/infinite-mode.png"
+                          alt="Modo infinito"
+                          className="w-6 h-6 mr-2 object-contain"
+                          onError={(e) => {
+                            // Fallback al icono SVG si la imagen no se encuentra
+                            e.currentTarget.style.display = 'none';
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'w-6 h-6 mr-2');
+                            svg.setAttribute('fill', 'none');
+                            svg.setAttribute('stroke', 'currentColor');
+                            svg.setAttribute('viewBox', '0 0 24 24');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('strokeLinecap', 'round');
+                            path.setAttribute('strokeLinejoin', 'round');
+                            path.setAttribute('strokeWidth', '2');
+                            path.setAttribute('d', 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4');
+                            svg.appendChild(path);
+                            e.currentTarget.parentElement!.insertBefore(svg, e.currentTarget.parentElement!.firstChild);
+                          }}
+                        />
+                        <span>{t.infinite}</span>
+                      </div>
+                    </button>
                   </div>
                 </div>
-                {/* Porcentaje de victorias */}
-                <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                  <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
-                    <img
-                      src="/icons/stats/victories.png"
-                      alt="Victorias"
-                      className="w-8 h-8 object-contain"
-                      onError={(e) => {
-                        // Fallback al icono SVG si la imagen no se encuentra
-                        e.currentTarget.style.display = 'none';
-                        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                        svg.setAttribute('class', 'w-6 h-6');
-                        svg.setAttribute('fill', 'currentColor');
-                        svg.setAttribute('viewBox', '0 0 20 20');
-                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                        path.setAttribute('fillRule', 'evenodd');
-                        path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
-                        path.setAttribute('clipRule', 'evenodd');
-                        svg.appendChild(path);
-                        e.currentTarget.parentElement!.appendChild(svg);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <p className="stat-value font-bold text-xl">
-                      {gameState.gameMode === 'daily'
-                        ? (gameState.dailyStats.totalPlayed > 0
-                          ? Math.round((gameState.dailyStats.totalWins / gameState.dailyStats.totalPlayed) * 100)
-                          : 0)
-                        : (gameState.infiniteStats.totalPlayed > 0
-                          ? Math.round((gameState.infiniteStats.totalWins / gameState.infiniteStats.totalPlayed) * 100)
-                          : 0)
-                      }%
-                    </p>
-                    <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.winRate.toUpperCase()}</p>
-                  </div>
-                </div>
-                {/* Racha actual (solo en modo diario) */}
-                {gameState.gameMode === 'daily' && (
+                <h3 className="text-lg font-semibold mb-4 text-center" style={{ color: 'var(--gold-accent)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>
+                  {gameState.gameMode === 'daily' ? t.dailyModeStats : t.infiniteModeStats}
+                </h3>
+                {/* Estadísticas con iconos y datos */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {/* Juegos jugados */}
                   <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
                     <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
                       <img
-                        src="/icons/stats/current-streak.png"
-                        alt="Racha Actual"
+                        src="/icons/stats/games-played.png"
+                        alt="Partidas"
+                        className="w-8 h-8 object-contain"
+                        onError={(e) => {
+                          // Fallback al icono SVG si la imagen no se encuentra
+                          e.currentTarget.style.display = 'none';
+                          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                          svg.setAttribute('class', 'w-6 h-6');
+                          svg.setAttribute('fill', 'currentColor');
+                          svg.setAttribute('viewBox', '0 0 20 20');
+                          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                          path.setAttribute('d', 'M9 2a1 1 0 000 2h2a1 1 0 100-2H9z');
+                          svg.appendChild(path);
+                          e.currentTarget.parentElement!.appendChild(svg);
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <p className="stat-value font-bold text-xl">
+                        {gameState.gameMode === 'daily'
+                          ? gameState.dailyStats.totalPlayed
+                          : gameState.infiniteStats.totalPlayed}
+                      </p>
+                      <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.gamesPlayed.toUpperCase()}</p>
+                    </div>
+                  </div>
+                  {/* Porcentaje de victorias */}
+                  <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
+                    <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                      <img
+                        src="/icons/stats/victories.png"
+                        alt="Victorias"
                         className="w-8 h-8 object-contain"
                         onError={(e) => {
                           // Fallback al icono SVG si la imagen no se encuentra
@@ -1292,92 +1261,133 @@ function HomeContent() {
                       />
                     </div>
                     <div>
-                      <p className="stat-value font-bold text-xl">{gameState.dailyStats.streak}</p>
-                      <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.currentStreak.toUpperCase()}</p>
+                      <p className="stat-value font-bold text-xl">
+                        {gameState.gameMode === 'daily'
+                          ? (gameState.dailyStats.totalPlayed > 0
+                            ? Math.round((gameState.dailyStats.totalWins / gameState.dailyStats.totalPlayed) * 100)
+                            : 0)
+                          : (gameState.infiniteStats.totalPlayed > 0
+                            ? Math.round((gameState.infiniteStats.totalWins / gameState.infiniteStats.totalPlayed) * 100)
+                            : 0)
+                        }%
+                      </p>
+                      <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.winRate.toUpperCase()}</p>
                     </div>
                   </div>
-                )}
-                {/* Mejor racha (solo en modo diario) */}
-                {gameState.gameMode === 'daily' && (
-                  <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                    <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
-                      <img
-                        src="/icons/stats/best-streak.png"
-                        alt="Mejor Racha"
-                        className="w-8 h-8 object-contain"
-                        onError={(e) => {
-                          // Fallback al icono SVG si la imagen no se encuentra
-                          e.currentTarget.style.display = 'none';
-                          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                          svg.setAttribute('class', 'w-6 h-6');
-                          svg.setAttribute('fill', 'currentColor');
-                          svg.setAttribute('viewBox', '0 0 20 20');
-                          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                          path.setAttribute('d', 'M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z');
-                          svg.appendChild(path);
-                          e.currentTarget.parentElement!.appendChild(svg);
-                        }}
-                      />
+                  {/* Racha actual (solo en modo diario) */}
+                  {gameState.gameMode === 'daily' && (
+                    <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
+                      <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                        <img
+                          src="/icons/stats/current-streak.png"
+                          alt="Racha Actual"
+                          className="w-8 h-8 object-contain"
+                          onError={(e) => {
+                            // Fallback al icono SVG si la imagen no se encuentra
+                            e.currentTarget.style.display = 'none';
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'w-6 h-6');
+                            svg.setAttribute('fill', 'currentColor');
+                            svg.setAttribute('viewBox', '0 0 20 20');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('fillRule', 'evenodd');
+                            path.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z');
+                            path.setAttribute('clipRule', 'evenodd');
+                            svg.appendChild(path);
+                            e.currentTarget.parentElement!.appendChild(svg);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <p className="stat-value font-bold text-xl">{gameState.dailyStats.streak}</p>
+                        <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.currentStreak.toUpperCase()}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="stat-value font-bold text-xl">{gameState.dailyStats.maxStreak}</p>
-                      <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.bestStreak.toUpperCase()}</p>
+                  )}
+                  {/* Mejor racha (solo en modo diario) */}
+                  {gameState.gameMode === 'daily' && (
+                    <div className="p-3 rounded-lg shadow-sm flex items-center" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
+                      <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                        <img
+                          src="/icons/stats/best-streak.png"
+                          alt="Mejor Racha"
+                          className="w-8 h-8 object-contain"
+                          onError={(e) => {
+                            // Fallback al icono SVG si la imagen no se encuentra
+                            e.currentTarget.style.display = 'none';
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'w-6 h-6');
+                            svg.setAttribute('fill', 'currentColor');
+                            svg.setAttribute('viewBox', '0 0 20 20');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('d', 'M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z');
+                            svg.appendChild(path);
+                            e.currentTarget.parentElement!.appendChild(svg);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <p className="stat-value font-bold text-xl">{gameState.dailyStats.maxStreak}</p>
+                        <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.bestStreak.toUpperCase()}</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-                {/* Juegos ganados (solo en modo infinito) */}
-                {gameState.gameMode === 'infinite' && (
-                  <div className="p-3 rounded-lg shadow-sm flex items-center col-span-2" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
-                    <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
-                      <img
-                        src="/icons/stats/infinite-wins.png"
-                        alt="Total Victorias Infinito"
-                        className="w-8 h-8 object-contain"
-                        onError={(e) => {
-                          // Fallback al icono SVG si la imagen no se encuentra
-                          e.currentTarget.style.display = 'none';
-                          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                          svg.setAttribute('class', 'w-6 h-6');
-                          svg.setAttribute('fill', 'currentColor');
-                          svg.setAttribute('viewBox', '0 0 20 20');
-                          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                          path.setAttribute('fillRule', 'evenodd');
-                          path.setAttribute('d', 'M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z');
-                          path.setAttribute('clipRule', 'evenodd');
-                          svg.appendChild(path);
-                          e.currentTarget.parentElement!.appendChild(svg);
-                        }}
-                      />
+                  )}
+                  {/* Juegos ganados (solo en modo infinito) */}
+                  {gameState.gameMode === 'infinite' && (
+                    <div className="p-3 rounded-lg shadow-sm flex items-center col-span-2" style={{ background: 'rgba(234, 242, 255, 0.15)', borderLeft: '3px solid var(--accent-color)' }}>
+                      <div className="mr-3 flex-shrink-0 flex items-center justify-center" style={{ color: 'white' }}>
+                        <img
+                          src="/icons/stats/infinite-wins.png"
+                          alt="Total Victorias Infinito"
+                          className="w-8 h-8 object-contain"
+                          onError={(e) => {
+                            // Fallback al icono SVG si la imagen no se encuentra
+                            e.currentTarget.style.display = 'none';
+                            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                            svg.setAttribute('class', 'w-6 h-6');
+                            svg.setAttribute('fill', 'currentColor');
+                            svg.setAttribute('viewBox', '0 0 20 20');
+                            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            path.setAttribute('fillRule', 'evenodd');
+                            path.setAttribute('d', 'M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z');
+                            path.setAttribute('clipRule', 'evenodd');
+                            svg.appendChild(path);
+                            e.currentTarget.parentElement!.appendChild(svg);
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <p className="stat-value font-bold text-xl">{gameState.infiniteStats.totalWins}</p>
+                        <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.totalInfiniteWins.toUpperCase()}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="stat-value font-bold text-xl">{gameState.infiniteStats.totalWins}</p>
-                      <p className="stat-label text-xs" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t.totalInfiniteWins.toUpperCase()}</p>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
+                <button
+                  className="w-full py-3 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
+                  style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}
+                  onClick={() => setShowStats(false)}
+                >
+                  {t.continuePlaying}
+                </button>
               </div>
-              <button
-                className="w-full py-3 text-white rounded-lg font-medium transition-all duration-300 shadow-md transform hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, var(--secondary-color), var(--dark-blue))' }}
-                onClick={() => setShowStats(false)}
-              >
-                {t.continuePlaying}
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Panel de Ayudas */}
-      {hintsState && (
-        <HintsPanel
-          isOpen={showHintsPanel}
-          onClose={() => setShowHintsPanel(false)}
-          currentHintsState={hintsState}
-          onUseHint={handleUseHint}
-          gameFinished={gameState.gameStatus !== 'playing'}
-        />
-      )}
+      {
+        hintsState && (
+          <HintsPanel
+            isOpen={showHintsPanel}
+            onClose={() => setShowHintsPanel(false)}
+            currentHintsState={hintsState}
+            onUseHint={handleUseHint}
+            gameFinished={gameState.gameStatus !== 'playing'}
+          />
+        )
+      }
 
       {/* Panel de Fondos */}
       <BackgroundsPanel
@@ -1396,7 +1406,7 @@ function HomeContent() {
 
 
       {/* El pie de página ahora está en el layout */}
-    </div>
+    </div >
   );
 }
 

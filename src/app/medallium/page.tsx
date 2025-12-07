@@ -4,15 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Yokai, Tribe, Game, tribeTranslations, tribeIcons, gameLogos, rankIcons, foodIcons, elementIcons, elementTranslations } from '@/types/yokai';
-import { 
-  loadMedallium, 
-  getUnlockedYokaiArray, 
-  filterByTribe, 
-  filterByGame, 
-  sortByMedalNumber, 
+import {
+  loadMedallium,
+  getUnlockedYokaiArray,
+  filterByTribe,
+  filterByGame,
+  sortByMedalNumber,
   sortByName,
   sortByTribe,
-  calculateMedalliumStats 
+  calculateMedalliumStats
 } from '@/utils/medalliumManager';
 import MedalliumCard from '@/components/MedalliumCard';
 import MedalliumDetail from '@/components/MedalliumDetail';
@@ -50,7 +50,7 @@ export default function Medallium() {
   const [games, setGames] = useState<Game[]>([]);
   const [selectedYokai, setSelectedYokai] = useState<Yokai | null>(null);
   const [stats, setStats] = useState({ totalUnlocked: 0, totalYokai: 0, percentage: 0 });
-  
+
   // Estados para UI y preferencias de usuario
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -101,7 +101,7 @@ export default function Medallium() {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      
+
       try {
         // Cargar todos los Yo-kai de la base de datos para obtener el total
         const allYokaiData = await getAllYokai();
@@ -109,36 +109,37 @@ export default function Medallium() {
 
         // Cargar los Yo-kai desbloqueados del medallium
         const medallium = loadMedallium();
-        const unlocked = getUnlockedYokaiArray(medallium);
+
+        // FILTRADO IMPORTANTE:
+        // Usamos solo los IDs para filtrar la lista fresca de la base de datos
+        const unlockedIds = Object.keys(medallium.unlockedYokai).map(Number);
+        const unlocked = allYokaiData.filter(y => unlockedIds.includes(y.id));
 
         // Verificar logros nuevos
         const newAchievements = checkAchievements(medallium, allYokaiData);
         if (newAchievements.length > 0) {
-          // Aquí podrías mostrar una notificación de logros desbloqueados
           console.log('Nuevos logros desbloqueados:', newAchievements);
         }
 
         // Calcular estadísticas avanzadas
         const advancedStatsData = calculateAdvancedStats(medallium, allYokaiData);
         setAdvancedStats(advancedStatsData);
-        
+
         // Guardar fechas de desbloqueo si no existen ya
         const dates: UnlockDates = { ...unlockDates };
         unlocked.forEach(yokai => {
           const yokaiIdStr = yokai.id.toString();
           if (!dates[yokaiIdStr] && medallium.unlockedYokai[yokai.id]) {
-            // Si está desbloqueado pero no tenemos fecha guardada, usamos la fecha actual
             dates[yokaiIdStr] = new Date().toLocaleDateString();
           }
         });
         setUnlockDates(dates);
         localStorage.setItem('medalliumUnlockDates', JSON.stringify(dates));
-        
+
         // Extraer todas las tribus y juegos disponibles para los filtros
         const uniqueTribes = Array.from(new Set(allYokaiData.map(y => y.tribe))) as Tribe[];
         const uniqueGames = Array.from(new Set(allYokaiData.map(y => y.game))) as Game[];
 
-        // Establecer los datos
         setTotalYokai(allYokaiData.length);
         setUnlockedYokai(unlocked);
         setFilteredYokai(sortByMedalNumber(unlocked));
@@ -153,7 +154,7 @@ export default function Medallium() {
         setLoading(false);
       }
     };
-    
+
     loadData();
   }, []); // Solo ejecutar al montar el componente
 
@@ -161,29 +162,29 @@ export default function Medallium() {
   useEffect(() => {
     // Primero aplicar los filtros
     let filtered = unlockedYokai;
-    
+
     // Filtrar por favoritos si está activado
     if (showFavoritesOnly) {
       filtered = filtered.filter(yokai => favorites.includes(yokai.id));
     }
-    
+
     // Aplicar filtros de categoría
     if (tribeFilter) {
       filtered = filterByTribe(filtered, tribeFilter);
     }
-    
+
     if (gameFilter) {
       filtered = filterByGame(filtered, gameFilter);
     }
-    
+
     if (rankFilter) {
       filtered = filtered.filter(yokai => yokai.rank === rankFilter);
     }
-    
+
     if (elementFilter) {
       filtered = filtered.filter(yokai => yokai.element === elementFilter);
     }
-    
+
     // Aplicar búsqueda por texto (usando nombres traducidos)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
@@ -196,7 +197,7 @@ export default function Medallium() {
         (yokai.game && yokai.game.toLowerCase().includes(query))
       );
     }
-    
+
     // Aplicar ordenación
     switch (sortBy) {
       case 'number':
@@ -209,17 +210,17 @@ export default function Medallium() {
         filtered = sortByTribe(filtered);
         break;
     }
-    
+
     setFilteredYokai(filtered);
   }, [
-    unlockedYokai, 
-    sortBy, 
-    tribeFilter, 
-    gameFilter, 
-    rankFilter, 
-    elementFilter, 
-    searchQuery, 
-    showFavoritesOnly, 
+    unlockedYokai,
+    sortBy,
+    tribeFilter,
+    gameFilter,
+    rankFilter,
+    elementFilter,
+    searchQuery,
+    showFavoritesOnly,
     favorites
   ]);
 
@@ -242,7 +243,7 @@ export default function Medallium() {
   const closeDetail = () => {
     setSelectedYokai(null);
   };
-  
+
   // Alternar favorito
   const toggleFavorite = (yokaiId: number) => {
     setFavorites((prev: number[]) => {
@@ -258,7 +259,7 @@ export default function Medallium() {
   const toggleViewMode = () => {
     setViewMode(viewMode === 'grid' ? 'list' : 'grid');
   };
-  
+
   // Limpiar todos los filtros
   const clearAllFilters = () => {
     setTribeFilter(null);
@@ -269,23 +270,23 @@ export default function Medallium() {
     setShowFavoritesOnly(false);
     setSortBy('number');
   };
-  
+
   // Comprobar si hay algún filtro activo
   const hasActiveFilters = () => {
-    return tribeFilter !== null || 
-           gameFilter !== null || 
-           rankFilter !== null || 
-           elementFilter !== null || 
-           searchQuery.trim() !== '' || 
-           showFavoritesOnly || 
-           sortBy !== 'number';
+    return tribeFilter !== null ||
+      gameFilter !== null ||
+      rankFilter !== null ||
+      elementFilter !== null ||
+      searchQuery.trim() !== '' ||
+      showFavoritesOnly ||
+      sortBy !== 'number';
   };
-  
+
   // Función para obtener la fecha de desbloqueo formateada
   const getUnlockDate = (yokaiNumber: number): string | undefined => {
     const unlockDateObj = unlockDates ? unlockDates[yokaiNumber.toString()] : undefined;
     if (!unlockDateObj) return undefined;
-    
+
     return new Date(unlockDateObj).toLocaleDateString('es-ES', {
       day: '2-digit',
       month: '2-digit',
@@ -298,8 +299,8 @@ export default function Medallium() {
       {/* Cabecera con título y botón de volver mejorado */}
       <header className="mb-6">
         <div className="relative flex items-center justify-center py-3">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="absolute left-2 flex items-center justify-center h-10 w-10 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition-colors shadow-sm"
             aria-label={t.backToGame}
           >
@@ -307,7 +308,7 @@ export default function Medallium() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
           </Link>
-          
+
           <div className="text-center">
             <div className="relative inline-block">
               <h1 className="text-4xl font-extrabold text-center text-gray-800 relative z-10">
@@ -335,7 +336,7 @@ export default function Medallium() {
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")', backgroundSize: '24px 24px' }}></div>
         </div>
-        
+
         <div className="relative">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-bold">{t.collectionProgress}</h2>
@@ -343,14 +344,14 @@ export default function Medallium() {
               {stats.percentage}%
             </div>
           </div>
-          
+
           <div className="flex items-end mb-3">
             <div className="text-3xl font-bold mr-2">{stats.totalUnlocked}</div>
             <div className="text-lg mb-1">/ {stats.totalYokai}</div>
           </div>
-          
+
           <div className="relative w-full bg-amber-700/50 rounded-full h-4 overflow-hidden shadow-inner">
-            <div 
+            <div
               className="h-full bg-white rounded-full transition-all duration-500 ease-out flex items-center justify-end pr-1"
               style={{ width: `${stats.percentage}%` }}
             >
@@ -496,13 +497,15 @@ export default function Medallium() {
                 <RefreshCw size={18} />
               </button>
             )}
+
+
           </div>
         </div>
 
         {/* Panel de filtros avanzados (desplegable) */}
         <AnimatePresence>
           {showFilters && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -514,13 +517,13 @@ export default function Medallium() {
                   <SlidersHorizontal size={18} className="mr-2" />
                   {t.advancedFilters}
                 </h3>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                   {/* Filtrar por tribu */}
                   <div>
                     <label className="block text-sm font-medium text-blue-700 mb-1">{t.tribe}</label>
                     <div className="relative">
-                      <select 
+                      <select
                         className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
                         value={tribeFilter || ''}
                         onChange={(e) => setTribeFilter(e.target.value || null)}
@@ -539,12 +542,12 @@ export default function Medallium() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Filtrar por elemento */}
                   <div>
                     <label className="block text-sm font-medium text-blue-700 mb-1">{t.element}</label>
                     <div className="relative">
-                      <select 
+                      <select
                         className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
                         value={elementFilter || ''}
                         onChange={(e) => setElementFilter(e.target.value || null)}
@@ -563,12 +566,12 @@ export default function Medallium() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Filtrar por rango */}
                   <div>
                     <label className="block text-sm font-medium text-blue-700 mb-1">{t.rank}</label>
                     <div className="relative">
-                      <select 
+                      <select
                         className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
                         value={rankFilter || ''}
                         onChange={(e) => setRankFilter(e.target.value || null)}
@@ -577,10 +580,10 @@ export default function Medallium() {
                         {Object.keys(rankIcons)
                           .filter(rank => rank !== 'SS' && rank !== 'SSS') // Excluir SS y SSS
                           .map((rank) => (
-                          <option key={rank} value={rank}>
-                            {rank.toUpperCase()}
-                          </option>
-                        ))}
+                            <option key={rank} value={rank}>
+                              {rank.toUpperCase()}
+                            </option>
+                          ))}
                       </select>
                       <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 text-blue-500">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -589,12 +592,12 @@ export default function Medallium() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Filtrar por juego */}
                   <div>
                     <label className="block text-sm font-medium text-blue-700 mb-1">{t.game}</label>
                     <div className="relative">
-                      <select 
+                      <select
                         className="w-full pl-10 py-2 rounded-lg border-blue-200 bg-white shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 transition-colors"
                         value={gameFilter || ''}
                         onChange={(e) => setGameFilter(e.target.value || null)}
@@ -641,14 +644,14 @@ export default function Medallium() {
               </div>
             )}
           </div>
-          
+
           {/* Modo cuadrícula */}
           {viewMode === 'grid' && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {filteredYokai.map((yokai) => (
-                <MedalliumCard 
-                  key={yokai.id} 
-                  yokai={yokai} 
+                <MedalliumCard
+                  key={yokai.id}
+                  yokai={yokai}
                   view={viewMode}
                   onClick={handleYokaiClick}
                   isFavorite={favorites?.includes(yokai.id)}
@@ -658,14 +661,14 @@ export default function Medallium() {
               ))}
             </div>
           )}
-          
+
           {/* Modo lista */}
           {viewMode === 'list' && (
             <div className="flex flex-col space-y-2">
               {filteredYokai.map((yokai) => (
-                <MedalliumCard 
-                  key={yokai.id} 
-                  yokai={yokai} 
+                <MedalliumCard
+                  key={yokai.id}
+                  yokai={yokai}
                   view={viewMode}
                   onClick={handleYokaiClick}
                   isFavorite={favorites?.includes(yokai.id)}
@@ -708,16 +711,16 @@ export default function Medallium() {
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E")', backgroundSize: '24px 24px' }}></div>
               </div>
-              
+
               {/* Imagen del Yo-kai */}
-              <img 
-                src={selectedYokai.imageurl || selectedYokai.image_url || selectedYokai.img || selectedYokai.image || '/images/yokai-placeholder.png'} 
+              <img
+                src={selectedYokai.imageurl || selectedYokai.image_url || selectedYokai.img || selectedYokai.image || '/images/yokai-placeholder.png'}
                 alt={getYokaiName(selectedYokai)}
                 className="w-full h-full object-contain drop-shadow-lg p-2"
               />
-              
+
               {/* Botón de cerrar */}
-              <button 
+              <button
                 className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm rounded-full p-2 hover:bg-white/60 transition-all duration-200 shadow-lg"
                 onClick={closeDetail}
                 aria-label="Cerrar"
@@ -726,13 +729,13 @@ export default function Medallium() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              
+
               {/* Medalla decorativa */}
               <div className="absolute left-3 top-3 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full py-1 px-3 shadow-lg">
                 #{selectedYokai.medalNumber}
               </div>
             </div>
-            
+
             <div className="p-5">
               {/* Nombre y tribu */}
               <div className="flex justify-between items-start mb-5">
@@ -744,27 +747,27 @@ export default function Medallium() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Características del Yo-kai */}
               <div className="grid grid-cols-3 gap-3 mb-5">
                 {/* Rango */}
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.rank}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img 
-                      src={rankIcons[selectedYokai.rank]} 
+                    <img
+                      src={rankIcons[selectedYokai.rank]}
                       alt={`${t.rank} ${selectedYokai.rank}`}
                       className="w-full h-full object-contain drop-shadow-md"
                     />
                   </div>
                 </div>
-                
+
                 {/* Elemento */}
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.element}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img 
-                      src={elementIcons[selectedYokai.element]} 
+                    <img
+                      src={elementIcons[selectedYokai.element]}
                       alt={getElementTranslation(selectedYokai.element)}
                       className="w-full h-full object-contain drop-shadow-md"
                       onError={(e) => {
@@ -786,13 +789,13 @@ export default function Medallium() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Comida favorita */}
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.food}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img 
-                      src={foodIcons[selectedYokai.favoriteFood]} 
+                    <img
+                      src={foodIcons[selectedYokai.favoriteFood]}
                       alt={getFoodTranslation(selectedYokai.favoriteFood)}
                       className="w-full h-full object-contain drop-shadow-md"
                       onError={(e) => {
@@ -812,7 +815,7 @@ export default function Medallium() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Juego de origen */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg shadow-sm">
                 <div className="flex items-center">

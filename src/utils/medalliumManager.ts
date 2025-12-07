@@ -45,19 +45,19 @@ export function unlockYokai(medallium: MedalliumData, yokai: Yokai): MedalliumDa
   if (isYokaiUnlocked(medallium, yokai.id)) {
     return medallium;
   }
-  
+
   // Crear una copia del medallium actual para no modificar el original
   const updatedMedallium: MedalliumData = {
     unlockedYokai: { ...medallium.unlockedYokai },
     totalUnlocked: medallium.totalUnlocked + 1
   };
-  
+
   // Añadir el nuevo Yo-kai
   updatedMedallium.unlockedYokai[yokai.id] = yokai;
-  
+
   // Guardar los cambios
   saveMedallium(updatedMedallium);
-  
+
   return updatedMedallium;
 }
 
@@ -101,10 +101,33 @@ export function calculateMedalliumStats(medallium: MedalliumData, totalYokai: nu
 } {
   const totalUnlocked = medallium.totalUnlocked;
   const percentage = totalYokai > 0 ? Math.round((totalUnlocked / totalYokai) * 100) : 0;
-  
+
   return {
     totalUnlocked,
     totalYokai,
     percentage
   };
+}
+
+// Desbloquear TODOS los Yo-kai (función de debug/test)
+export function unlockAllYokais(medallium: MedalliumData, allYokai: Yokai[]): MedalliumData {
+  const updatedMedallium: MedalliumData = {
+    unlockedYokai: { ...medallium.unlockedYokai },
+    totalUnlocked: medallium.totalUnlocked
+  };
+
+  let newUnlockedCount = 0;
+
+  allYokai.forEach(yokai => {
+    if (!updatedMedallium.unlockedYokai[yokai.id]) {
+      updatedMedallium.unlockedYokai[yokai.id] = yokai;
+      newUnlockedCount++;
+    }
+  });
+
+  updatedMedallium.totalUnlocked += newUnlockedCount;
+
+  saveMedallium(updatedMedallium);
+
+  return updatedMedallium;
 }
