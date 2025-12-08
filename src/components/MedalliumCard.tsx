@@ -16,7 +16,23 @@ interface MedalliumCardProps {
   onToggleFavorite?: (yokaiId: number) => void;
 }
 
-// Mapeo de colores por rango para estilos premium
+// Mapeo de colores por tribu para fondos
+const tribeColors: Record<string, { bg: string, border: string, shadow: string }> = {
+  'Charming': { bg: 'bg-pink-100/80', border: 'border-pink-400', shadow: 'shadow-pink-200' },
+  'Mysterious': { bg: 'bg-yellow-100/80', border: 'border-yellow-400', shadow: 'shadow-yellow-200' },
+  'Tough': { bg: 'bg-orange-100/80', border: 'border-orange-400', shadow: 'shadow-orange-200' },
+  'Heartful': { bg: 'bg-green-100/80', border: 'border-green-400', shadow: 'shadow-green-200' },
+  'Shady': { bg: 'bg-blue-900/80', border: 'border-blue-700', shadow: 'shadow-blue-800' },
+  'Eerie': { bg: 'bg-purple-100/80', border: 'border-purple-400', shadow: 'shadow-purple-200' },
+  'Slippery': { bg: 'bg-sky-100/80', border: 'border-sky-400', shadow: 'shadow-sky-200' },
+  'Wicked': { bg: 'bg-gray-600/80', border: 'border-gray-700', shadow: 'shadow-gray-700' },
+  'Boss': { bg: 'bg-purple-900/80', border: 'border-purple-700', shadow: 'shadow-purple-800' },
+  'Enma': { bg: 'bg-red-900/80', border: 'border-red-700', shadow: 'shadow-red-800' },
+  'Brave': { bg: 'bg-red-100/80', border: 'border-red-400', shadow: 'shadow-red-200' },
+  'Wandroid': { bg: 'bg-indigo-900/80', border: 'border-indigo-700', shadow: 'shadow-indigo-800' },
+};
+
+// Mapeo de colores por rango para estilos premium (fallback)
 const rankColors: Record<string, { bg: string, border: string, shadow: string, text: string }> = {
   'E': { bg: 'bg-gray-50', border: 'border-gray-400', shadow: 'shadow-gray-200', text: 'text-gray-600' },
   'D': { bg: 'bg-sky-50', border: 'border-sky-400', shadow: 'shadow-sky-200', text: 'text-sky-700' },
@@ -57,10 +73,22 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
 
   const imageUrl = yokai.imageurl || yokai.image || '/images/yokai-placeholder.png';
 
-  // Obtener estilos según el rango
+  // Obtener estilos según la tribu (prioridad) o rango (fallback)
+  const tribeStyle = !isLocked && yokai.tribe && tribeColors[yokai.tribe]
+    ? tribeColors[yokai.tribe]
+    : null;
+
   const rankStyle = !isLocked && yokai.rank && rankColors[yokai.rank]
     ? rankColors[yokai.rank]
     : { bg: 'bg-gray-50', border: 'border-gray-200', shadow: 'shadow-gray-200', text: 'text-gray-600' };
+
+  // Usar tribu si existe, sino usar rango
+  const cardStyle = tribeStyle || rankStyle;
+
+  // Combinar: fondo de tribu, borde de rango
+  const cardBg = tribeStyle?.bg || rankStyle.bg;
+  const cardBorder = rankStyle.border;
+  const cardShadow = rankStyle.shadow;
 
   // Efecto de brillo para rangos altos
   const isHighRank = ['S', 'SS', 'SSS', 'Z', 'ZZ', 'ZZZ'].includes(yokai.rank || '');
@@ -86,7 +114,7 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
         : 'flex items-center p-3 gap-4'
         } ${isLocked
           ? 'bg-gray-100 opacity-80 border-2 border-dashed border-gray-300'
-          : `${rankStyle.bg} border-2 ${rankStyle.border} ${rankStyle.shadow}`
+          : `${cardBg} border-2 ${cardBorder} ${cardShadow}`
         } rounded-xl overflow-hidden transition-all duration-300 cursor-pointer hover:z-10`}
       whileHover={!isLocked ? {
         y: -4,
