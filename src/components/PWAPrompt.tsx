@@ -17,6 +17,16 @@ export default function PWAPrompt() {
   const [installPromptDismissed, setInstallPromptDismissed] = useState(false);
   const [notificationPromptDismissed, setNotificationPromptDismissed] = useState(false);
   useEffect(() => {
+    // Versión del sistema de notificaciones - incrementar para resetear el prompt
+    const NOTIFICATION_SYSTEM_VERSION = '2'; // v2 = nuevo sistema de Web Push
+    const storedVersion = localStorage.getItem('notification-system-version');
+
+    // Si la versión cambió, resetear el estado de dismissed para mostrar el prompt de nuevo
+    if (storedVersion !== NOTIFICATION_SYSTEM_VERSION) {
+      localStorage.removeItem('pwa-notification-dismissed');
+      localStorage.setItem('notification-system-version', NOTIFICATION_SYSTEM_VERSION);
+    }
+
     // Verificar si los prompts fueron previamente cerrados
     const installDismissed = localStorage.getItem('pwa-install-dismissed') === 'true';
     const notificationDismissed = localStorage.getItem('pwa-notification-dismissed') === 'true';
