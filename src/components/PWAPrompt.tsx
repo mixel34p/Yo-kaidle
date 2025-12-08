@@ -36,28 +36,38 @@ export default function PWAPrompt() {
     setNotificationPromptDismissed(notificationDismissed);
 
     // Check if notifications are supported
-    if ('Notification' in window && !notificationDismissed) {
+    const checkAndShowNotificationPrompt = async () => {
+      if (!('Notification' in window) || notificationDismissed) {
+        return;
+      }
+
       // Si el permiso fue denegado, no mostrar
       if (Notification.permission === 'denied') {
         setShowNotificationPrompt(false);
+        return;
       }
+
       // Si el permiso es 'default' (nunca preguntado), mostrar
-      else if (Notification.permission === 'default') {
+      if (Notification.permission === 'default') {
         setShowNotificationPrompt(true);
+        return;
       }
+
       // Si el permiso es 'granted', verificar si están suscritos al nuevo push
-      else if (Notification.permission === 'granted') {
-        // Verificar si hay suscripción push activa
-        isSubscribedToPush().then((isSubscribed: boolean) => {
-          // Solo mostrar si NO están suscritos al nuevo sistema
-          if (!isSubscribed) {
-            setShowNotificationPrompt(true);
-          } else {
-            setShowNotificationPrompt(false);
-          }
-        });
+      if (Notification.permission === 'granted') {
+        try {
+          const isSubscribed = await isSubscribedToPush();
+          // Mostrar si NO están suscritos al nuevo sistema
+          setShowNotificationPrompt(!isSubscribed);
+        } catch (error) {
+          console.log('[PWAPrompt] Error checking subscription, showing prompt:', error);
+          // En caso de error (ej: dev mode sin SW), mostrar el prompt
+          setShowNotificationPrompt(true);
+        }
       }
-    }
+    };
+
+    checkAndShowNotificationPrompt();
 
     // Handle PWA install prompt
     const handler = (e: Event) => {
