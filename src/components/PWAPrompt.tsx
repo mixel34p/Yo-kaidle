@@ -140,7 +140,7 @@ export default function PWAPrompt() {
   if (!showInstallPrompt && !showNotificationPrompt) return null;
 
   return (
-    <div className="fixed bottom-20 left-4 right-4 z-50 flex flex-col gap-2 sm:bottom-4 md:w-auto md:left-4">
+    <div className="fixed bottom-20 left-4 right-4 z-[9999] flex flex-col gap-2 sm:bottom-4 md:w-auto md:left-4 pointer-events-auto">
       {showInstallPrompt && deferredPrompt && (
         <div className="relative flex items-center justify-center gap-2 px-4 py-3 bg-yellow-400 text-black rounded-lg shadow-lg font-medium">
           <span className="text-xl">📱</span>
