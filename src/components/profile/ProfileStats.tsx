@@ -65,13 +65,13 @@ export default function ProfileStats({ stats, theme }: ProfileStatsProps) {
           {language === 'es'
             ? 'Progreso y logros principales'
             : language === 'it'
-            ? 'Progresso e risultati principali'
-            : 'Main progress and achievements'}
+              ? 'Progresso e risultati principali'
+              : 'Main progress and achievements'}
         </p>
       </div>
 
       {/* Grid de estadísticas - Solo números, sin barras estúpidas */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         {/* Mejor Racha */}
         <div className="bg-gradient-to-br from-yellow-900/50 to-orange-900/50 backdrop-blur-sm rounded-xl p-6 border border-yellow-500/30 shadow-xl text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
@@ -124,6 +124,33 @@ export default function ProfileStats({ stats, theme }: ProfileStatsProps) {
           </div>
           <div className="text-orange-200/70 text-sm font-medium">
             {t.consecutiveDays}
+          </div>
+        </div>
+
+        {/* Partidas Jugadas - NUEVO */}
+        <div className="bg-gradient-to-br from-green-900/50 to-emerald-900/50 backdrop-blur-sm rounded-xl p-6 border border-green-500/30 shadow-xl text-center hover:shadow-2xl transition-all duration-300 hover:scale-105">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <img
+              src="/icons/stats/total-played.png"
+              alt="Partidas Jugadas"
+              className="w-7 h-7"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.innerHTML = '🎮';
+                fallback.className = 'text-green-400 text-xl';
+                e.currentTarget.parentElement!.insertBefore(fallback, e.currentTarget);
+              }}
+            />
+            <h3 className="text-lg font-semibold text-white">
+              {t.gamesPlayed}
+            </h3>
+          </div>
+          <div className="text-4xl font-bold text-green-300 mb-2">
+            {stats.total_played}
+          </div>
+          <div className="text-green-200/70 text-sm font-medium">
+            {language === 'es' ? 'partidas totales' : language === 'it' ? 'partite totali' : 'total games'}
           </div>
         </div>
 
