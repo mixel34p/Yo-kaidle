@@ -36,7 +36,7 @@ export function useSocialStats() {
 
       // Calcular estadísticas públicas (usando los nombres correctos)
       const publicStats = {
-        total_played: gameState?.totalPlayed || 0,
+        total_played: gameState?.dailyStats?.totalPlayed || 0,  // ✅ Corregido: leer de dailyStats
         best_streak: gameState?.maxStreak || 0,  // Corregido: usar maxStreak
         current_streak: gameState?.streak || 0,  // Corregido: usar streak
         yokai_unlocked: yokaiUnlockedCount,

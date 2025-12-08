@@ -321,6 +321,7 @@ interface Translations {
   globalLeaderboards: string;
   bestStreakRanking: string;
   yokaiUnlockedRanking: string;
+  totalPlayedRanking: string;
   leaderboardRank: string;
   leaderboardPlayer: string;
   leaderboardScore: string;
@@ -664,6 +665,7 @@ const translations: Record<Language, Translations> = {
     globalLeaderboards: 'Rankings Globales',
     bestStreakRanking: 'Ranking de Mejor Racha',
     yokaiUnlockedRanking: 'Ranking de Yo-kais Desbloqueados',
+    totalPlayedRanking: 'Ranking de Partidas Jugadas',
     leaderboardRank: 'Puesto',
     leaderboardPlayer: 'Jugador',
     leaderboardScore: 'Puntuación',
@@ -1015,7 +1017,8 @@ const translations: Record<Language, Translations> = {
     // Leaderboard
     globalLeaderboards: 'Global Leaderboards',
     bestStreakRanking: 'Best Streak Ranking',
-    yokaiUnlockedRanking: 'Yo-kai Unlocked Ranking',
+    yokaiUnlockedRanking: 'Yokai Unlocked Ranking',
+    totalPlayedRanking: 'Games Played Ranking',
     leaderboardRank: 'Rank',
     leaderboardPlayer: 'Player',
     leaderboardScore: 'Score',
@@ -1373,6 +1376,7 @@ const translations: Record<Language, Translations> = {
     globalLeaderboards: 'Classifiche Globali',
     bestStreakRanking: 'Classifica Migliore Serie',
     yokaiUnlockedRanking: 'Classifica Yo-kai Sbloccati',
+    totalPlayedRanking: 'Classifica Partite Giocate',
     leaderboardRank: 'Posizione',
     leaderboardPlayer: 'Giocatore',
     leaderboardScore: 'Punteggio',

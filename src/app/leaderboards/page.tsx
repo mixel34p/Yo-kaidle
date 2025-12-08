@@ -15,15 +15,17 @@ interface LeaderboardEntry {
   avatar_frame: string | null;
   best_streak: number;
   yokai_unlocked: number;
+  total_played: number;
   rank: number;
 }
 
 interface LeaderboardData {
   bestStreak: LeaderboardEntry[];
   yokaiUnlocked: LeaderboardEntry[];
+  totalPlayed: LeaderboardEntry[];
 }
 
-type LeaderboardType = 'bestStreak' | 'yokaiUnlocked';
+type LeaderboardType = 'bestStreak' | 'yokaiUnlocked' | 'totalPlayed';
 
 export default function LeaderboardsPage() {
   const router = useRouter();
@@ -33,16 +35,19 @@ export default function LeaderboardsPage() {
   const [activeTab, setActiveTab] = useState<LeaderboardType>('bestStreak');
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData>({
     bestStreak: [],
-    yokaiUnlocked: []
+    yokaiUnlocked: [],
+    totalPlayed: []
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userRanks, setUserRanks] = useState<{
     bestStreak: number | null;
     yokaiUnlocked: number | null;
+    totalPlayed: number | null;
   }>({
     bestStreak: null,
-    yokaiUnlocked: null
+    yokaiUnlocked: null,
+    totalPlayed: null
   });
 
   // Cargar datos de leaderboards
@@ -71,10 +76,20 @@ export default function LeaderboardsPage() {
 
         if (yokaiError) throw yokaiError;
 
+        const { data: totalPlayedStats, error: totalPlayedError } = await supabase
+          .from('user_stats')
+          .select('id, total_played')
+          .order('total_played', { ascending: false })
+          .gt('total_played', 0)
+          .limit(50);
+
+        if (totalPlayedError) throw totalPlayedError;
+
         // Obtener todos los IDs únicos de usuarios
         const allUserIds = Array.from(new Set([
           ...bestStreakStats.map(s => s.id),
-          ...yokaiStats.map(s => s.id)
+          ...yokaiStats.map(s => s.id),
+          ...totalPlayedStats.map(s => s.id)
         ]));
 
         // Cargar perfiles de todos los usuarios
@@ -103,6 +118,7 @@ export default function LeaderboardsPage() {
               avatar_frame: profile.avatar_frame,
               best_streak: entry.best_streak,
               yokai_unlocked: 0,
+              total_played: 0,
               rank: index + 1
             };
           })
@@ -121,6 +137,26 @@ export default function LeaderboardsPage() {
               avatar_frame: profile.avatar_frame,
               best_streak: 0,
               yokai_unlocked: entry.yokai_unlocked,
+              total_played: 0,
+              rank: index + 1
+            };
+          })
+          .filter(entry => entry !== null) as LeaderboardEntry[];
+
+        // Procesar datos de total played con JOIN manual
+        const processedTotalPlayed: LeaderboardEntry[] = totalPlayedStats
+          .map((entry, index) => {
+            const profile = profilesMap.get(entry.id);
+            if (!profile) return null;
+
+            return {
+              id: entry.id,
+              username: profile.username,
+              avatar_url: profile.avatar_url,
+              avatar_frame: profile.avatar_frame,
+              best_streak: 0,
+              yokai_unlocked: 0,
+              total_played: entry.total_played,
               rank: index + 1
             };
           })
@@ -128,17 +164,20 @@ export default function LeaderboardsPage() {
 
         setLeaderboardData({
           bestStreak: processedBestStreak,
-          yokaiUnlocked: processedYokaiUnlocked
+          yokaiUnlocked: processedYokaiUnlocked,
+          totalPlayed: processedTotalPlayed
         });
 
         // Calcular ranking del usuario actual
         if (user) {
           const bestStreakRank = processedBestStreak.findIndex(entry => entry.id === user.id) + 1;
           const yokaiRank = processedYokaiUnlocked.findIndex(entry => entry.id === user.id) + 1;
+          const totalPlayedRank = processedTotalPlayed.findIndex(entry => entry.id === user.id) + 1;
 
           setUserRanks({
             bestStreak: bestStreakRank > 0 ? bestStreakRank : null,
-            yokaiUnlocked: yokaiRank > 0 ? yokaiRank : null
+            yokaiUnlocked: yokaiRank > 0 ? yokaiRank : null,
+            totalPlayed: totalPlayedRank > 0 ? totalPlayedRank : null
           });
         }
 
@@ -241,6 +280,16 @@ export default function LeaderboardsPage() {
             <Star size={16} className="sm:w-5 sm:h-5" />
             <span className="text-sm sm:text-base">{t.yokaiUnlockedRanking}</span>
           </button>
+          <button
+            onClick={() => setActiveTab('totalPlayed')}
+            className={`flex items-center gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg transition-all duration-200 ${activeTab === 'totalPlayed'
+              ? 'bg-green-600 text-white shadow-lg'
+              : 'text-white/70 hover:text-white hover:bg-blue-800/50'
+              }`}
+          >
+            <User size={16} className="sm:w-5 sm:h-5" />
+            <span className="text-sm sm:text-base">{t.totalPlayedRanking}</span>
+          </button>
         </div>
       </div>
 
@@ -305,10 +354,18 @@ export default function LeaderboardsPage() {
                 {/* Score */}
                 <div className="flex-shrink-0 text-right">
                   <div className="text-lg sm:text-2xl font-bold text-white">
-                    {activeTab === 'bestStreak' ? entry.best_streak : entry.yokai_unlocked}
+                    {activeTab === 'bestStreak'
+                      ? entry.best_streak
+                      : activeTab === 'yokaiUnlocked'
+                        ? entry.yokai_unlocked
+                        : entry.total_played}
                   </div>
                   <div className="text-white/60 text-xs sm:text-sm">
-                    {activeTab === 'bestStreak' ? t.consecutiveDays : 'Yo-kais'}
+                    {activeTab === 'bestStreak'
+                      ? t.consecutiveDays
+                      : activeTab === 'yokaiUnlocked'
+                        ? 'Yo-kais'
+                        : t.gamesPlayed}
                   </div>
                 </div>
               </div>
