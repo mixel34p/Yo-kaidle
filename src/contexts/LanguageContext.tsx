@@ -735,7 +735,39 @@ const translations: Record<Language, Translations> = {
     previewProfile: 'Vista Previa del Perfil',
     badges: 'Insignias',
     selectBadges: 'Seleccionar Insignias',
-    noBadgesSelected: 'Sin insignias seleccionadas'
+    noBadgesSelected: 'Sin insignias seleccionadas',
+
+    // Achievements Panel UI
+    uncompletedAchievements: 'Sin Completar',
+    completedAchievements: 'Completados',
+    allCategories: 'Todos',
+    collectionCategory: 'Colección',
+    tribesCategory: 'Tribus',
+    gamesCategory: 'Juegos',
+    ranksCategory: 'Rangos',
+    specialCategory: 'Especiales',
+    achievementUncompleted: 'Sin Completar',
+    achievementCompleted: 'Completado',
+    noAchievementsUncompleted: 'No tienes logros sin completar',
+    noAchievementsCompleted: 'No tienes logros completados aún',
+    reward: 'Recompensa',
+    achievementProgress: 'Progreso de Logros',
+    totalPoints: 'Puntos Totales',
+    achievementStats: 'Estadísticas de Logros',
+    keepPlayingToUnlock: '¡Sigue jugando para desbloquear logros!',
+    allAchievementsUnlocked: '¡Has desbloqueado todos los logros de esta categoría!',
+    noLockedAchievements: 'No hay más logros por desbloquear en esta categoría',
+    achievements: 'Logros',
+    completed: 'Completado',
+    earned: 'Ganados',
+    total: 'Total',
+    points: 'Puntos',
+    claimReward: 'Reclamar',
+    claimed: 'Reclamado',
+    hints: 'Ayudas',
+    usePointsToGetHints: 'Usa puntos para obtener pistas',
+    insufficientPoints: 'Puntos insuficientes',
+    used: 'Usado'
   },
   en: {
     appTitle: 'Yo-kaidle',
@@ -1111,7 +1143,7 @@ const translations: Record<Language, Translations> = {
     previewProfile: 'Profile Preview',
     badges: 'Badges',
     selectBadges: 'Select Badges',
-    noBadgesSelected: 'No badges selected'
+    noBadgesSelected: 'No badges selected',
   },
   it: {
     appTitle: 'Yo-kaidle',
@@ -1357,8 +1389,7 @@ const translations: Record<Language, Translations> = {
     perDay: 'al giorno',
     noRecentActivity: 'Nessuna attività recente',
     remainingToComplete: 'Rimanenti',
-    firstYokai: 'Primo Yo-kai',
-    lastYokai: 'Ultimo Yo-kai',
+
 
     // Achievements Panel UI
     uncompletedAchievements: 'Non Completati',
@@ -1494,7 +1525,7 @@ const translations: Record<Language, Translations> = {
     previewProfile: 'Anteprima Profilo',
     badges: 'Distintivi',
     selectBadges: 'Seleziona Distintivi',
-    noBadgesSelected: 'Nessun distintivo selezionato'
+    noBadgesSelected: 'Nessun distintivo selezionato',
   }
 };
 
