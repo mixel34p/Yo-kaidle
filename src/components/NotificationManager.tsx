@@ -2,121 +2,94 @@
 
 import { useEffect, useRef } from 'react';
 import { getTodayDateString } from '@/utils/gameLogic';
+import {
+  subscribeToPush,
+  isSubscribedToPush,
+  updateSubscriptionActivity,
+  isPushSupported
+} from '@/utils/pushManager';
 
 export default function NotificationManager() {
-  const lastNotificationDate = useRef<string | null>(null);
+  const lastActivityUpdate = useRef<string | null>(null);
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    // Registrar el service worker y configurar notificaciones
-    if ('serviceWorker' in navigator && 'Notification' in window) {
-      navigator.serviceWorker.ready.then((registration) => {
-        // Si las notificaciones están permitidas, programar notificaciones diarias
-        if (Notification.permission === 'granted') {
-          scheduleNotifications(registration);
-          checkForNewDayNotification();
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
+    const initializePush = async () => {
+      // Check if push is supported
+      if (!isPushSupported()) {
+        console.log('[NotificationManager] Push not supported');
+        return;
+      }
+
+      // If permission is granted, ensure we're subscribed
+      if (Notification.permission === 'granted') {
+        const isSubscribed = await isSubscribedToPush();
+
+        if (!isSubscribed) {
+          // Try to subscribe (will save to Supabase)
+          console.log('[NotificationManager] Re-subscribing to push...');
+          await subscribeToPush();
+        } else {
+          // Update activity timestamp
+          const today = getTodayDateString();
+          if (lastActivityUpdate.current !== today) {
+            await updateSubscriptionActivity();
+            lastActivityUpdate.current = today;
+          }
         }
-      });
-    }
+      }
+    };
 
-    // Verificar cada minuto si hay un nuevo día
-    const interval = setInterval(checkForNewDayNotification, 60000);
-
-    return () => clearInterval(interval);
+    initializePush();
   }, []);
 
-  const scheduleNotifications = (registration: ServiceWorkerRegistration) => {
-    // Enviar mensaje al service worker para programar notificaciones
-    if (registration.active) {
-      registration.active.postMessage({
-        type: 'SCHEDULE_DAILY_NOTIFICATION'
-      });
-    }
-  };
-
-  const checkForNewDayNotification = async () => {
-    const today = getTodayDateString();
-
-    // Solo enviar notificación si las notificaciones están permitidas y es un nuevo día
-    if (Notification.permission === 'granted' && lastNotificationDate.current !== today) {
-      const now = new Date();
-
-      // Enviar notificación a las 9:00 AM (con margen de 30 minutos)
-      if (now.getHours() === 9 && now.getMinutes() < 30) {
-        await showNewDayNotification();
-        lastNotificationDate.current = today;
-      }
-    }
-  };
-
-  const showNewDayNotification = async () => {
-    try {
-      if ('serviceWorker' in navigator) {
-        const registration = await navigator.serviceWorker.ready;
-        await registration.showNotification('¡Nuevo Yo-kai disponible!', {
-          body: '¡Un nuevo desafío diario te espera! ¿Podrás adivinar el Yo-kai de hoy?',
-          icon: '/icons/icon-192.png',
-          badge: '/icons/icon-192.png',
-          tag: 'daily-yokai',
-          requireInteraction: false,
-          data: {
-            url: '/',
-            timestamp: Date.now(),
-            type: 'daily-yokai'
-          }
-        });
-      }
-    } catch (error) {
-      console.error('Error showing new day notification:', error);
-    }
-  };
-
-  // Este componente no renderiza nada, solo maneja la lógica
+  // This component doesn't render anything
   return null;
 }
 
-// Función utilitaria para solicitar permisos de notificación
+/**
+ * Request notification permission and subscribe to push
+ * This is the main function to call when user clicks "Enable notifications"
+ */
 export const requestNotificationPermission = async (): Promise<NotificationPermission> => {
-  if (!('Notification' in window)) {
-    throw new Error('Este navegador no soporta notificaciones');
+  if (!isPushSupported()) {
+    throw new Error('Este navegador no soporta notificaciones push');
   }
 
+  // If already granted, just return
   if (Notification.permission === 'granted') {
+    // Ensure we're subscribed
+    await subscribeToPush();
     return 'granted';
   }
 
+  // If denied, return without asking again
   if (Notification.permission === 'denied') {
     return 'denied';
   }
 
+  // Request permission
   const permission = await Notification.requestPermission();
 
-  if (permission === 'granted' && 'serviceWorker' in navigator) {
-    // Programar notificaciones cuando se conceden los permisos
-    navigator.serviceWorker.ready.then((registration) => {
-      if (registration.active) {
-        registration.active.postMessage({
-          type: 'SCHEDULE_DAILY_NOTIFICATION'
-        });
-      }
-    });
+  // If granted, subscribe to push
+  if (permission === 'granted') {
+    const subscription = await subscribeToPush();
+    if (subscription) {
+      console.log('[NotificationManager] Successfully subscribed to push notifications');
+    } else {
+      console.warn('[NotificationManager] Permission granted but failed to subscribe');
+    }
   }
 
   return permission;
 };
 
-// Función para cancelar notificaciones
-export const cancelNotifications = async (): Promise<void> => {
-  if ('serviceWorker' in navigator) {
-    const registration = await navigator.serviceWorker.ready;
-    if (registration.active) {
-      registration.active.postMessage({
-        type: 'CANCEL_DAILY_NOTIFICATION'
-      });
-    }
-  }
-};
-
-// Función para mostrar una notificación de prueba
+/**
+ * Show a test notification to verify push is working
+ */
 export const showTestNotification = async (): Promise<void> => {
   if (Notification.permission !== 'granted') {
     throw new Error('Los permisos de notificación no están concedidos');
@@ -125,7 +98,7 @@ export const showTestNotification = async (): Promise<void> => {
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.ready;
     await registration.showNotification('¡Notificación de prueba!', {
-      body: 'Las notificaciones están funcionando correctamente 🎮',
+      body: 'Las notificaciones push están funcionando correctamente 🎮',
       icon: '/icons/icon-192.png',
       badge: '/icons/icon-192.png',
       tag: 'test-notification',
@@ -136,4 +109,12 @@ export const showTestNotification = async (): Promise<void> => {
       }
     });
   }
+};
+
+/**
+ * Cancel/unsubscribe from push notifications
+ */
+export const cancelNotifications = async (): Promise<void> => {
+  const { unsubscribeFromPush } = await import('@/utils/pushManager');
+  await unsubscribeFromPush();
 };
