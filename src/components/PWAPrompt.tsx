@@ -12,12 +12,14 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function PWAPrompt() {
+  console.log('[PWAPrompt] Component mounted!');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(true); // FORZADO A TRUE PARA DEBUG
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [installPromptDismissed, setInstallPromptDismissed] = useState(false);
   const [notificationPromptDismissed, setNotificationPromptDismissed] = useState(false);
   useEffect(() => {
+    console.log('[PWAPrompt] useEffect running!');
     // Versión del sistema de notificaciones - incrementar para resetear el prompt
     const NOTIFICATION_SYSTEM_VERSION = '2'; // v2 = nuevo sistema de Web Push
     const storedVersion = localStorage.getItem('notification-system-version');
