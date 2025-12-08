@@ -68,13 +68,13 @@ export default function FeedbackPanel() {
   // Deshabilitar scroll cuando el modal está abierto
   React.useEffect(() => {
     if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+
+      return () => {
+        document.body.style.overflow = originalOverflow || '';
+      };
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   const handleInputChange = (
