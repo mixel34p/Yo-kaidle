@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { requestNotificationPermission, showTestNotification } from './NotificationManager';
+import { isSubscribedToPush } from '@/utils/pushManager';
 import { X } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -34,12 +35,27 @@ export default function PWAPrompt() {
     setInstallPromptDismissed(installDismissed);
     setNotificationPromptDismissed(notificationDismissed);
 
-    // Check if notifications are supported and not already granted
+    // Check if notifications are supported
     if ('Notification' in window && !notificationDismissed) {
-      if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-        setShowNotificationPrompt(true);
-      } else {
+      // Si el permiso fue denegado, no mostrar
+      if (Notification.permission === 'denied') {
         setShowNotificationPrompt(false);
+      }
+      // Si el permiso es 'default' (nunca preguntado), mostrar
+      else if (Notification.permission === 'default') {
+        setShowNotificationPrompt(true);
+      }
+      // Si el permiso es 'granted', verificar si están suscritos al nuevo push
+      else if (Notification.permission === 'granted') {
+        // Verificar si hay suscripción push activa
+        isSubscribedToPush().then((isSubscribed: boolean) => {
+          // Solo mostrar si NO están suscritos al nuevo sistema
+          if (!isSubscribed) {
+            setShowNotificationPrompt(true);
+          } else {
+            setShowNotificationPrompt(false);
+          }
+        });
       }
     }
 
