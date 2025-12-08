@@ -110,8 +110,12 @@ export default function PWAPrompt() {
     setDeferredPrompt(null);
   };
   const handleNotificationPermission = async () => {
+    console.log('[PWAPrompt] handleNotificationPermission called!');
+    alert('Botón pulsado! Solicitando permisos...');
+
     try {
       const permission = await requestNotificationPermission();
+      console.log('[PWAPrompt] Permission result:', permission);
 
       if (permission === 'granted') {
         toast.success('¡Notificaciones activadas! Te avisaremos cuando haya un nuevo Yo-kai diario 🔔');
@@ -127,6 +131,7 @@ export default function PWAPrompt() {
       }
     } catch (err) {
       console.error('Error al solicitar permisos:', err);
+      alert('Error: ' + (err as Error).message);
       toast.error('Error al configurar las notificaciones');
     }
   };
