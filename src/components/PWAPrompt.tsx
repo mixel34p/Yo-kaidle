@@ -14,7 +14,7 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAPrompt() {
   console.log('[PWAPrompt] Component mounted!');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showNotificationPrompt, setShowNotificationPrompt] = useState(true); // FORZADO A TRUE PARA DEBUG
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false); // DESHABILITADO
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [installPromptDismissed, setInstallPromptDismissed] = useState(false);
   const [notificationPromptDismissed, setNotificationPromptDismissed] = useState(false);
@@ -32,44 +32,12 @@ export default function PWAPrompt() {
 
     // Verificar si los prompts fueron previamente cerrados
     const installDismissed = localStorage.getItem('pwa-install-dismissed') === 'true';
-    const notificationDismissed = localStorage.getItem('pwa-notification-dismissed') === 'true';
 
     setInstallPromptDismissed(installDismissed);
-    setNotificationPromptDismissed(notificationDismissed);
 
-    // Check if notifications are supported
-    const checkAndShowNotificationPrompt = async () => {
-      if (!('Notification' in window) || notificationDismissed) {
-        return;
-      }
+    // PROMPT DE NOTIFICACIONES DESHABILITADO
+    // El estado inicial es false, así que nunca se mostrará
 
-      // Si el permiso fue denegado, no mostrar
-      if (Notification.permission === 'denied') {
-        setShowNotificationPrompt(false);
-        return;
-      }
-
-      // Si el permiso es 'default' (nunca preguntado), mostrar
-      if (Notification.permission === 'default') {
-        setShowNotificationPrompt(true);
-        return;
-      }
-
-      // Si el permiso es 'granted', verificar si están suscritos al nuevo push
-      if (Notification.permission === 'granted') {
-        try {
-          const isSubscribed = await isSubscribedToPush();
-          // Mostrar si NO están suscritos al nuevo sistema
-          setShowNotificationPrompt(!isSubscribed);
-        } catch (error) {
-          console.log('[PWAPrompt] Error checking subscription, showing prompt:', error);
-          // En caso de error (ej: dev mode sin SW), mostrar el prompt
-          setShowNotificationPrompt(true);
-        }
-      }
-    };
-
-    checkAndShowNotificationPrompt();
 
     // Handle PWA install prompt
     const handler = (e: Event) => {
