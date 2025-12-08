@@ -1,1675 +1,839 @@
 {
-
-"tribes": {
-
-"Charming": "Charming",
-
-"Mysterious": "Mysterious",
-
-"Tough": "Tough",
-
-"Heartful": "Heartful",
-
-"Shady": "Shady",
-
-"Eerie": "Eerie",
-
-"Slippery": "Slippery",
-
-"Wicked": "Wicked",
-
-"Boss": "Boss",
-
-"Enma": "Enma",
-
-"Brave": "Brave",
-
-"Wandroid": "Wandroid"
-
-},
-
-"elements": {
-
-"Fire": "Fire",
-
-"Water": "Water",
-
-"Lightning": "Lightning",
-
-"Earth": "Earth",
-
-"Wind": "Wind",
-
-"Ice": "Ice",
-
-"Drain": "Drain",
-
-"Restoration": "Restoration",
-
-"None": "None"
-
-},
-
-"foods": {
-
-"Rice Balls": "Rice Balls",
-
-"Bread": "Bread",
-
-"Candy": "Candy",
-
-"Milk": "Milk",
-
-"Juice": "Juice",
-
-"Hamburgers": "Hamburgers",
-
-"Chinese Food": "Chinese Food",
-
-"Ramen": "Ramen",
-
-"Veggies": "Veggies",
-
-"Meat": "Meat",
-
-"Seafood": "Seafood",
-
-"Sushi": "Sushi",
-
-"Curry": "Curry",
-
-"Sweets": "Sweets",
-
-"Doughnuts": "Doughnuts",
-
-"Donuts": "Donuts",
-
-"Oden": "Oden",
-
-"Soba": "Soba",
-
-"Snacks": "Snacks",
-
-"Chocobars": "Chocobars",
-
-"Ice Cream": "Ice Cream",
-
-"Pizza": "Pizza",
-
-"Hot Dogs": "Hot Dogs",
-
-"Pasta": "Pasta",
-
-"Tempura": "Tempura",
-
-"Sushi-Tempura": "Sushi-Tempura",
-
-"Sukiyaki": "Sukiyaki",
-
-"Mega Tasty Bars": "Mega Tasty Bars",
-
-"None": "None"
-
-},
-
-"names": {
-
-"Abuflauta": "Greengramps",
-
-"Abuflorido": "Elder Bloom",
-
-"Aburroz": "Grainpa",
-
-"Abuspléndido": "Flash T. Cash",
-
-"Abuzampa": "Hungramps",
-
-"Abuzampa XXL": "Supersize Gramps",
-
-"Acelgo": "Herbiboy",
-
-"Adoleszombi": "Zomboy",
-
-"Afronauta": "Afronaut",
-
-"Agorerana": "Whinona",
-
-"Agujeto": "Payn",
-
-"Akusika": "Snitchin",
-
-"Alarción": "Skreek",
-
-"Albornocita Azul": "Lil Blue Bathing Hood",
-
-"Alcaldero": "Pandle",
-
-"Algacabana": "Kelpacabana",
-
-"Alga Senséi": "Seaweed Sensei",
-
-"Algazara": "Lafalotta",
-
-"Algio": "Ake",
-
-"Almirante Admirable": "Admirable Admiral",
-
-"Alpina": "Alpina",
-
-"Amarguito": "Glumdango",
-
-"Amarilia": "Grubbles",
-
-"Ambivalencio": "Shakey",
-
-"Ambrosio": "Verygoodsir",
-
-"Ángel Garudián": "Tengulightened",
-
-"Anguilocio": "Time Keeler",
-
-"Angustiánima": "Sunk’nsoul",
-
-"Animanstruo": "Massiface",
-
-"Anjijila": "Heheheel",
-
-"Apanleado": "Buttered Blue",
-
-"Apelicano": "Apelican",
-
-"Apéstula": "Badsmella",
-
-"Aracne": "Arachnia",
-
-"Aracnéfico": "Arachnevil",
-
-"Aracnio": "Arachnus",
-
-"Aranecido": "Danke Sand",
-
-"Arenito": "Sandmeh",
-
-"Arfidio": "Slitheref",
-
-"Argenta": "Gin",
-
-"Arrocet": "Cereal Spiller",
-
-"Arruñona": "Grumples",
-
-"Asnyan": "Acenyan",
-
-"Aterracota": "Terrorpotta",
-
-"Aterrahorror": "Madmunch",
-
-"Atierrador": "Mudmunch",
-
-"Áurea": "Kin",
-
-"Aureonyan": "Goldenyan",
-
-"Aureosqueleto": "Goldy Bones",
-
-"Auxiliadora": "Got It Maid",
-
-"Avarqueroso": "Greesel",
-
-"Aviguito Pío": "Letsbifrenz",
-
-"Ayay": "Buhu",
-
-"Aydroide Y": "Sighborg Y",
-
-"Aymadrilo": "OMGator",
-
-"B3-NK1": "B3-NK1",
-
-"Babamandra": "Silmamander",
-
-"Baku": "Baku",
-
-"Ballenato": "Narwail",
-
-"Barbacoo": "BBQvil",
-
-"Bastenyan": "Bastnetnyan",
-
-"Batallitos": "Papa Windbag",
-
-"Bateadós": "Slugger",
-
-"Bebesaurio": "T-Wrecks",
-
-"Belcefibio": "Toadal Demon",
-
-"Belladona": "Everfore",
-
-"BellónZ": "Krystal Fox",
-
-"Bellotieso": "Bellotieso",
-
-"Benkei": "Benkei",
-
-"Benzaiten": "Benzaiten",
-
-"Berenpenas": "Neggplant",
-
-"Bergantín": "SV Snaggerjag",
-
-"Bilgatino": "Indexter",
-
-"Bishamonten": "Bishamonten",
-
-"Blancacone": "Snow Spect-hare",
-
-"Blanpir": "Whapir",
-
-"Bola Blanda": "Goofball",
-
-"Bolilete": "Rollen",
-
-"Bolsadrón": "Gimme",
-
-"Boquirroto": "Spenp",
-
-"Borjamar": "Shellebrity",
-
-"Bóvida": "Moolinda",
-
-"Bronquereta": "Firewig",
-
-"Brownilda": "Petty-Cake",
-
-"Buchinyan": "Buchinyan",
-
-"Caballero Hueco": "Hollow Guard",
-
-"Cachaslote": "Whaleman",
-
-"Cachocarne": "Chicken Chukket",
-
-"Cafechucho": "Puppiccino",
-
-"Cafeíno": "Allnyta",
-
-"Calabilidoso": "Skillskull",
-
-"Calarrupto": "Squisker",
-
-"Calaveroscopio": "Skulleidoscope",
-
-"Caldewok": "Wobblewok",
-
-"Calmarinero": "Shipshape Sailor",
-
-"Camelia": "Camellia",
-
-"Camorro": "Agent X",
-
-"Camperabajo": "Beetall",
-
-"Cantacólito": "Chirpolyte",
-
-"Cantaderna": "Chirpster",
-
-"Cantigarra": "Singcada",
-
-"Cantonio": "Manjimutt",
-
-"Capi-Cachas": "Sgt. Burly ",
-
-"Capipalante": "Cap’n Rex",
-
-"Capitán Botín": "Plundros",
-
-"Capitán Nublo": "Silver Lining",
-
-"Capitán Penas": "Cap’n Crash",
-
-"Capitán Rayo": "Captain Thunder",
-
-"Caporrista": "Badude",
-
-"Cardado": "Feargus",
-
-"Cartairada": "Love-Torn",
-
-"Cartepollo": "Peckpocket",
-
-"Casanono": "Casanono",
-
-"Casanovo": "Casanuva",
-
-"Cascarito": "Unshelltered",
-
-"Caseriélago": "Abodabat",
-
-"Castelius I": "Castelius I",
-
-"Castelius II": "Castelius II",
-
-"Castelius III": "Castelius III",
-
-"Cazamentires": "Ogralus",
-
-"Cazarrayos": "Frazzel",
-
-"Cellisca": "Drizzelda",
-
-"Chafarabajo": "Cruncha",
-
-"Chafarina": "Spoilerina",
-
-"Chancleto": "Pittapatt",
-
-"Chapulín": "Hoppy-go-Lucky",
-
-"Charlatón": "Charlatón",
-
-"Chatárrenstein": "Babblong",
-
-"Chef Ricote": "Yellskitchen",
-
-"Chíclope": "Boyclops",
-
-"Chocobonyan": "Chocobonyan",
-
-"Chocovaca": "Chilled Cowcao",
-
-"Chunda y Tachunda": "In-Tune",
-
-"Chupapremios": "Lappinitup",
-
-"Chupatinas": "Tublappa",
-
-"Chupatodo": "Grublappa",
-
-"Chupatricio": "Alicktokat",
-
-"Ciclomán": "Deadcool",
-
-"Ciclonojo": "Torneyedo",
-
-"Cicluracan": "Eyeclone",
-
-"Cimbalina": "Cymbalina",
-
-"Cimbrón": "Wiglin",
-
-"Cinisierpe": "Cynake",
-
-"Cisnia": "Lady Longnek",
-
-"Clicán": "Push Pup",
-
-"Clipso": "Clipso",
-
-"Coagulón": "Gush",
-
-"Coberturo": "Signiton",
-
-"Cobravil": "Snidewinder",
-
-"Cocó Masiel": "Jeanne Ne-Sais-Quoi",
-
-"Cofre Cafre": "Treasure Pest",
-
-"Coman-Cachas": "Bison Burly ",
-
-"Conde Caries": "Count Cavity",
-
-"Condespótico": "Decidevible",
-
-"Coneagente": "Agent Spect-hare",
-
-"Contentallo": "Happycane",
-
-"Contrarioni": "Contrarioni",
-
-"Copo": "Slush",
-
-"Corbapacasa": "Tie-red",
-
-"Cortarroz": "Slicenrice",
-
-"Cotilleja": "Tattletell",
-
-"Cotiterror": "Tattleterror",
-
-"Cremaligno": "Whisped Cream",
-
-"Cremallero": "Zip Unlock",
-
-"Cuernarabajo": "Hornaplenty",
-
-"Cuesco": "Cheeksqueek",
-
-"Cupístolo": "Cupistol",
-
-"Curaníscala": "Nurse Tongus",
-
-"Cutremomia": "Crummy Mummy",
-
-"Dabombo": "Pergushin",
-
-"Dádivo": "Ol’ Fortune",
-
-"Daikokuten": "Daikokuten",
-
-"Dámona": "Damona",
-
-"Dandiniche": "Dandoodle",
-
-"Dargüin": "Starwin",
-
-"Darknyan": "Darknyan",
-
-"Demoniorco": "Orcanos",
-
-"Demoniorcólito": "Orcalyte",
-
-"Demoniorco Lu Bu": "Orcanos Lu Bu",
-
-"Deporchugo": "Sweattuce",
-
-"Deprisquito": "Moskevil",
-
-"Desaranecido": "No Sandkyu",
-
-"Desinverest": "Whateverest",
-
-"Deslumbrella": "Dazzabel",
-
-"Desolvidador": "Flushback",
-
-"Destrozasaurio": "D-Stroy",
-
-"Destrukto": "Unkeen",
-
-"Devoralmas": "Devourer",
-
-"Devoramonios": "Demuncher",
-
-"Dex Cápito": "Ed Zoff",
-
-"Diablés": "Awevil",
-
-"Diamanqueleto": "Glitzy Bones",
-
-"Diamanyan": "Dianyan",
-
-"Diávolo": "The Executor",
-
-"Diez de Komajiro": "Komajiro Ten",
-
-"Discursi": "Gabby",
-
-"Divamarina": "Princess Pearl",
-
-"Doblilete": "Dubbles",
-
-"Domiplof": "Bowminos",
-
-"Don Arenito": "Mister Sandmeh",
-
-"Don Aureone": "The Goldfather",
-
-"Doncella de la Ruina": "Maiden Ruin",
-
-"Donchan": "Don Chan",
-
-"Don Cospirazione": "Don Spiracy",
-
-"Don Crueleone": "The Ghoulfather",
-
-"Don Despacito": "Snailspace",
-
-"Don Kaldo": "Master Oden",
-
-"Dorantúo": "Gilgaros",
-
-"Dormidomingo": "Lazy Sundae",
-
-"Dormileón": "Lie-in",
-
-"Dortre": "Gleam",
-
-"Dracunyan": "Dracunyan",
-
-"Dradorado": "El Dorago",
-
-"Dragón Azur": "Azure Dragon",
-
-"Draquí": "Draggie",
-
-"Dr. Majarov": "Dr. Maddiman",
-
-"Dr. Nihil Listo": "Dr. E. Raser",
-
-"Dr. Nocturnia": "Dr. Nocturne",
-
-"Dr. Sintripas": "Dr. Nogut",
-
-"Duocólito": "Duolyte",
-
-"Duoleta": "Duwheel",
-
-"Duque Lametodo": "Duke Drooly",
-
-"Ebisu": "Ebisu",
-
-"Educoso": "Teducator",
-
-"Ejemtos": "Coughkoff",
-
-"El Carnicero": "Soulcleaver",
-
-"Eleganfibio": "Toadal Dude",
-
-"Elúho": "Elloo",
-
-"Embajador Fabuloso": "Gorgeous Ambassador",
-
-"Emperador Rosa": "Pink Emperor",
-
-"Enciélago": "Hidabat",
-
-"Eneposa": "Enefly",
-
-"Enerposa": "Enerfly",
-
-"Enma Ancestral": "Ancient Enma",
-
-"Enma Infinito": "Infinite Enma",
-
-"Enma Solar": "Solar Enma",
-
-"Enma Umbrío": "Umbral Enma",
-
-"Enormarabajo": "Rhinormous",
-
-"Envelo": "Wydeawake",
-
-"Equinio": "Neighthan",
-
-"Erizlor": "Hurchin",
-
-"Ermiciélago": "Belfree",
-
-"Escanlofrío": "Pupsicle",
-
-"Eskakeo": "Ben Tover",
-
-"Esmaltina": "Pearly White",
-
-"Esmenyan": "Emenyan",
-
-"Espaoi": "K’mon-K’mon",
-
-"Espayá": "Tut ‘n’ K’mon",
-
-"Espe": "Tomorrow Gal",
-
-"Espinyan": "Thornyan",
-
-"Esquelebella": "Skelebella",
-
-"Esquelleja": "Skranny",
-
-"Estatinarca": "Statiking",
-
-"Estatiniño": "Statikid",
-
-"Estigio VI": "Styx Mk.VI",
-
-"Estrenoko": "Starry Noko",
-
-"Estréquito": "Squeeky",
-
-"Eterna": "Eterna",
-
-"Exitio": "Legsit",
-
-"Explotacota": "Blownhistoppa",
-
-"Expresso": "Headasteam",
-
-"Faisanyan": "Pheasanyan",
-
-"Falsillo": "Failian",
-
-"Fantasfitriona": "Ghostess",
-
-"Fantasmurái": "Phantasmurai",
-
-"Felisonte": "Happierre",
-
-"Fenixtelecto": "The Hinix",
-
-"Fiestuki": "House Partay",
-
-"Filete II": "Steaking",
-
-"Flamileón": "Blazion",
-
-"Flamngu": "Flengu",
-
-"Flautiscólito": "Slackolyte",
-
-"Flautista de Malmelín": "Slackerjack",
-
-"Flequipilante": "Hairum Scarum",
-
-"Florentina": "Bubble Beth",
-
-"Florinoko": "Bloominoko",
-
-"Flus": "Swosh",
-
-"Foliculio": "Furdinand",
-
-"Fracaguas": "Brokenbrella",
-
-"Fracalavero": "Nummskull",
-
-"Frauduralla": "Judgebrick",
-
-"Fresanyan": "Strawbnyan",
-
-"Frihuahua": "Chilhuahua",
-
-"Frikigarto": "Uber Geeko",
-
-"Fristina": "Frostina",
-
-"Frivolia": "Snobetty",
-
-"Frustrolillo": "Wack o’ Lantern",
-
-"Fukurokuju": "Fukurokuju",
-
-"Fulgurilla": "Little Charrmer",
-
-"Furtre": "Snee",
-
-"Gambulloso": "Pride Shrimp",
-
-"Gamero": "Yo-kaiju",
-
-"Gargantúo": "Gargaros",
-
-"Gargazampa": "Hungorge",
-
-"Gatallanes": "Kittylumbus",
-
-"Gatóbal Colón": "Columbakat",
-
-"Gememinencias": "Right Brothers",
-
-"Genedáver": "Corptain",
-
-"Globonauta": "Hot Air Buffoon",
-
-"Globqueo": "Blowkade",
-
-"Globtundente": "Ledballoon",
-
-"Gogonzalo": "Fundango",
-
-"Goto": "Droplette",
-
-"Graciosno": "Compunzer",
-
-"Grafilcebú": "Roughgraff",
-
-"Gran Coco": "Brutle",
-
-"Gran Enma": "Lord Enma",
-
-"Gran Enma Iluminado": "Lord Enma Awoken",
-
-"Granizia": "Blizzaria",
-
-"Gran Mangu": "Master Nyada",
-
-"Gran Nomi": "High Gnomey",
-
-"Gran Sabueso": "Hardy Hound",
-
-"Grazi": "Blizzie",
-
-"Gruñón Khan": "Groupus Khan",
-
-"Guerrero Güey": "El Gutso",
-
-"Habilgarra": "Cadable",
-
-"Hazlotu": "Yoodooit",
-
-"Hermanión": "Bruff",
-
-"Herrato": "Misterr Typoo",
-
-"Hierodista": "Injurnalist",
-
-"Hilarión": "Lamedian",
-
-"Horrogenio": "Horridjinn",
-
-"Horterraro": "Flumpy",
-
-"Hotei": "Hotei",
-
-"Hovernyan": "Hovernyan",
-
-"Hovernyan Cao Cao": "Hovernyan Cao Cao",
-
-"Hovernyan S": "Hovernyan S",
-
-"Huracán Güey": "El Gutso Grande",
-
-"Ícarus": "IcarOS",
-
-"Ido": "Daiz",
-
-"Ilúho": "Illoo",
-
-"Iluminazén": "The Zenlightener",
-
-"Iluminocto": "Illuminoct",
-
-"Ilusionisto": "Hoaxy-Coaxy",
-
-"Impás": "Impass",
-
-"Implacablio": "Untidy",
-
-"Inaguantablio": "Unpleasant",
-
-"Indeciguro": "Ponderoo",
-
-"Indiligencio": "No-Go Kart",
-
-"Infinitio": "Infinipea",
-
-"Ingenio": "Comic Genieus",
-
-"Injustio": "Unfairy",
-
-"Inquielifante": "Fidgephant",
-
-"Insaciablo": "Urnfulfilled",
-
-"Insomna": "Insomni",
-
-"Intelecto": "Hinozall",
-
-"Intelecto Iluminado": "Hinozall Awoken",
-
-"Inverestupción": "Whatuption",
-
-"Isotomas": "Thurston",
-
-"Jabalupo": "Hoggles",
-
-"Jetnyan": "Jetnyan",
-
-"Jibakoma": "Jibakoma",
-
-"Jibanyan": "Jibanyan",
-
-"Jibanyan B": "Jibanyan B",
-
-"Jibanyan Liu Bei": "Jibanyan Liu Bei",
-
-"Jibanyan S": "Jibanyan S",
-
-"Jibanyan T": "Jibanyan T",
-
-"Jipigenio": "Imagenius",
-
-"Jotamasan": "Jackomasan",
-
-"Joyezno": "Eyellure",
-
-"Juntollero": "Reuknight",
-
-"Jurojin": "Jurojin",
-
-"Kabukio": "Kabukio",
-
-"Kali Mera": "Kat Kraydel",
-
-"Kapman": "Kaped Komander",
-
-"Kappadachín": "Appak",
-
-"Kappafalso": "Faux Kappa",
-
-"Kappamalo": "Mad Kappa",
-
-"Kappandante": "Walkappa",
-
-"Kapparfista": "Supyo",
-
-"Kapunki": "Kapunki",
-
-"Katakroken": "Slacka-slash",
-
-"Katananái": "Cutta-nah-nah",
-
-"Katano": "Cutta-nah",
-
-"Keji Do Khan": "Grumpus Khan",
-
-"Kieroto": "Wantston",
-
-"Kimera": "Chymera",
-
-"Kimerreal": "Kingmera",
-
-"Kintaronyan": "Kintaronyan",
-
-"Kiwinyan": "Kiwinyan",
-
-"KJ": "KJ",
-
-"Koalanyan": "Koalanyan",
-
-"Komaestopistas": "Koma Knomads",
-
-"Koma Estrella": "Koma Star",
-
-"Komajiro": "Komajiro",
-
-"Komajiro S": "Komajiro S",
-
-"Komaleón": "Komane",
-
-"Komanubis": "Komanubis",
-
-"Komasan": "Komasan",
-
-"Komasan B": "Komasan B",
-
-"Komasan S": "Komasan S",
-
-"Komasan Sun Ce": "Komasan Sun Ce",
-
-"Komasan T": "Komasan T",
-
-"Komasura": "Komashura",
-
-"Komatigrado": "Komiger",
-
-"Komecasa": "Houzzat",
-
-"Komemo": "Wazzat",
-
-"Kyryn": "Kyryn",
-
-"Kyubi": "Kyubi",
-
-"Kyubot": "Kyubot",
-
-"Labizula": "Blips",
-
-"Lady Démona": "Dame Demona",
-
-"Lady Desdicha": "Dame Dedtime",
-
-"Lady Espanto": "Dame Dredful",
-
-"Lapo": "Quagmira",
-
-"Lavadenco": "Swelterrier",
-
-"Lena": "Toiletta",
-
-"Leñaciegotxea": "Bumblejack",
-
-"León Alfa": "Lie-in Heart",
-
-"Leonerai": "Messyrai",
-
-"Leongüista": "Lionguist",
-
-"Limónescente": "Zest-a-Minute",
-
-"Lord Dragón": "Dragon Lord",
-
-"Lord Lava": "Lava Lord",
-
-"Lord Pedigrí": "Gentlemutt",
-
-"Lorigón": "Armsman",
-
-"Los Bomboledores": "Percrushionists",
-
-"Losiento": "So-Sorree",
-
-"Lucharabajo": "Beetler",
-
-"Ludorái": "Chansin",
-
-"Luigi Longueras": "Snippity Cricket",
-
-"Lustre": "Sheen",
-
-"Machaka": "Agon",
-
-"Machimío": "Minochi",
-
-"Maginyan": "Maginyan",
-
-"Maharazás": "Rampajah",
-
-"Maldenotep": "Sarcophacurse",
-
-"Malena": "Foiletta",
-
-"Malicia": "Unkaind",
-
-"Malisnia": "Wrongnek",
-
-"Malmet": "Snaggly",
-
-"Malpejismo": "Mircle",
-
-"Mamá Aura": "Mama Aura",
-
-"Mamuguanto": "Enduriphant",
-
-"Manazas": "Hans Galore",
-
-"Mandícoro": "Copperled",
-
-"Manojo": "Hans Full",
-
-"Maracario": "Rhumbastiltskin",
-
-"Maravinyan": "Wondernyan",
-
-"Maripasada": "Amplifly",
-
-"Martillete": "Mallice",
-
-"Marulleja": "Tattlecast",
-
-"Masculloso": "Mumbles",
-
-"Máster Chof": "Oh Bah Gah!",
-
-"Maxicastelius": "Castelius Max",
-
-"Mazado de la Calzada": "Fitwit",
-
-"Mazorco": "Cornfused",
-
-"MC Kappa": "Lil Kappa",
-
-"McKraken": "McKraken",
-
-"Meganyan": "Meganyan",
-
-"Mejorposa": "Betterfly",
-
-"Melonyan": "Melonyan",
-
-"Memorio": "Mem-o-Vac",
-
-"Metepatas": "Slippup",
-
-"Mili": "Floppa",
-
-"Milimpiano": "Brushido",
-
-"Milperdones": "My-Baaad",
-
-"Mimoniquí": "Mimikin",
-
-"Minimoto": "Minimoto",
-
-"Minipulpobola": "Takoyakid",
-
-"Miopatra": "Meopatra",
-
-"Mirlobirlo": "Robbinyu",
-
-"Miss Mousse": "Life-is-Parfait",
-
-"Miss Teria": "Miss Teri",
-
-"Mochimacho": "Mochismo",
-
-"Mochueloqué": "Who-Me",
-
-"Mogurinyan": "Mooglenyan",
-
-"Mokopavo": "Snotsolong",
-
-"Momonyan": "Momonyan",
-
-"Montaña Loca": "Mad Mountain",
-
-"Monte Merario": "Speedemountain",
-
-"Morenaso": "Carniboy",
-
-"Morfea": "Sandi",
-
-"Mosquereta": "Irewig",
-
-"Multiniche": "Multimutt",
-
-"Murallin": "Walldin",
-
-"Murmullamasa": "Mass Mutterer",
-
-"Naqueperder": "Nautaloss",
-
-"Naranyan": "Oranyan",
-
-"Náuseo": "Spewart",
-
-"Nébula": "Smogmella",
-
-"Necrocobra": "The Woebra",
-
-"Negasus": "Negasus",
-
-"Negatalia": "Dismarelda",
-
-"Negatisquito": "Negatibuzz",
-
-"Nereida": "Mermaidyn",
-
-"Niebli": "Smogling",
-
-"Nievacolas": "Frostail",
-
-"Nihablar": "Noway",
-
-"Ningarra": "Cadin",
-
-"Niscala": "Tongus",
-
-"Noaipapel": "Throne Wiper",
-
-"No-Bot": "No-Bot",
-
-"Nocturnia": "Beddy-Byes",
-
-"Noguío": "Leadoni",
-
-"Noko": "Noko",
-
-"Nomedá": "Lodo",
-
-"Nomevén": "Dimmy",
-
-"Nomi": "Gnomey",
-
-"No-No": "Nosirs ",
-
-"Normalino": "Fuu 2",
-
-"Nostoy": "Blandon",
-
-"Nul": "Nul",
-
-"Nulo": "Bronzlow",
-
-"Nunchucky": "Nunchucky",
-
-"Nyansés II": "Nyanses II",
-
-"Oceánida": "Mermother",
-
-"Octosierpe": "Slurpent",
-
-"Odisenyan": "Odysseynyan",
-
-"Ojezno": "Eyesoar",
-
-"Ojimandra": "Eyedra",
-
-"Olvirunner": "Runsure",
-
-"Ondívoro": "Signibble",
-
-"Opti": "Chippa",
-
-"Origenio": "Oridjinn",
-
-"Originyan": "Originyan",
-
-"Osademonio": "Beelzebold",
-
-"Osfurio": "Zerberker",
-
-"Oskyubi": "Darkyubi",
-
-"Oso Boco": "Harry Barry",
-
-"Pachús": "Duchoo",
-
-"Padefo": "Rinsin Repete",
-
-"Panceto": "Salty Bacon",
-
-"Pandalón": "Slax",
-
-"Pandanoko": "Pandanoko",
-
-"Pandora": "Pandora",
-
-"Panduro": "Punching Baguette",
-
-"Panja Pro": "Panja Pro",
-
-"Pantuflo": "Slippy",
-
-"Papá Rayo\t": "Papa Bolt ",
-
-"Partidacio": "Ballin",
-
-"Pasodón": "Steppa",
-
-"Pataleto": "Hissfit",
-
-"Pataletoni": "Tantroni",
-
-"Paticio": "Skulk",
-
-"Patis": "Leggly",
-
-"Paupermán": "Supoor Hero",
-
-"Pecificador": "Big Fish",
-
-"Péditum": "Cuttincheez",
-
-"Pegarabajo": "Rhinoggin",
-
-"Pelirrojo": "Rudy",
-
-"Pellurón": "Chummer",
-
-"Pelochnyan": "Baddinyan",
-
-"Peluco": "Furgus",
-
-"Pelusón": "Shedwin",
-
-"Penancio": "Sad to the Bone",
-
-"Perronyan": "Puppinyan",
-
-"Perselefante": "Touphant",
-
-"Peter Punki": "Sing Kong",
-
-"Pezgativo": "Rageon",
-
-"Pezqueroso": "Fishpicable",
-
-"Pezquiciado": "Tunatic",
-
-"Picassina": "Jumbelina",
-
-"Picorrón": "Scritchy",
-
-"Pifiasus": "Neighfarious",
-
-"Pili": "Flippa",
-
-"Pilicajosa": "Nagatha",
-
-"Pillastre": "Gnomine",
-
-"Piopío Yonohesido": "Liarbird",
-
-"Platinum": "Platinos",
-
-"Pom": "Dromp",
-
-"Pomponio Gala": "Lord Shrillington",
-
-"Populina": "Mee 2",
-
-"Pregundragón Rey": "Whyvern King",
-
-"Preguntio": "Why Naant",
-
-"Prestragon": "Yoink",
-
-"Pringurón": "Shrook",
-
-"Procrastinocho": "Procrastinocchio",
-
-"Profesor Avertijo\t": "Professor Plumage",
-
-"Prudencio": "Oh Wheel",
-
-"Puergazán": "Slumberhog",
-
-"Puf": "N’more",
-
-"Pufilindo": "Pinkipoo",
-
-"Pufimaloso": "Pookivil",
-
-"Pufipatitas": "Shmoopie",
-
-"Pulpobola Rey": "Takoyaking",
-
-"Pulpopular": "Flocktopus",
-
-"Pupilo Panja": "Panja Pupil",
-
-"Quierodeso": "Wotchagot",
-
-"Radiopatio": "Mr. Blockhead",
-
-"Rafaz": "Rockabelly",
-
-"Rapidizo": "Nekidspeed",
-
-"Rataleza": "Tyrat",
-
-"Rayael": "Zappary",
-
-"Ray Baqueto": "Rongo Swirll",
-
-"Rayito": "Ray O’Light",
-
-"Reahucio": "Repossessor",
-
-"Rebelcebú": "Roughraff",
-
-"Reboca": "Chatalie",
-
-"Rechinella": "Rattelle",
-
-"Reina Usapyon": "Queen Usapyon",
-
-"Relapache": "Slackoon",
-
-"Renaldo": "Squandeer",
-
-"Repeloso": "Poofessor",
-
-"Repostilleja": "Tattlecakes",
-
-"Reptozudo": "Mython",
-
-"Re-Q-Pera": "Re-Q-Perate",
-
-"Respondio": "Naandhi",
-
-"Retinado": "Retinado",
-
-"Retuiterio": "Retreeter",
-
-"Reversa": "Reversa",
-
-"Reversada": "Reversette",
-
-"Rey Jibanyan": "King Jibanyan",
-
-"Rey Palmiro": "King Deadward",
-
-"Rey Pulsivo": "DisliKing",
-
-"Ritma": "Rhyth",
-
-"Robin Ful": "Sigh-Durr",
-
-"Roboabuzampa": "Robogramps",
-
-"Robocantonio": "Robomutt",
-
-"Robodraqui": "Robodraggie",
-
-"Robokapp": "Robokapp",
-
-"Robokoma": "Robokoma",
-
-"Robonoko": "Robonoko",
-
-"Robonyan": "Robonyan",
-
-"Robonyan 2.0": "Robonyan F ",
-
-"Robonyan 28": "Robonyan 28",
-
-"Robonyan 3000": "Robonyan 3000",
-
-"Robonyan Definitivo": "Ultimate Robonyan",
-
-"Rocky Malrolla": "Rocky Badboya",
-
-"Rolláculo": "The Boracle",
-
-"Rúbeo J": "Rubeus J",
-
-"Rubinyan": "Rubinyan",
-
-"Sacoco": "Snartle",
-
-"Sailornyan": "Sailornyan",
-
-"Saltetera": "Humtea Jumtea",
-
-"Samulimpio": "Washogun",
-
-"Samuranguila": "Samureel",
-
-"Sandinyan": "Watermelnyan",
-
-"Saporientador": "Frogetmenot",
-
-"Segadora": "Whirlweasel",
-
-"Seleno": "Lunie",
-
-"Ser Bero": "Sir Berus",
-
-"Sheriff Agonio": "Nervous Rex",
-
-"Shogún Real": "Shogun King",
-
-"Shogunyan": "Shogunyan",
-
-"Showbonyan": "Showbonyan",
-
-"Shurikenny": "Shurikenny",
-
-"Sierpesado": "Putasockinit",
-
-"Simionyan": "Chimpanyan",
-
-"Sincara": "Faysoff",
-
-"Sincopollo": "Twirly Pie",
-
-"Sinná": "Undy",
-
-"Sinnareno": "Tanbo",
-
-"Sirenia": "Mermadonna",
-
-"Sirimiri": "Drizzle",
-
-"Sirleón": "Siro",
-
-"Sir Nyancelot": "Sir Nyansalot",
-
-"Socarrat": "Flamurice",
-
-"Sololo": "Soloman",
-
-"Sombrillo": "Pallysol",
-
-"Sombrillogro": "Scarasol",
-
-"Sombrío": "Shamasol",
-
-"Somnia": "Bakulia",
-
-"Sónico": "Double Time",
-
-"Su Hackeltad": "Hack King",
-
-"Sumodón": "Sumodon",
-
-"Supergerente": "Supermanager",
-
-"Superniñato": "Unbelievaboy!",
-
-"Superniñato Picajoso": "Inflammaboy!",
-
-"Superniñato Rebelde": "Unbearaboy!",
-
-"Supernyan": "Supernyan",
-
-"Supersónico": "Sonic Bam",
-
-"Supersumodón": "Yokozudon",
-
-"Sushinyan": "Sushinyan",
-
-"Sushisyama": "Sushiyama",
-
-"Suspicioni": "Suspicioni",
-
-"Sustóleo": "Ooze Zat",
-
-"Talloestrella": "Hoppy-go-Lucky",
-
-"Tanquivocado": "Mistank",
-
-"Tarantutor": "Tarantutor",
-
-"Telespejo": "Mirapo",
-
-"Tembloleón": "Quaken",
-
-"Tempurasan": "Tempurasan",
-
-"T. Energison": "T. Energison",
-
-"Tengu": "Tengu",
-
-"Tengulecto": "Tengloom",
-
-"Tengullón": "Nird",
-
-"Tenguriginal": "Tenguriginal",
-
-"Tenongrio": "Croonger",
-
-"Tentanfadado": "Bitter Batter",
-
-"Tentelento": "Dulluma",
-
-"Tentemacho": "Darumacho",
-
-"Tenterila": "Goruma",
-
-"Termascino": "Sproink",
-
-"Terminyanator": "Terminyanator",
-
-"Terrormadura": "Spooklunk",
-
-"Testructor": "Teastroyer",
-
-"Tetrariosa": "Infour",
-
-"Tibu Jones": "Indiana Jaws",
-
-"Tiburón Jaquetón": "El Sharkador",
-
-"Tiburón Tiburcio": "The Jawsome Kid",
-
-"Tigrapa": "Tigappa",
-
-"Tigrenyan": "Machonyan",
-
-"Timidiablo": "Timidevil",
-
-"Timo Gallo": "Crook-a-doodle",
-
-"Timorato Buendía": "Mr. Blue-Shy",
-
-"Tío Infinito": "Uncle Infinite",
-
-"Tita corazón": "Auntie Heart",
-
-"Tochacolate": "Cocobanana",
-
-"Tochaplátano": "Bananose",
-
-"Todoapesta": "Stinkeye",
-
-"Todobelicoso": "Asura",
-
-"Todoídos": "Too-Much-To-Take",
-
-"Tofupyon": "Tofupyon",
-
-"Tomanota": "Cue-Tee",
-
-"Tomnyan": "Tomnyan",
-
-"Tomoko": "Snottle",
-
-"Tontolín": "Dummkap",
-
-"Topamí": "Mynimo",
-
-"Topanyan": "Topanyan",
-
-"Topiña": "Molar Petite",
-
-"Topoderoso": "Holey Moley",
-
-"Toragorero": "Defectabull",
-
-"Torbellóptico": "Eyephoon",
-
-"Tortícolis": "Cricky",
-
-"Torivinador": "Predictabull",
-
-"Torivino": "Smashibull",
-
-"Tornalmohado": "Flippit",
-
-"Torpesaurio": "Clodzilla",
-
-"Torreznio": "Slumberhog",
-
-"Trabalanghi": "Tongue-Twister",
-
-"Trampeida": "Scaremaiden",
-
-"Trenditópico": "Treetter",
-
-"Tricotom": "Ol’ Saint Trick",
-
-"Trielespejo": "Miradox",
-
-"Trilépata": "Espy",
-
-"Tripasqueleto": "Gutsy Bones",
-
-"Tristeresa": "Drenchetta",
-
-"Tumbardillo": "Horizontail",
-
-"Turdido": "Confuze",
-
-"Ubiúho": "Alloo",
-
-"Ulteria": "Ulteria",
-
-"Ultimísimo Nyamurái": "The Lastest Nyanmurai",
-
-"Último Nyanmurái": "The Last Nyanmurai",
-
-"Ultra K": "Moximus K",
-
-"Ultra N": "Moximus N",
-
-"Unikyryn": "Unikirin",
-
-"Urbasierpe": "City Licker",
-
-"Urnaconda": "Urnaconda",
-
-"Usapyon": "Usapyon",
-
-"Usapyon B": "Usapyon B",
-
-"Usapyon Zhongda": "Usapyon Zhongda",
-
-"Uvanyan": "Grapenyan",
-
-"Vacaloca": "Stircrazy Stu",
-
-"Vacilagón": "Draaagin",
-
-"Venocto": "Venoct",
-
-"Venoctobot": "Venoctobot",
-
-"Venoctoscuro": "Shadow Venoct",
-
-"Ventisquero": "Alhail",
-
-"Vivariposa": "Peppillon",
-
-"Vociferio": "Roary",
-
-"Vrumbo": "Rawry",
-
-"Vueltodorado": "Swirlious Gold",
-
-"Vueltomai": "Swirlious Omai",
-
-"Vulcavador": "Shovulcan",
-
-"Whismodín": "Josper",
-
-"Whisper": "Whisper",
-
-"Whisper Kongming": "Whisper Kongming",
-
-"Whispócrates": "Whispocrates",
-
-"Wibblekoma": "Wibblekoma",
-
-"Wobblenyan": "Wobblenyan",
-
-"Yanomás": "Q’wit",
-
-"Yelmandante": "Helmsman",
-
-"Yemajestad": "Her Eggcelency",
-
-"Yoguididacta": "Yoganalisten",
-
-"Yopago": "Almi",
-
-"Yopaso": "D’wanna",
-
-"Yopple-Bot": "Yopple-Bot",
-
-"Zafinyan": "Sapphinyan",
-
-"Zalameria": "Demandi",
-
-"Zampo": "Grubsnitch",
-
-"Záppingla": "Count Zapaway",
-
-"Zarpa Dorada": "Golden Claws",
-
-"Zarpa Roja": "Red Paws",
-
-"Zazel": "Zazel",
-
-"Zazelirio": "Zazelmare",
-
-"Zazel Justiciero": "Righteous Zazel",
-
-"Zudado": "Swelton"
-
-}
-
+    "tribes": {
+        "Charming": "Charming",
+        "Mysterious": "Mysterious",
+        "Tough": "Tough",
+        "Heartful": "Heartful",
+        "Shady": "Shady",
+        "Eerie": "Eerie",
+        "Slippery": "Slippery",
+        "Wicked": "Wicked",
+        "Boss": "Boss",
+        "Enma": "Enma",
+        "Brave": "Brave",
+        "Wandroid": "Wandroid"
+    },
+    "elements": {
+        "Fire": "Fire",
+        "Water": "Water",
+        "Lightning": "Lightning",
+        "Earth": "Earth",
+        "Wind": "Wind",
+        "Ice": "Ice",
+        "Drain": "Drain",
+        "Restoration": "Restoration",
+        "None": "None"
+    },
+    "foods": {
+        "Rice Balls": "Rice Balls",
+        "Bread": "Bread",
+        "Candy": "Candy",
+        "Milk": "Milk",
+        "Juice": "Juice",
+        "Hamburgers": "Hamburgers",
+        "Chinese Food": "Chinese Food",
+        "Ramen": "Ramen",
+        "Veggies": "Veggies",
+        "Meat": "Meat",
+        "Seafood": "Seafood",
+        "Sushi": "Sushi",
+        "Curry": "Curry",
+        "Sweets": "Sweets",
+        "Doughnuts": "Doughnuts",
+        "Donuts": "Donuts",
+        "Oden": "Oden",
+        "Soba": "Soba",
+        "Snacks": "Snacks",
+        "Chocobars": "Chocobars",
+        "Ice Cream": "Ice Cream",
+        "Pizza": "Pizza",
+        "Hot Dogs": "Hot Dogs",
+        "Pasta": "Pasta",
+        "Tempura": "Tempura",
+        "Sushi-Tempura": "Sushi-Tempura",
+        "Sukiyaki": "Sukiyaki",
+        "Mega Tasty Bars": "Mega Tasty Bars",
+        "None": "None"
+    },
+    "names": {
+        "Abuflauta": "Greengramps",
+        "Abuflorido": "Elder Bloom",
+        "Aburroz": "Grainpa",
+        "Abuspléndido": "Flash T. Cash",
+        "Abuzampa": "Hungramps",
+        "Abuzampa XXL": "Supersize Gramps",
+        "Acelgo": "Herbiboy",
+        "Adoleszombi": "Zomboy",
+        "Afronauta": "Afronaut",
+        "Agorerana": "Whinona",
+        "Agujeto": "Payn",
+        "Akusika": "Snitchin",
+        "Alarción": "Skreek",
+        "Albornocita Azul": "Lil Blue Bathing Hood",
+        "Alcaldero": "Pandle",
+        "Algacabana": "Kelpacabana",
+        "Alga Senséi": "Seaweed Sensei",
+        "Algazara": "Lafalotta",
+        "Algio": "Ake",
+        "Almirante Admirable": "Admirable Admiral",
+        "Alpina": "Alpina",
+        "Amarguito": "Glumdango",
+        "Amarilia": "Grubbles",
+        "Ambivalencio": "Shakey",
+        "Ambrosio": "Verygoodsir",
+        "Ángel Garudián": "Tengulightened",
+        "Anguilocio": "Time Keeler",
+        "Angustiánima": "Sunk’nsoul",
+        "Animanstruo": "Massiface",
+        "Anjijila": "Heheheel",
+        "Apanleado": "Buttered Blue",
+        "Apelicano": "Apelican",
+        "Apéstula": "Badsmella",
+        "Aracne": "Arachnia",
+        "Aracnéfico": "Arachnevil",
+        "Aracnio": "Arachnus",
+        "Aranecido": "Danke Sand",
+        "Arenito": "Sandmeh",
+        "Arfidio": "Slitheref",
+        "Argenta": "Gin",
+        "Arrocet": "Cereal Spiller",
+        "Arruñona": "Grumples",
+        "Asnyan": "Acenyan",
+        "Aterracota": "Terrorpotta",
+        "Aterrahorror": "Madmunch",
+        "Atierrador": "Mudmunch",
+        "Áurea": "Kin",
+        "Aureonyan": "Goldenyan",
+        "Aureosqueleto": "Goldy Bones",
+        "Auxiliadora": "Got It Maid",
+        "Avarqueroso": "Greesel",
+        "Aviguito Pío": "Letsbifrenz",
+        "Ayay": "Buhu",
+        "Aydroide Y": "Sighborg Y",
+        "Aymadrilo": "OMGator",
+        "B3-NK1": "B3-NK1",
+        "Babamandra": "Silmamander",
+        "Baku": "Baku",
+        "Ballenato": "Narwail",
+        "Barbacoo": "BBQvil",
+        "Bastenyan": "Bastnetnyan",
+        "Batallitos": "Papa Windbag",
+        "Bateadós": "Slugger",
+        "Bebesaurio": "T-Wrecks",
+        "Belcefibio": "Toadal Demon",
+        "Belladona": "Everfore",
+        "BellónZ": "Krystal Fox",
+        "Bellotieso": "Bellotieso",
+        "Benkei": "Benkei",
+        "Benzaiten": "Benzaiten",
+        "Berenpenas": "Neggplant",
+        "Bergantín": "SV Snaggerjag",
+        "Bilgatino": "Indexter",
+        "Bishamonten": "Bishamonten",
+        "Blancacone": "Snow Spect-hare",
+        "Blanpir": "Whapir",
+        "Bola Blanda": "Goofball",
+        "Bolilete": "Rollen",
+        "Bolsadrón": "Gimme",
+        "Boquirroto": "Spenp",
+        "Borjamar": "Shellebrity",
+        "Bóvida": "Moolinda",
+        "Bronquereta": "Firewig",
+        "Brownilda": "Petty-Cake",
+        "Buchinyan": "Buchinyan",
+        "Caballero Hueco": "Hollow Guard",
+        "Cachaslote": "Whaleman",
+        "Cachocarne": "Chicken Chukket",
+        "Cafechucho": "Puppiccino",
+        "Cafeíno": "Allnyta",
+        "Calabilidoso": "Skillskull",
+        "Calarrupto": "Squisker",
+        "Calaveroscopio": "Skulleidoscope",
+        "Caldewok": "Wobblewok",
+        "Calmarinero": "Shipshape Sailor",
+        "Camelia": "Camellia",
+        "Camorro": "Agent X",
+        "Camperabajo": "Beetall",
+        "Cantacólito": "Chirpolyte",
+        "Cantaderna": "Chirpster",
+        "Cantigarra": "Singcada",
+        "Cantonio": "Manjimutt",
+        "Capi-Cachas": "Sgt. Burly ",
+        "Capipalante": "Cap’n Rex",
+        "Capitán Botín": "Plundros",
+        "Capitán Nublo": "Silver Lining",
+        "Capitán Penas": "Cap’n Crash",
+        "Capitán Rayo": "Captain Thunder",
+        "Caporrista": "Badude",
+        "Cardado": "Feargus",
+        "Cartairada": "Love-Torn",
+        "Cartepollo": "Peckpocket",
+        "Casanono": "Casanono",
+        "Casanovo": "Casanuva",
+        "Cascarito": "Unshelltered",
+        "Caseriélago": "Abodabat",
+        "Castelius I": "Castelius I",
+        "Castelius II": "Castelius II",
+        "Castelius III": "Castelius III",
+        "Cazamentires": "Ogralus",
+        "Cazarrayos": "Frazzel",
+        "Cellisca": "Drizzelda",
+        "Chafarabajo": "Cruncha",
+        "Chafarina": "Spoilerina",
+        "Chancleto": "Pittapatt",
+        "Chapulín": "Hoppy-go-Lucky",
+        "Charlatón": "Charlatón",
+        "Chatárrenstein": "Babblong",
+        "Chef Ricote": "Yellskitchen",
+        "Chíclope": "Boyclops",
+        "Chocobonyan": "Chocobonyan",
+        "Chocovaca": "Chilled Cowcao",
+        "Chunda y Tachunda": "In-Tune",
+        "Chupapremios": "Lappinitup",
+        "Chupatinas": "Tublappa",
+        "Chupatodo": "Grublappa",
+        "Chupatricio": "Alicktokat",
+        "Ciclomán": "Deadcool",
+        "Ciclonojo": "Torneyedo",
+        "Cicluracan": "Eyeclone",
+        "Cimbalina": "Cymbalina",
+        "Cimbrón": "Wiglin",
+        "Cinisierpe": "Cynake",
+        "Cisnia": "Lady Longnek",
+        "Clicán": "Push Pup",
+        "Clipso": "Clipso",
+        "Coagulón": "Gush",
+        "Coberturo": "Signiton",
+        "Cobravil": "Snidewinder",
+        "Cocó Masiel": "Jeanne Ne-Sais-Quoi",
+        "Cofre Cafre": "Treasure Pest",
+        "Coman-Cachas": "Bison Burly ",
+        "Conde Caries": "Count Cavity",
+        "Condespótico": "Decidevible",
+        "Coneagente": "Agent Spect-hare",
+        "Contentallo": "Happycane",
+        "Contrarioni": "Contrarioni",
+        "Copo": "Slush",
+        "Corbapacasa": "Tie-red",
+        "Cortarroz": "Slicenrice",
+        "Cotilleja": "Tattletell",
+        "Cotiterror": "Tattleterror",
+        "Cremaligno": "Whisped Cream",
+        "Cremallero": "Zip Unlock",
+        "Cuernarabajo": "Hornaplenty",
+        "Cuesco": "Cheeksqueek",
+        "Cupístolo": "Cupistol",
+        "Curaníscala": "Nurse Tongus",
+        "Cutremomia": "Crummy Mummy",
+        "Dabombo": "Pergushin",
+        "Dádivo": "Ol’ Fortune",
+        "Daikokuten": "Daikokuten",
+        "Dámona": "Damona",
+        "Dandiniche": "Dandoodle",
+        "Dargüin": "Starwin",
+        "Darknyan": "Darknyan",
+        "Demoniorco": "Orcanos",
+        "Demoniorcólito": "Orcalyte",
+        "Demoniorco Lu Bu": "Orcanos Lu Bu",
+        "Deporchugo": "Sweattuce",
+        "Deprisquito": "Moskevil",
+        "Desaranecido": "No Sandkyu",
+        "Desinverest": "Whateverest",
+        "Deslumbrella": "Dazzabel",
+        "Desolvidador": "Flushback",
+        "Destrozasaurio": "D-Stroy",
+        "Destrukto": "Unkeen",
+        "Devoralmas": "Devourer",
+        "Devoramonios": "Demuncher",
+        "Dex Cápito": "Ed Zoff",
+        "Diablés": "Awevil",
+        "Diamanqueleto": "Glitzy Bones",
+        "Diamanyan": "Dianyan",
+        "Diávolo": "The Executor",
+        "Diez de Komajiro": "Komajiro Ten",
+        "Discursi": "Gabby",
+        "Divamarina": "Princess Pearl",
+        "Doblilete": "Dubbles",
+        "Domiplof": "Bowminos",
+        "Don Arenito": "Mister Sandmeh",
+        "Don Aureone": "The Goldfather",
+        "Doncella de la Ruina": "Maiden Ruin",
+        "Donchan": "Don Chan",
+        "Don Cospirazione": "Don Spiracy",
+        "Don Crueleone": "The Ghoulfather",
+        "Don Despacito": "Snailspace",
+        "Don Kaldo": "Master Oden",
+        "Dorantúo": "Gilgaros",
+        "Dormidomingo": "Lazy Sundae",
+        "Dormileón": "Lie-in",
+        "Dortre": "Gleam",
+        "Dracunyan": "Dracunyan",
+        "Dradorado": "El Dorago",
+        "Dragón Azur": "Azure Dragon",
+        "Draquí": "Draggie",
+        "Dr. Majarov": "Dr. Maddiman",
+        "Dr. Nihil Listo": "Dr. E. Raser",
+        "Dr. Nocturnia": "Dr. Nocturne",
+        "Dr. Sintripas": "Dr. Nogut",
+        "Duocólito": "Duolyte",
+        "Duoleta": "Duwheel",
+        "Duque Lametodo": "Duke Drooly",
+        "Ebisu": "Ebisu",
+        "Educoso": "Teducator",
+        "Ejemtos": "Coughkoff",
+        "El Carnicero": "Soulcleaver",
+        "Eleganfibio": "Toadal Dude",
+        "Elúho": "Elloo",
+        "Embajador Fabuloso": "Gorgeous Ambassador",
+        "Emperador Rosa": "Pink Emperor",
+        "Enciélago": "Hidabat",
+        "Eneposa": "Enefly",
+        "Enerposa": "Enerfly",
+        "Enma Ancestral": "Ancient Enma",
+        "Enma Infinito": "Infinite Enma",
+        "Enma Solar": "Solar Enma",
+        "Enma Umbrío": "Umbral Enma",
+        "Enormarabajo": "Rhinormous",
+        "Envelo": "Wydeawake",
+        "Equinio": "Neighthan",
+        "Erizlor": "Hurchin",
+        "Ermiciélago": "Belfree",
+        "Escanlofrío": "Pupsicle",
+        "Eskakeo": "Ben Tover",
+        "Esmaltina": "Pearly White",
+        "Esmenyan": "Emenyan",
+        "Espaoi": "K’mon-K’mon",
+        "Espayá": "Tut ‘n’ K’mon",
+        "Espe": "Tomorrow Gal",
+        "Espinyan": "Thornyan",
+        "Esquelebella": "Skelebella",
+        "Esquelleja": "Skranny",
+        "Estatinarca": "Statiking",
+        "Estatiniño": "Statikid",
+        "Estigio VI": "Styx Mk.VI",
+        "Estrenoko": "Starry Noko",
+        "Estréquito": "Squeeky",
+        "Eterna": "Eterna",
+        "Exitio": "Legsit",
+        "Explotacota": "Blownhistoppa",
+        "Expresso": "Headasteam",
+        "Faisanyan": "Pheasanyan",
+        "Falsillo": "Failian",
+        "Fantasfitriona": "Ghostess",
+        "Fantasmurái": "Phantasmurai",
+        "Felisonte": "Happierre",
+        "Fenixtelecto": "The Hinix",
+        "Fiestuki": "House Partay",
+        "Filete II": "Steaking",
+        "Flamileón": "Blazion",
+        "Flamngu": "Flengu",
+        "Flautiscólito": "Slackolyte",
+        "Flautista de Malmelín": "Slackerjack",
+        "Flequipilante": "Hairum Scarum",
+        "Florentina": "Bubble Beth",
+        "Florinoko": "Bloominoko",
+        "Flus": "Swosh",
+        "Foliculio": "Furdinand",
+        "Fracaguas": "Brokenbrella",
+        "Fracalavero": "Nummskull",
+        "Frauduralla": "Judgebrick",
+        "Fresanyan": "Strawbnyan",
+        "Frihuahua": "Chilhuahua",
+        "Frikigarto": "Uber Geeko",
+        "Fristina": "Frostina",
+        "Frivolia": "Snobetty",
+        "Frustrolillo": "Wack o’ Lantern",
+        "Fukurokuju": "Fukurokuju",
+        "Fulgurilla": "Little Charrmer",
+        "Furtre": "Snee",
+        "Gambulloso": "Pride Shrimp",
+        "Gamero": "Yo-kaiju",
+        "Gargantúo": "Gargaros",
+        "Gargazampa": "Hungorge",
+        "Gatallanes": "Kittylumbus",
+        "Gatóbal Colón": "Columbakat",
+        "Gememinencias": "Right Brothers",
+        "Genedáver": "Corptain",
+        "Globonauta": "Hot Air Buffoon",
+        "Globqueo": "Blowkade",
+        "Globtundente": "Ledballoon",
+        "Gogonzalo": "Fundango",
+        "Goto": "Droplette",
+        "Graciosno": "Compunzer",
+        "Grafilcebú": "Roughgraff",
+        "Gran Coco": "Brutle",
+        "Gran Enma": "Lord Enma",
+        "Gran Enma Iluminado": "Lord Enma Awoken",
+        "Granizia": "Blizzaria",
+        "Gran Mangu": "Master Nyada",
+        "Gran Nomi": "High Gnomey",
+        "Gran Sabueso": "Hardy Hound",
+        "Grazi": "Blizzie",
+        "Gruñón Khan": "Groupus Khan",
+        "Guerrero Güey": "El Gutso",
+        "Habilgarra": "Cadable",
+        "Hazlotu": "Yoodooit",
+        "Hermanión": "Bruff",
+        "Herrato": "Misterr Typoo",
+        "Hierodista": "Injurnalist",
+        "Hilarión": "Lamedian",
+        "Horrogenio": "Horridjinn",
+        "Horterraro": "Flumpy",
+        "Hotei": "Hotei",
+        "Hovernyan": "Hovernyan",
+        "Hovernyan Cao Cao": "Hovernyan Cao Cao",
+        "Hovernyan S": "Hovernyan S",
+        "Huracán Güey": "El Gutso Grande",
+        "Ícarus": "IcarOS",
+        "Ido": "Daiz",
+        "Ilúho": "Illoo",
+        "Iluminazén": "The Zenlightener",
+        "Iluminocto": "Illuminoct",
+        "Ilusionisto": "Hoaxy-Coaxy",
+        "Impás": "Impass",
+        "Implacablio": "Untidy",
+        "Inaguantablio": "Unpleasant",
+        "Indeciguro": "Ponderoo",
+        "Indiligencio": "No-Go Kart",
+        "Infinitio": "Infinipea",
+        "Ingenio": "Comic Genieus",
+        "Injustio": "Unfairy",
+        "Inquielifante": "Fidgephant",
+        "Insaciablo": "Urnfulfilled",
+        "Insomna": "Insomni",
+        "Intelecto": "Hinozall",
+        "Intelecto Iluminado": "Hinozall Awoken",
+        "Inverestupción": "Whatuption",
+        "Isotomas": "Thurston",
+        "Jabalupo": "Hoggles",
+        "Jetnyan": "Jetnyan",
+        "Jibakoma": "Jibakoma",
+        "Jibanyan": "Jibanyan",
+        "Jibanyan B": "Jibanyan B",
+        "Jibanyan Liu Bei": "Jibanyan Liu Bei",
+        "Jibanyan S": "Jibanyan S",
+        "Jibanyan T": "Jibanyan T",
+        "Jipigenio": "Imagenius",
+        "Jotamasan": "Jackomasan",
+        "Joyezno": "Eyellure",
+        "Juntollero": "Reuknight",
+        "Jurojin": "Jurojin",
+        "Kabukio": "Kabukio",
+        "Kali Mera": "Kat Kraydel",
+        "Kapman": "Kaped Komander",
+        "Kappadachín": "Appak",
+        "Kappafalso": "Faux Kappa",
+        "Kappamalo": "Mad Kappa",
+        "Kappandante": "Walkappa",
+        "Kapparfista": "Supyo",
+        "Kapunki": "Kapunki",
+        "Katakroken": "Slacka-slash",
+        "Katananái": "Cutta-nah-nah",
+        "Katano": "Cutta-nah",
+        "Keji Do Khan": "Grumpus Khan",
+        "Kieroto": "Wantston",
+        "Kimera": "Chymera",
+        "Kimerreal": "Kingmera",
+        "Kintaronyan": "Kintaronyan",
+        "Kiwinyan": "Kiwinyan",
+        "KJ": "KJ",
+        "Koalanyan": "Koalanyan",
+        "Komaestopistas": "Koma Knomads",
+        "Koma Estrella": "Koma Star",
+        "Komajiro": "Komajiro",
+        "Komajiro S": "Komajiro S",
+        "Komaleón": "Komane",
+        "Komanubis": "Komanubis",
+        "Komasan": "Komasan",
+        "Komasan B": "Komasan B",
+        "Komasan S": "Komasan S",
+        "Komasan Sun Ce": "Komasan Sun Ce",
+        "Komasan T": "Komasan T",
+        "Komasura": "Komashura",
+        "Komatigrado": "Komiger",
+        "Komecasa": "Houzzat",
+        "Komemo": "Wazzat",
+        "Kyryn": "Kyryn",
+        "Kyubi": "Kyubi",
+        "Kyubot": "Kyubot",
+        "Labizula": "Blips",
+        "Lady Démona": "Dame Demona",
+        "Lady Desdicha": "Dame Dedtime",
+        "Lady Espanto": "Dame Dredful",
+        "Lapo": "Quagmira",
+        "Lavadenco": "Swelterrier",
+        "Lena": "Toiletta",
+        "Leñaciegotxea": "Bumblejack",
+        "León Alfa": "Lie-in Heart",
+        "Leonerai": "Messyrai",
+        "Leongüista": "Lionguist",
+        "Limónescente": "Zest-a-Minute",
+        "Lord Dragón": "Dragon Lord",
+        "Lord Lava": "Lava Lord",
+        "Lord Pedigrí": "Gentlemutt",
+        "Lorigón": "Armsman",
+        "Los Bomboledores": "Percrushionists",
+        "Losiento": "So-Sorree",
+        "Lucharabajo": "Beetler",
+        "Ludorái": "Chansin",
+        "Luigi Longueras": "Snippity Cricket",
+        "Lustre": "Sheen",
+        "Machaka": "Agon",
+        "Machimío": "Minochi",
+        "Maginyan": "Maginyan",
+        "Maharazás": "Rampajah",
+        "Maldenotep": "Sarcophacurse",
+        "Malena": "Foiletta",
+        "Malicia": "Unkaind",
+        "Malisnia": "Wrongnek",
+        "Malmet": "Snaggly",
+        "Malpejismo": "Mircle",
+        "Mamá Aura": "Mama Aura",
+        "Mamuguanto": "Enduriphant",
+        "Manazas": "Hans Galore",
+        "Mandícoro": "Copperled",
+        "Manojo": "Hans Full",
+        "Maracario": "Rhumbastiltskin",
+        "Maravinyan": "Wondernyan",
+        "Maripasada": "Amplifly",
+        "Martillete": "Mallice",
+        "Marulleja": "Tattlecast",
+        "Masculloso": "Mumbles",
+        "Máster Chof": "Oh Bah Gah!",
+        "Maxicastelius": "Castelius Max",
+        "Mazado de la Calzada": "Fitwit",
+        "Mazorco": "Cornfused",
+        "MC Kappa": "Lil Kappa",
+        "McKraken": "McKraken",
+        "Meganyan": "Meganyan",
+        "Mejorposa": "Betterfly",
+        "Melonyan": "Melonyan",
+        "Memorio": "Mem-o-Vac",
+        "Metepatas": "Slippup",
+        "Mili": "Floppa",
+        "Milimpiano": "Brushido",
+        "Milperdones": "My-Baaad",
+        "Mimoniquí": "Mimikin",
+        "Minimoto": "Minimoto",
+        "Minipulpobola": "Takoyakid",
+        "Miopatra": "Meopatra",
+        "Mirlobirlo": "Robbinyu",
+        "Miss Mousse": "Life-is-Parfait",
+        "Miss Teria": "Miss Teri",
+        "Mochimacho": "Mochismo",
+        "Mochueloqué": "Who-Me",
+        "Mogurinyan": "Mooglenyan",
+        "Mokopavo": "Snotsolong",
+        "Momonyan": "Momonyan",
+        "Montaña Loca": "Mad Mountain",
+        "Monte Merario": "Speedemountain",
+        "Morenaso": "Carniboy",
+        "Morfea": "Sandi",
+        "Mosquereta": "Irewig",
+        "Multiniche": "Multimutt",
+        "Murallin": "Walldin",
+        "Murmullamasa": "Mass Mutterer",
+        "Naqueperder": "Nautaloss",
+        "Naranyan": "Oranyan",
+        "Náuseo": "Spewart",
+        "Nébula": "Smogmella",
+        "Necrocobra": "The Woebra",
+        "Negasus": "Negasus",
+        "Negatalia": "Dismarelda",
+        "Negatisquito": "Negatibuzz",
+        "Nereida": "Mermaidyn",
+        "Niebli": "Smogling",
+        "Nievacolas": "Frostail",
+        "Nihablar": "Noway",
+        "Ningarra": "Cadin",
+        "Niscala": "Tongus",
+        "Noaipapel": "Throne Wiper",
+        "No-Bot": "No-Bot",
+        "Nocturnia": "Beddy-Byes",
+        "Noguío": "Leadoni",
+        "Noko": "Noko",
+        "Nomedá": "Lodo",
+        "Nomevén": "Dimmy",
+        "Nomi": "Gnomey",
+        "No-No": "Nosirs ",
+        "Normalino": "Fuu 2",
+        "Nostoy": "Blandon",
+        "Nul": "Nul",
+        "Nulo": "Bronzlow",
+        "Nunchucky": "Nunchucky",
+        "Nyansés II": "Nyanses II",
+        "Oceánida": "Mermother",
+        "Octosierpe": "Slurpent",
+        "Odisenyan": "Odysseynyan",
+        "Ojezno": "Eyesoar",
+        "Ojimandra": "Eyedra",
+        "Olvirunner": "Runsure",
+        "Ondívoro": "Signibble",
+        "Opti": "Chippa",
+        "Origenio": "Oridjinn",
+        "Originyan": "Originyan",
+        "Osademonio": "Beelzebold",
+        "Osfurio": "Zerberker",
+        "Oskyubi": "Darkyubi",
+        "Oso Boco": "Harry Barry",
+        "Pachús": "Duchoo",
+        "Padefo": "Rinsin Repete",
+        "Panceto": "Salty Bacon",
+        "Pandalón": "Slax",
+        "Pandanoko": "Pandanoko",
+        "Pandora": "Pandora",
+        "Panduro": "Punching Baguette",
+        "Panja Pro": "Panja Pro",
+        "Pantuflo": "Slippy",
+        "Papá Rayo\t": "Papa Bolt ",
+        "Partidacio": "Ballin",
+        "Pasodón": "Steppa",
+        "Pataleto": "Hissfit",
+        "Pataletoni": "Tantroni",
+        "Paticio": "Skulk",
+        "Patis": "Leggly",
+        "Paupermán": "Supoor Hero",
+        "Pecificador": "Big Fish",
+        "Péditum": "Cuttincheez",
+        "Pegarabajo": "Rhinoggin",
+        "Pelirrojo": "Rudy",
+        "Pellurón": "Chummer",
+        "Pelochnyan": "Baddinyan",
+        "Peluco": "Furgus",
+        "Pelusón": "Shedwin",
+        "Penancio": "Sad to the Bone",
+        "Perronyan": "Puppinyan",
+        "Perselefante": "Touphant",
+        "Peter Punki": "Sing Kong",
+        "Pezgativo": "Rageon",
+        "Pezqueroso": "Fishpicable",
+        "Pezquiciado": "Tunatic",
+        "Picassina": "Jumbelina",
+        "Picorrón": "Scritchy",
+        "Pifiasus": "Neighfarious",
+        "Pili": "Flippa",
+        "Pilicajosa": "Nagatha",
+        "Pillastre": "Gnomine",
+        "Piopío Yonohesido": "Liarbird",
+        "Platinum": "Platinos",
+        "Pom": "Dromp",
+        "Pomponio Gala": "Lord Shrillington",
+        "Populina": "Mee 2",
+        "Pregundragón Rey": "Whyvern King",
+        "Preguntio": "Why Naant",
+        "Prestragon": "Yoink",
+        "Pringurón": "Shrook",
+        "Procrastinocho": "Procrastinocchio",
+        "Profesor Avertijo\t": "Professor Plumage",
+        "Prudencio": "Oh Wheel",
+        "Puergazán": "Slumberhog",
+        "Puf": "N’more",
+        "Pufilindo": "Pinkipoo",
+        "Pufimaloso": "Pookivil",
+        "Pufipatitas": "Shmoopie",
+        "Pulpobola Rey": "Takoyaking",
+        "Pulpopular": "Flocktopus",
+        "Pupilo Panja": "Panja Pupil",
+        "Quierodeso": "Wotchagot",
+        "Radiopatio": "Mr. Blockhead",
+        "Rafaz": "Rockabelly",
+        "Rapidizo": "Nekidspeed",
+        "Rataleza": "Tyrat",
+        "Rayael": "Zappary",
+        "Ray Baqueto": "Rongo Swirll",
+        "Rayito": "Ray O’Light",
+        "Reahucio": "Repossessor",
+        "Rebelcebú": "Roughraff",
+        "Reboca": "Chatalie",
+        "Rechinella": "Rattelle",
+        "Reina Usapyon": "Queen Usapyon",
+        "Relapache": "Slackoon",
+        "Renaldo": "Squandeer",
+        "Repeloso": "Poofessor",
+        "Repostilleja": "Tattlecakes",
+        "Reptozudo": "Mython",
+        "Re-Q-Pera": "Re-Q-Perate",
+        "Respondio": "Naandhi",
+        "Retinado": "Retinado",
+        "Retuiterio": "Retreeter",
+        "Reversa": "Reversa",
+        "Reversada": "Reversette",
+        "Rey Jibanyan": "King Jibanyan",
+        "Rey Palmiro": "King Deadward",
+        "Rey Pulsivo": "DisliKing",
+        "Ritma": "Rhyth",
+        "Robin Ful": "Sigh-Durr",
+        "Roboabuzampa": "Robogramps",
+        "Robocantonio": "Robomutt",
+        "Robodraqui": "Robodraggie",
+        "Robokapp": "Robokapp",
+        "Robokoma": "Robokoma",
+        "Robonoko": "Robonoko",
+        "Robonyan": "Robonyan",
+        "Robonyan 2.0": "Robonyan F ",
+        "Robonyan 28": "Robonyan 28",
+        "Robonyan 3000": "Robonyan 3000",
+        "Robonyan Definitivo": "Ultimate Robonyan",
+        "Rocky Malrolla": "Rocky Badboya",
+        "Rolláculo": "The Boracle",
+        "Rúbeo J": "Rubeus J",
+        "Rubinyan": "Rubinyan",
+        "Sacoco": "Snartle",
+        "Sailornyan": "Sailornyan",
+        "Saltetera": "Humtea Jumtea",
+        "Samulimpio": "Washogun",
+        "Samuranguila": "Samureel",
+        "Sandinyan": "Watermelnyan",
+        "Saporientador": "Frogetmenot",
+        "Segadora": "Whirlweasel",
+        "Seleno": "Lunie",
+        "Ser Bero": "Sir Berus",
+        "Sheriff Agonio": "Nervous Rex",
+        "Shogún Real": "Shogun King",
+        "Shogunyan": "Shogunyan",
+        "Showbonyan": "Showbonyan",
+        "Shurikenny": "Shurikenny",
+        "Sierpesado": "Putasockinit",
+        "Simionyan": "Chimpanyan",
+        "Sincara": "Faysoff",
+        "Sincopollo": "Twirly Pie",
+        "Sinná": "Undy",
+        "Sinnareno": "Tanbo",
+        "Sirenia": "Mermadonna",
+        "Sirimiri": "Drizzle",
+        "Sirleón": "Siro",
+        "Sir Nyancelot": "Sir Nyansalot",
+        "Socarrat": "Flamurice",
+        "Sololo": "Soloman",
+        "Sombrillo": "Pallysol",
+        "Sombrillogro": "Scarasol",
+        "Sombrío": "Shamasol",
+        "Somnia": "Bakulia",
+        "Sónico": "Double Time",
+        "Su Hackeltad": "Hack King",
+        "Sumodón": "Sumodon",
+        "Supergerente": "Supermanager",
+        "Superniñato": "Unbelievaboy!",
+        "Superniñato Picajoso": "Inflammaboy!",
+        "Superniñato Rebelde": "Unbearaboy!",
+        "Supernyan": "Supernyan",
+        "Supersónico": "Sonic Bam",
+        "Supersumodón": "Yokozudon",
+        "Sushinyan": "Sushinyan",
+        "Sushisyama": "Sushiyama",
+        "Suspicioni": "Suspicioni",
+        "Sustóleo": "Ooze Zat",
+        "Talloestrella": "Hoppy-go-Lucky",
+        "Tanquivocado": "Mistank",
+        "Tarantutor": "Tarantutor",
+        "Telespejo": "Mirapo",
+        "Tembloleón": "Quaken",
+        "Tempurasan": "Tempurasan",
+        "T. Energison": "T. Energison",
+        "Tengu": "Tengu",
+        "Tengulecto": "Tengloom",
+        "Tengullón": "Nird",
+        "Tenguriginal": "Tenguriginal",
+        "Tenongrio": "Croonger",
+        "Tentanfadado": "Bitter Batter",
+        "Tentelento": "Dulluma",
+        "Tentemacho": "Darumacho",
+        "Tenterila": "Goruma",
+        "Termascino": "Sproink",
+        "Terminyanator": "Terminyanator",
+        "Terrormadura": "Spooklunk",
+        "Testructor": "Teastroyer",
+        "Tetrariosa": "Infour",
+        "Tibu Jones": "Indiana Jaws",
+        "Tiburón Jaquetón": "El Sharkador",
+        "Tiburón Tiburcio": "The Jawsome Kid",
+        "Tigrapa": "Tigappa",
+        "Tigrenyan": "Machonyan",
+        "Timidiablo": "Timidevil",
+        "Timo Gallo": "Crook-a-doodle",
+        "Timorato Buendía": "Mr. Blue-Shy",
+        "Tío Infinito": "Uncle Infinite",
+        "Tita corazón": "Auntie Heart",
+        "Tochacolate": "Cocobanana",
+        "Tochaplátano": "Bananose",
+        "Todoapesta": "Stinkeye",
+        "Todobelicoso": "Asura",
+        "Todoídos": "Too-Much-To-Take",
+        "Tofupyon": "Tofupyon",
+        "Tomanota": "Cue-Tee",
+        "Tomnyan": "Tomnyan",
+        "Tomoko": "Snottle",
+        "Tontolín": "Dummkap",
+        "Topamí": "Mynimo",
+        "Topanyan": "Topanyan",
+        "Topiña": "Molar Petite",
+        "Topoderoso": "Holey Moley",
+        "Toragorero": "Defectabull",
+        "Torbellóptico": "Eyephoon",
+        "Tortícolis": "Cricky",
+        "Torivinador": "Predictabull",
+        "Torivino": "Smashibull",
+        "Tornalmohado": "Flippit",
+        "Torpesaurio": "Clodzilla",
+        "Torreznio": "Slumberhog",
+        "Trabalanghi": "Tongue-Twister",
+        "Trampeida": "Scaremaiden",
+        "Trenditópico": "Treetter",
+        "Tricotom": "Ol’ Saint Trick",
+        "Trielespejo": "Miradox",
+        "Trilépata": "Espy",
+        "Tripasqueleto": "Gutsy Bones",
+        "Tristeresa": "Drenchetta",
+        "Tumbardillo": "Horizontail",
+        "Turdido": "Confuze",
+        "Ubiúho": "Alloo",
+        "Ulteria": "Ulteria",
+        "Ultimísimo Nyamurái": "The Lastest Nyanmurai",
+        "Último Nyanmurái": "The Last Nyanmurai",
+        "Ultra K": "Moximus K",
+        "Ultra N": "Moximus N",
+        "Unikyryn": "Unikirin",
+        "Urbasierpe": "City Licker",
+        "Urnaconda": "Urnaconda",
+        "Usapyon": "Usapyon",
+        "Usapyon B": "Usapyon B",
+        "Usapyon Zhongda": "Usapyon Zhongda",
+        "Uvanyan": "Grapenyan",
+        "Vacaloca": "Stircrazy Stu",
+        "Vacilagón": "Draaagin",
+        "Venocto": "Venoct",
+        "Venoctobot": "Venoctobot",
+        "Venoctoscuro": "Shadow Venoct",
+        "Ventisquero": "Alhail",
+        "Vivariposa": "Peppillon",
+        "Vociferio": "Roary",
+        "Vrumbo": "Rawry",
+        "Vueltodorado": "Swirlious Gold",
+        "Vueltomai": "Swirlious Omai",
+        "Vulcavador": "Shovulcan",
+        "Whismodín": "Josper",
+        "Whisper": "Whisper",
+        "Whisper Kongming": "Whisper Kongming",
+        "Whispócrates": "Whispocrates",
+        "Wibblekoma": "Wibblekoma",
+        "Wobblenyan": "Wobblenyan",
+        "Yanomás": "Q’wit",
+        "Yelmandante": "Helmsman",
+        "Yemajestad": "Her Eggcelency",
+        "Yoguididacta": "Yoganalisten",
+        "Yopago": "Almi",
+        "Yopaso": "D’wanna",
+        "Yopple-Bot": "Yopple-Bot",
+        "Zafinyan": "Sapphinyan",
+        "Zalameria": "Demandi",
+        "Zampo": "Grubsnitch",
+        "Záppingla": "Count Zapaway",
+        "Zarpa Dorada": "Golden Claws",
+        "Zarpa Roja": "Red Paws",
+        "Zazel": "Zazel",
+        "Zazelirio": "Zazelmare",
+        "Zazel Justiciero": "Righteous Zazel",
+        "Zudado": "Swelton",
+        "Shogunyan Cristalizado": "Crystal Shogunyan"
+    }
 }
