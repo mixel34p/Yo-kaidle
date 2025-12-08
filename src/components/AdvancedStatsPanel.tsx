@@ -13,7 +13,7 @@ interface AdvancedStatsPanelProps {
 const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, className = '' }) => {
   const { t, getTribeTranslation } = useLanguage();
   const [activeTab, setActiveTab] = useState<'overview' | 'tribes' | 'games'>('overview');
-  
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A';
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -22,7 +22,7 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
       year: 'numeric'
     });
   };
-  
+
   const getProgressColor = (percentage: number) => {
     if (percentage >= 100) return 'bg-green-500';
     if (percentage >= 75) return 'bg-blue-500';
@@ -30,11 +30,11 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
     if (percentage >= 25) return 'bg-orange-500';
     return 'bg-red-500';
   };
-  
+
   return (
     <div className={`advanced-stats-panel bg-white rounded-lg shadow-lg ${className}`}>
 
-      
+
       {/* Tabs */}
       <div className="flex border-b border-gray-200 overflow-x-auto">
         {[
@@ -45,18 +45,17 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center space-x-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
-              activeTab === tab.id
+            className={`flex items-center space-x-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab.id
                 ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
                 : 'text-gray-600 hover:text-gray-800'
-            }`}
+              }`}
           >
             <span>{tab.icon}</span>
             <span>{tab.label}</span>
           </button>
         ))}
       </div>
-      
+
       {/* Contenido de tabs */}
       <div className="p-6 max-h-96 overflow-y-auto">
         {activeTab === 'overview' && (
@@ -92,7 +91,7 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
             </div>
           </div>
         )}
-        
+
         {activeTab === 'tribes' && (
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-4">👥 {t.tribeDistribution}</h3>
@@ -123,7 +122,7 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
                   </div>
                   {tribe.lastUnlocked && (
                     <div className="text-xs text-gray-500 mt-1">
-                      {t.lastYokai}: {formatDate(tribe.lastUnlocked)}
+                      Último: {formatDate(tribe.lastUnlocked)}
                     </div>
                   )}
                 </div>
@@ -131,7 +130,7 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
             </div>
           </div>
         )}
-        
+
         {activeTab === 'games' && (
           <div>
             <h3 className="text-lg font-semibold text-gray-800 mb-4">🎮 {t.gameProgress}</h3>
@@ -174,7 +173,7 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
                   </div>
                   {game.lastUnlocked && (
                     <div className="text-xs text-gray-500 mt-1">
-                      {t.lastYokai}: {formatDate(game.lastUnlocked)}
+                      Último: {formatDate(game.lastUnlocked)}
                     </div>
                   )}
                 </div>
