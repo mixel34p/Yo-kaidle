@@ -68,6 +68,7 @@ export async function getCurrentSubscription(): Promise<PushSubscription | null>
  * Returns the subscription if successful, null otherwise
  */
 export async function subscribeToPush(): Promise<PushSubscription | null> {
+    console.log('[Push] subscribeToPush initiated');
     if (!isPushSupported()) {
         console.error('[Push] Push notifications not supported');
         return null;
@@ -77,35 +78,44 @@ export async function subscribeToPush(): Promise<PushSubscription | null> {
         console.error('[Push] VAPID public key not configured');
         return null;
     }
+    console.log('[Push] VAPID Key present');
 
     try {
         // Request notification permission first
+        console.log('[Push] Requesting native permission...');
         const permission = await Notification.requestPermission();
+        console.log('[Push] Native permission result:', permission);
+
         if (permission !== 'granted') {
             console.log('[Push] Notification permission denied');
             return null;
         }
 
         // Get service worker registration
+        console.log('[Push] Waiting for SW ready...');
         const registration = await navigator.serviceWorker.ready;
+        console.log('[Push] SW ready obtained:', registration);
 
         // Check for existing subscription
+        console.log('[Push] Checking existing subscription...');
         let subscription = await registration.pushManager.getSubscription();
+        console.log('[Push] Existing subscription:', subscription);
 
         if (subscription) {
-            console.log('[Push] Existing subscription found');
+            console.log('[Push] Existing subscription found, saving to server...');
             // Ensure it's saved in the database
             await saveSubscriptionToServer(subscription);
             return subscription;
         }
 
         // Create new subscription
-        console.log('[Push] Creating new push subscription...');
+        console.log('[Push] Creating new push subscription with VAPID...');
         const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
         subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: applicationServerKey.buffer as ArrayBuffer
         });
+        console.log('[Push] New subscription created:', subscription);
 
         // Save to server
         await saveSubscriptionToServer(subscription);
