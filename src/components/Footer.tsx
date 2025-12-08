@@ -3,17 +3,32 @@
 import React from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import dynamic from 'next/dynamic';
+
+// Importar FeedbackPanel de forma dinámica
+const FeedbackPanel = dynamic(() => import('./FeedbackPanel'), {
+  ssr: false,
+  loading: () => null
+});
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
 
-  return (    <footer className="fixed bottom-0 left-0 right-0 w-full bg-gradient-to-r from-blue-700/90 to-blue-900/90 text-white py-2 sm:py-3 px-4 shadow-lg backdrop-blur-sm border-t border-blue-400/30 z-40">
-      <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4">
+  return (    
+    <footer className="fixed bottom-0 left-0 right-0 w-full bg-gradient-to-r from-blue-700/90 to-blue-900/90 text-white py-2 sm:py-3 px-4 shadow-lg backdrop-blur-sm border-t border-blue-400/30 z-40">
+      <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
+        {/* Copyright y trademark */}
         <div className="text-center sm:text-left text-sm sm:mb-0">
           <p className="opacity-75 text-sm sm:text-base">{t.copyright}</p>
           <p className="text-xs opacity-60 hidden sm:block">{t.trademark}</p>
         </div>
         
+        {/* Centro: Botón de Feedback */}
+        <div id="feedback-root" className="flex-shrink-0">
+          <FeedbackPanel />
+        </div>
+        
+        {/* Créditos y redes sociales */}
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Créditos */}
           <div className="text-right">
@@ -43,8 +58,8 @@ const Footer: React.FC = () => {
             aria-label="Patreon"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<path d="M0 0h5.455v24H0V0zm14.182 6.545a6.545 6.545 0 1 1 0 13.09 6.545 6.545 0 0 1 0-13.09z" />
-			</svg>
+              <path d="M0 0h5.455v24H0V0zm14.182 6.545a6.545 6.545 0 1 1 0 13.09 6.545 6.545 0 0 1 0-13.09z" />
+            </svg>
           </a>
         </div>
       </div>

@@ -1,0 +1,93 @@
+{
+  "app": {
+    "title": "Yo-kaidle",
+    "subtitle": "Un wordle di Yo-kai Watch.",
+    "description": "Wordle ispirato dal franchise di Yo-kai Watch. Mostra le tue conoscenze sui Yo-kai e completa il tuo Medallium!"
+  },
+  "navigation": {
+    "play": "Gioca",
+    "medallium": "Mio Medallium"
+  },
+  "search": {
+    "placeholder": "Cerca un Yo-kai...",
+    "tribe": "Tribù",
+    "rank": "Rango"
+  },
+  "gameRules": {
+    "title": "Regole del gioco",
+    "toggleButton": "Come giocare?",
+    "rules": [
+      "Indovina lo Yo-kai giornaliero in 6 tentativi o meno.",
+      "Ogni tentativo deve essere uno Yo-kai valido della serie.",
+      "Dopo ogni tentativo, riceverai indizi sulle caratteristiche dello Yo-kai:"
+    ],
+    "colorExplanations": {
+      "correct": "Verde: La caratteristica è corretta",
+      "incorrect": "Rosso: La caratteristica è scorretta",
+      "higher": "Giallo con ↑: Il rango dello Yo-kai target è più alto",
+      "lower": "Giallo con ↓: Il rango dello Yo-kai target è più basso"
+    },
+    "clarifications": {
+      "title": "Chiarimenti importanti:",
+      "items": [
+        "La sezione gioco si riferisce al gioco in cui lo Yo-kai ha debuttato come ottenibile.",
+        "Gli Yo-kai usano le caratteristiche del primo gioco in cui appaiono. (Tranne quelli di Sangokushi, che si adattano al 3)",
+        "Non viene considerata la versione ottenibile dei boss e i boss senza un rango ufficiale sono Rango S.",
+        "Il gioco è ancora in fase di sviluppo e potrebbe contenere errori. Puoi segnalarli su discord."
+      ]
+    }
+  },
+  "gameModes": {
+    "daily": "Giornaliero",
+    "infinite": "Infinito",
+    "configuration": "Configurazione"
+  },
+  "gameOver": {
+    "won": "Congratulazioni!",
+    "lost": "Buona fortuna la prossima volta!",
+    "share": "Condividi",
+    "playAgain": "Gioca di nuovo",
+    "showStats": "Mostra statistiche",
+    "shareMessage": {
+      "header": "Ho indovinato lo Yokaidle in modalità {mode}!",
+      "attempts": "Tentativi: {current}/{max}",
+      "yokai": "Yo-kai: {name}",
+      "tribe": "Tribù: {tribe}",
+      "game": "Gioco: {game}",
+      "footer": "Provalo tu stesso: https://yokaidle.vercel.app"
+    },
+    "modes": {
+      "daily": "giornaliero",
+      "infinite": "infinito"
+    }
+  },
+  "footer": {
+    "copyright": "© 2025 Yo-kaidle",
+    "trademark": "Yo-kai Watch è un marchio registrato di Level-5 e LEVEL-5 Inc.",
+    "createdBy": "Creato da",
+    "helpedBy": "Aiutato da"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "title": "Scatola dei Suggerimenti",
+    "type": "Tipo di segnalazione",
+    "typeBug": "🐛 Bug/Errore",
+    "typeSuggestion": "💡 Suggerimento",
+    "typeOther": "📝 Altro",
+    "username": "Nome utente",
+    "usernamePlaceholder": "Il tuo nome (opzionale)",
+    "reportTitle": "Titolo",
+    "reportTitlePlaceholder": "Breve riassunto del problema o dell'idea",
+    "description": "Descrizione",
+    "descriptionPlaceholder": "Raccontaci più dettagli...",
+    "send": "Invia Feedback",
+    "sending": "Invio in corso...",
+    "required": "Obbligatorio",
+    "selectType": "Seleziona il tipo di segnalazione",
+    "addTitle": "Aggiungi un titolo",
+    "addDescription": "Descrivi il problema o il suggerimento",
+    "success": "Grazie per il tuo feedback! 💪",
+    "error": "Errore nell'invio del feedback",
+    "privacy": "I tuoi dati verranno inviati in modo sicuro. Non condivideremo le tue informazioni."
+  }
+}

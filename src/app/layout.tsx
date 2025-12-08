@@ -118,7 +118,9 @@ export default function RootLayout({
       <body className={`${inter.className} overscroll-none`}>
         <ClientLanguageProvider>
           <SocialAuthProvider>
-            {/* Componente cliente para el popup de actualizaciones */}            <ClientUpdatesWrapper />            <NotificationManager />
+            {/* Componente cliente para el popup de actualizaciones */}
+            <ClientUpdatesWrapper />
+            <NotificationManager />
             <main className="container mx-auto px-4 py-4 pb-32 sm:py-8 sm:pb-24 max-w-2xl">
               {children}
             </main>

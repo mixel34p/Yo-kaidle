@@ -155,12 +155,12 @@ export default function ProfileStats({ stats, theme }: ProfileStatsProps) {
         </div>
 
         {/* Yo-kais Desbloqueados - SOLO ESTE con barra porque tiene sentido */}
-        <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-          <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-purple-500/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden">
+          <div className="flex flex-col items-center gap-2 mb-4">
             <img
               src="/icons/game-modes/medallium.png"
               alt="Medallium"
-              className="w-7 h-7"
+              className="w-6 h-6 flex-shrink-0"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 const fallback = document.createElement('div');
@@ -169,7 +169,7 @@ export default function ProfileStats({ stats, theme }: ProfileStatsProps) {
                 e.currentTarget.parentElement!.insertBefore(fallback, e.currentTarget);
               }}
             />
-            <h3 className="text-lg font-semibold text-white text-center">
+            <h3 className="text-sm sm:text-base font-semibold text-white text-center leading-tight">
               {t.profileYokaiUnlocked}
             </h3>
           </div>

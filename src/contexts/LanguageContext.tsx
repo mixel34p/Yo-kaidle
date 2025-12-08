@@ -65,6 +65,31 @@ interface Translations {
   createdBy: string;
   helpedBy: string;
 
+  // Feedback
+  feedbackButton: string;
+  feedbackTitle: string;
+  feedbackType: string;
+  feedbackTypeBug: string;
+  feedbackTypeSuggestion: string;
+  feedbackTypeOther: string;
+  priorityLow: string;
+  priorityMedium: string;
+  priorityHigh: string;
+  feedbackUsername: string;
+  feedbackUsernamePlaceholder: string;
+  feedbackReportTitle: string;
+  feedbackReportTitlePlaceholder: string;
+  feedbackDescription: string;
+  feedbackDescriptionPlaceholder: string;
+  feedbackSend: string;
+  feedbackSending: string;
+  feedbackSelectType: string;
+  feedbackAddTitle: string;
+  feedbackAddDescription: string;
+  feedbackSuccess: string;
+  feedbackError: string;
+  feedbackPrivacy: string;
+
   // Additional UI elements
   close: string;
   loading: string;
@@ -331,8 +356,6 @@ interface Translations {
   topPlayers: string;
   yourRank: string;
   notRanked: string;
-  firstYokai: string;
-  lastYokai: string;
 
   // Achievements Panel UI
   uncompletedAchievements: string;
@@ -422,6 +445,31 @@ const translations: Record<Language, Translations> = {
     trademark: 'Yo-kai Watch es una marca registrada de Level-5 y LEVEL-5 Inc.',
     createdBy: 'Creado por',
     helpedBy: 'Ayudado por',
+
+    // Feedback
+    feedbackButton: 'Feedback',
+    feedbackTitle: 'Buzón de Sugerencias',
+    feedbackType: 'Tipo de reporte',
+    feedbackTypeBug: '🐛 Error/Bug',
+    feedbackTypeSuggestion: '💡 Sugerencia',
+    feedbackTypeOther: '📝 Otro',
+    priorityLow: 'Baja',
+    priorityMedium: 'Media',
+    priorityHigh: 'Alta',
+    feedbackUsername: 'Nombre de usuario',
+    feedbackUsernamePlaceholder: 'Tu nombre (opcional)',
+    feedbackReportTitle: 'Título',
+    feedbackReportTitlePlaceholder: 'Resumen breve del problema o idea',
+    feedbackDescription: 'Descripción',
+    feedbackDescriptionPlaceholder: 'Cuéntanos más detalles...',
+    feedbackSend: 'Enviar Feedback',
+    feedbackSending: 'Enviando...',
+    feedbackSelectType: 'Selecciona el tipo de reporte',
+    feedbackAddTitle: 'Añade un título',
+    feedbackAddDescription: 'Describe el problema o sugerencia',
+    feedbackSuccess: '¡Gracias por tu feedback! 💪',
+    feedbackError: 'Error al enviar el feedback',
+    feedbackPrivacy: 'Tus datos se enviarán de forma segura. No compartiremos tu información.',
 
     close: 'Cerrar',
     loading: 'Cargando...',
@@ -584,40 +632,6 @@ const translations: Record<Language, Translations> = {
     perDay: 'por día',
     noRecentActivity: 'No hay actividad reciente',
     remainingToComplete: 'Faltan',
-    firstYokai: 'Primer Yo-kai',
-    lastYokai: 'Último Yo-kai',
-
-    // Achievements Panel UI
-    uncompletedAchievements: 'Sin Completar',
-    completedAchievements: 'Completados',
-    allCategories: 'Todos',
-    collectionCategory: 'Colección',
-    tribesCategory: 'Tribus',
-    gamesCategory: 'Juegos',
-    ranksCategory: 'Rangos',
-    specialCategory: 'Especiales',
-    achievementUncompleted: 'Sin Completar',
-    achievementCompleted: 'Completado',
-    noAchievementsUncompleted: 'No tienes logros sin completar',
-    noAchievementsCompleted: 'No tienes logros completados aún',
-    reward: 'Recompensa',
-    achievementProgress: 'Progreso de Logros',
-    totalPoints: 'Puntos Totales',
-    achievementStats: 'Estadísticas de Logros',
-    keepPlayingToUnlock: '¡Sigue jugando para desbloquear logros!',
-    allAchievementsUnlocked: '¡Has desbloqueado todos los logros de esta categoría!',
-    noLockedAchievements: 'No hay más logros por desbloquear en esta categoría',
-    achievements: 'Logros',
-    completed: 'Completado',
-    earned: 'Ganados',
-    total: 'Total',
-    points: 'Puntos',
-    claimReward: 'Reclamar',
-    claimed: 'Reclamado',
-    hints: 'Ayudas',
-    usePointsToGetHints: 'Usa puntos para obtener pistas',
-    insufficientPoints: 'Puntos insuficientes',
-    used: 'Usado',
 
     // Social/Auth System
     // Authentication
@@ -775,6 +789,31 @@ const translations: Record<Language, Translations> = {
     trademark: 'Yo-kai Watch is a registered trademark of Level-5 and LEVEL-5 Inc.',
     createdBy: 'Created by',
     helpedBy: 'Helped by',
+
+    // Feedback
+    feedbackButton: 'Feedback',
+    feedbackTitle: 'Suggestion Box',
+    feedbackType: 'Report type',
+    feedbackTypeBug: '🐛 Bug/Error',
+    feedbackTypeSuggestion: '💡 Suggestion',
+    feedbackTypeOther: '📝 Other',
+    priorityLow: 'Low',
+    priorityMedium: 'Medium',
+    priorityHigh: 'High',
+    feedbackUsername: 'Username',
+    feedbackUsernamePlaceholder: 'Your name (optional)',
+    feedbackReportTitle: 'Title',
+    feedbackReportTitlePlaceholder: 'Brief summary of the issue or idea',
+    feedbackDescription: 'Description',
+    feedbackDescriptionPlaceholder: 'Tell us more details...',
+    feedbackSend: 'Send Feedback',
+    feedbackSending: 'Sending...',
+    feedbackSelectType: 'Select the report type',
+    feedbackAddTitle: 'Add a title',
+    feedbackAddDescription: 'Describe the issue or suggestion',
+    feedbackSuccess: 'Thank you for your feedback! 💪',
+    feedbackError: 'Error sending feedback',
+    feedbackPrivacy: 'Your data will be sent securely. We will not share your information.',
 
     close: 'Close',
     loading: 'Loading...',
@@ -937,8 +976,6 @@ const translations: Record<Language, Translations> = {
     perDay: 'per day',
     noRecentActivity: 'No recent activity',
     remainingToComplete: 'Remaining',
-    firstYokai: 'First Yo-kai',
-    lastYokai: 'Last Yo-kai',
 
     // Achievements Panel UI
     uncompletedAchievements: 'Uncompleted',
@@ -1132,6 +1169,31 @@ const translations: Record<Language, Translations> = {
     trademark: 'Yo-kai Watch è un marchio registrato di Level-5 e LEVEL-5 Inc.',
     createdBy: 'Creato da',
     helpedBy: 'Aiutato da',
+
+    // Feedback
+    feedbackButton: 'Feedback',
+    feedbackTitle: 'Scatola dei Suggerimenti',
+    feedbackType: 'Tipo di segnalazione',
+    feedbackTypeBug: '🐛 Bug/Errore',
+    feedbackTypeSuggestion: '💡 Suggerimento',
+    feedbackTypeOther: '📝 Altro',
+    priorityLow: 'Bassa',
+    priorityMedium: 'Media',
+    priorityHigh: 'Alta',
+    feedbackUsername: 'Nome utente',
+    feedbackUsernamePlaceholder: 'Il tuo nome (opzionale)',
+    feedbackReportTitle: 'Titolo',
+    feedbackReportTitlePlaceholder: 'Breve riassunto del problema o dell\'idea',
+    feedbackDescription: 'Descrizione',
+    feedbackDescriptionPlaceholder: 'Raccontaci più dettagli...',
+    feedbackSend: 'Invia Feedback',
+    feedbackSending: 'Invio in corso...',
+    feedbackSelectType: 'Seleziona il tipo di segnalazione',
+    feedbackAddTitle: 'Aggiungi un titolo',
+    feedbackAddDescription: 'Descrivi il problema o il suggerimento',
+    feedbackSuccess: 'Grazie per il tuo feedback! 💪',
+    feedbackError: 'Errore nell\'invio del feedback',
+    feedbackPrivacy: 'I tuoi dati verranno inviati in modo sicuro. Non condivideremo le tue informazioni.',
 
     // Additional UI elements
     close: 'Chiudi',

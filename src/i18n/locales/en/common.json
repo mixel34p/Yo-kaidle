@@ -66,5 +66,28 @@
     "trademark": "Yo-kai Watch is a registered trademark of Level-5 and LEVEL-5 Inc.",
     "createdBy": "Created by",
     "helpedBy": "Helped by"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "title": "Suggestion Box",
+    "type": "Report type",
+    "typeBug": "🐛 Bug/Error",
+    "typeSuggestion": "💡 Suggestion",
+    "typeOther": "📝 Other",
+    "username": "Username",
+    "usernamePlaceholder": "Your name (optional)",
+    "reportTitle": "Title",
+    "reportTitlePlaceholder": "Brief summary of the issue or idea",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell us more details...",
+    "send": "Send Feedback",
+    "sending": "Sending...",
+    "required": "Required",
+    "selectType": "Select the report type",
+    "addTitle": "Add a title",
+    "addDescription": "Describe the issue or suggestion",
+    "success": "Thank you for your feedback! 💪",
+    "error": "Error sending feedback",
+    "privacy": "Your data will be sent securely. We will not share your information."
   }
 }
