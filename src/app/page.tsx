@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import YokaiGrid from '@/components/YokaiGrid';
@@ -74,6 +74,9 @@ function HomeContent() {
   // Hook para auth social
   const { user } = useSocialAuth();
   const router = useRouter();
+
+  // Ref para manejar el timeout del Game Over
+  const gameOverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Hook para sincronizar estadísticas sociales
   useSocialStats();
@@ -206,6 +209,13 @@ function HomeContent() {
   const handleNewInfiniteGame = async () => {
     // Ocultar Game Over INMEDIATAMENTE para evitar mostrar el Yo-kai anterior
     setShowGameOver(false);
+
+    // Limpiar cualquier timeout pendiente de una partida anterior
+    if (gameOverTimeoutRef.current) {
+      clearTimeout(gameOverTimeoutRef.current);
+      gameOverTimeoutRef.current = null;
+    }
+
     setLoading(true);
 
     const today = getTodayDateString();
@@ -795,8 +805,13 @@ function HomeContent() {
 
       setMessage('');
       // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas
+      // Retrasar la pantalla de victoria para permitir que se complete la animación de todas las celdas
       const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
-      setTimeout(() => setShowGameOver(true), animationDuration);
+
+      // Limpiar timeout anterior si existe
+      if (gameOverTimeoutRef.current) clearTimeout(gameOverTimeoutRef.current);
+
+      gameOverTimeoutRef.current = setTimeout(() => setShowGameOver(true), animationDuration);
     } else if (newGuesses.length >= MAX_GUESSES) {
       newGameStatus = 'lost';
 
@@ -813,8 +828,13 @@ function HomeContent() {
 
       setMessage('');
       // Retrasar la pantalla de derrota para permitir que se complete la animación de todas las celdas
+      // Retrasar la pantalla de derrota para permitir que se complete la animación de todas las celdas
       const animationDuration = 3000; // 1s para la última celda + 2s adicionales para asegurar que todo termina
-      setTimeout(() => setShowGameOver(true), animationDuration);
+
+      // Limpiar timeout anterior si existe
+      if (gameOverTimeoutRef.current) clearTimeout(gameOverTimeoutRef.current);
+
+      gameOverTimeoutRef.current = setTimeout(() => setShowGameOver(true), animationDuration);
     }
 
     // Actualizar el estado del juego
