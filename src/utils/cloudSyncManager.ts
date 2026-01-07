@@ -183,6 +183,17 @@ export async function downloadFromCloud(userId: string): Promise<boolean> {
             applyCloudData(result.data);
             markAsSynced(userId);
             console.log('[CloudSync] Data downloaded and applied successfully');
+
+            // After downloading, upload again to update session_id in cloud
+            // This prevents the cross-device prompt from appearing again on refresh
+            const sessionId = getSessionId();
+            await fetch('/api/cloud-sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, data: result.data, sessionId })
+            });
+            console.log('[CloudSync] Session ID updated in cloud');
+
             return true;
         }
 
