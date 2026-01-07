@@ -317,10 +317,17 @@ export function startPeriodicSync(userId: string): void {
         clearInterval(periodicSyncInterval);
     }
 
-    // Sync every 5 minutes
+    // Do an immediate sync on start
+    const syncStatus = getSyncStatus();
+    if (syncStatus.isSynced && syncStatus.userId === userId) {
+        console.log('[CloudSync] Initial sync on app start');
+        uploadToCloud(userId);
+    }
+
+    // Then sync every 5 minutes
     periodicSyncInterval = setInterval(() => {
-        const syncStatus = getSyncStatus();
-        if (syncStatus.isSynced && syncStatus.userId === userId) {
+        const status = getSyncStatus();
+        if (status.isSynced && status.userId === userId) {
             console.log('[CloudSync] Periodic sync triggered');
             uploadToCloud(userId);
         }
