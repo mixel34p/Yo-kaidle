@@ -204,7 +204,10 @@ function HomeContent() {
   // El popup de actualizaciones ahora se gestiona en el layout global
   // Reiniciar partida infinita: nuevo yokai y limpiar intentos
   const handleNewInfiniteGame = async () => {
+    // Ocultar Game Over INMEDIATAMENTE para evitar mostrar el Yo-kai anterior
+    setShowGameOver(false);
     setLoading(true);
+
     const today = getTodayDateString();
     const eventFilter = await getEventFilter();
     const randomYokai = await getRandomYokai(selectedGameSources, tribeRestrictions.excludeBossTribes, eventFilter);
@@ -212,7 +215,6 @@ function HomeContent() {
       const newGameState = createNewInfiniteGame(today, randomYokai, gameState);
       setGameState(newGameState);
       setGuessResults([]);
-      setShowGameOver(false);
       setMessage("");
       setFoodIconTimestamp(Date.now());
       setPointsEarnedThisGame(0); // Resetear puntos ganados
