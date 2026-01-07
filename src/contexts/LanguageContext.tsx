@@ -389,7 +389,27 @@ interface Translations {
   insufficientPoints: string;
   used: string;
 
-
+  // Cloud Sync
+  cloudSync: string;
+  cloudSyncTitle: string;
+  cloudSyncDescription: string;
+  localData: string;
+  cloudData: string;
+  useLocalData: string;
+  useCloudData: string;
+  syncInProgress: string;
+  syncComplete: string;
+  syncError: string;
+  resync: string;
+  resyncDescription: string;
+  noCloudData: string;
+  yokaiUnlockedCount: string;
+  achievementsUnlockedCount: string;
+  pointsEarned: string;
+  gamesPlayedCount: string;
+  lastSynced: string;
+  uploadingData: string;
+  downloadingData: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -767,7 +787,29 @@ const translations: Record<Language, Translations> = {
     hints: 'Ayudas',
     usePointsToGetHints: 'Usa puntos para obtener pistas',
     insufficientPoints: 'Puntos insuficientes',
-    used: 'Usado'
+    used: 'Usado',
+
+    // Cloud Sync
+    cloudSync: 'Sincronización en la nube',
+    cloudSyncTitle: 'Sincronizar progreso',
+    cloudSyncDescription: 'Elige cómo sincronizar tu progreso entre dispositivos.',
+    localData: 'Datos locales',
+    cloudData: 'Datos en la nube',
+    useLocalData: 'Usar datos locales',
+    useCloudData: 'Usar datos de la nube',
+    syncInProgress: 'Sincronizando...',
+    syncComplete: '¡Sincronización completada!',
+    syncError: 'Error al sincronizar',
+    resync: 'Resincronizar',
+    resyncDescription: 'Volver a elegir qué datos usar',
+    noCloudData: 'No hay datos guardados en la nube',
+    yokaiUnlockedCount: 'Yo-kai desbloqueados',
+    achievementsUnlockedCount: 'Logros completados',
+    pointsEarned: 'Puntos ganados',
+    gamesPlayedCount: 'Partidas jugadas',
+    lastSynced: 'Última sincronización',
+    uploadingData: 'Subiendo datos...',
+    downloadingData: 'Descargando datos...'
   },
   en: {
     appTitle: 'Yo-kaidle',
@@ -1144,6 +1186,28 @@ const translations: Record<Language, Translations> = {
     badges: 'Badges',
     selectBadges: 'Select Badges',
     noBadgesSelected: 'No badges selected',
+
+    // Cloud Sync
+    cloudSync: 'Cloud Sync',
+    cloudSyncTitle: 'Sync Progress',
+    cloudSyncDescription: 'Choose how to sync your progress across devices.',
+    localData: 'Local Data',
+    cloudData: 'Cloud Data',
+    useLocalData: 'Use Local Data',
+    useCloudData: 'Use Cloud Data',
+    syncInProgress: 'Syncing...',
+    syncComplete: 'Sync complete!',
+    syncError: 'Sync error',
+    resync: 'Resync',
+    resyncDescription: 'Choose which data to use again',
+    noCloudData: 'No cloud data saved',
+    yokaiUnlockedCount: 'Yo-kai unlocked',
+    achievementsUnlockedCount: 'Achievements completed',
+    pointsEarned: 'Points earned',
+    gamesPlayedCount: 'Games played',
+    lastSynced: 'Last synced',
+    uploadingData: 'Uploading data...',
+    downloadingData: 'Downloading data...'
   },
   it: {
     appTitle: 'Yo-kaidle',
@@ -1526,6 +1590,28 @@ const translations: Record<Language, Translations> = {
     badges: 'Distintivi',
     selectBadges: 'Seleziona Distintivi',
     noBadgesSelected: 'Nessun distintivo selezionato',
+
+    // Cloud Sync
+    cloudSync: 'Sincronizzazione cloud',
+    cloudSyncTitle: 'Sincronizza progresso',
+    cloudSyncDescription: 'Scegli come sincronizzare i tuoi progressi tra i dispositivi.',
+    localData: 'Dati locali',
+    cloudData: 'Dati cloud',
+    useLocalData: 'Usa dati locali',
+    useCloudData: 'Usa dati cloud',
+    syncInProgress: 'Sincronizzazione...',
+    syncComplete: 'Sincronizzazione completata!',
+    syncError: 'Errore di sincronizzazione',
+    resync: 'Risincronizza',
+    resyncDescription: 'Scegli di nuovo quali dati usare',
+    noCloudData: 'Nessun dato cloud salvato',
+    yokaiUnlockedCount: 'Yo-kai sbloccati',
+    achievementsUnlockedCount: 'Obiettivi completati',
+    pointsEarned: 'Punti guadagnati',
+    gamesPlayedCount: 'Partite giocate',
+    lastSynced: 'Ultima sincronizzazione',
+    uploadingData: 'Caricamento dati...',
+    downloadingData: 'Scaricamento dati...'
   }
 };
 
