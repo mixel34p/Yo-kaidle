@@ -17,6 +17,10 @@ const NotificationManager = dynamic(() => import('@/components/NotificationManag
   ssr: false,
   loading: () => null
 })
+const ConnectAccountPrompt = dynamic(() => import('@/components/ConnectAccountPrompt'), {
+  ssr: false,
+  loading: () => null
+})
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -125,6 +129,7 @@ export default function RootLayout({
               {children}
             </main>
             <PWAPrompt />
+            <ConnectAccountPrompt />
             <Footer />
           </SocialAuthProvider>
         </ClientLanguageProvider>
