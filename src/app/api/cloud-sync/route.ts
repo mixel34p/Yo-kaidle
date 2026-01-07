@@ -92,9 +92,19 @@ export async function POST(request: NextRequest) {
             });
 
         if (error) {
-            console.error('[API Cloud Sync] POST error:', error);
+            console.error('[API Cloud Sync] POST error:', {
+                message: error.message,
+                code: error.code,
+                details: error.details,
+                hint: error.hint
+            });
             return NextResponse.json(
-                { error: 'Failed to save cloud data' },
+                {
+                    error: 'Failed to save cloud data',
+                    details: error.message,
+                    code: error.code,
+                    hint: error.hint
+                },
                 { status: 500 }
             );
         }
