@@ -89,5 +89,33 @@
     "success": "Grazie per il tuo feedback! 💪",
     "error": "Errore nell'invio del feedback",
     "privacy": "I tuoi dati verranno inviati in modo sicuro. Non condivideremo le tue informazioni."
+  },
+  "suggestions": {
+    "button": "Suggerisci",
+    "title": "✨ Suggerisci Contenuto",
+    "type": "Cosa vuoi suggerire?",
+    "typeFrame": "Cornice",
+    "typeBackground": "Sfondo",
+    "typeMusic": "Musica",
+    "typeTitle": "Titolo",
+    "name": "Nome",
+    "namePlaceholder": "Es: Cornice dorata di Jibanyan",
+    "description": "Descrizione / Motivo",
+    "descriptionPlaceholder": "Perché dovrebbe essere aggiunto? Cosa lo rende speciale?",
+    "imageUrl": "URL immagine",
+    "imageUrlPlaceholder": "https://imgur.com/... o link diretto",
+    "imageUrlHint": "Carica la tua immagine su Imgur o Discord e incolla il link",
+    "referenceUrl": "URL di riferimento",
+    "referenceUrlPlaceholder": "https://youtube.com/... o link della canzone",
+    "send": "Invia Suggerimento",
+    "sending": "Invio in corso...",
+    "success": "Suggerimento inviato con successo!",
+    "error": "Errore nell'invio del suggerimento",
+    "loginRequired": "Accedi per suggerire",
+    "loginDescription": "Devi accedere con Discord per inviare suggerimenti",
+    "rewardBanner": "Puoi vincere il tuo suggerimento come ricompensa se viene implementato! 🎁",
+    "sendingAs": "Inviando come",
+    "addName": "Per favore, aggiungi un nome",
+    "addDescription": "Per favore, aggiungi una descrizione"
   }
 }

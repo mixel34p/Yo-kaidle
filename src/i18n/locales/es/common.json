@@ -89,5 +89,33 @@
     "success": "¡Gracias por tu feedback! 💪",
     "error": "Error al enviar el feedback",
     "privacy": "Tus datos se enviarán de forma segura. No compartiremos tu información."
+  },
+  "suggestions": {
+    "button": "Sugerir",
+    "title": "✨ Sugerir Contenido",
+    "type": "¿Qué quieres sugerir?",
+    "typeFrame": "Marco",
+    "typeBackground": "Fondo",
+    "typeMusic": "Música",
+    "typeTitle": "Título",
+    "name": "Nombre",
+    "namePlaceholder": "Ej: Marco de Jibanyan dorado",
+    "description": "Descripción / Razón",
+    "descriptionPlaceholder": "¿Por qué debería añadirse? ¿Qué lo hace especial?",
+    "imageUrl": "URL de imagen",
+    "imageUrlPlaceholder": "https://imgur.com/... o enlace directo",
+    "imageUrlHint": "Sube tu imagen a Imgur o Discord y pega el enlace",
+    "referenceUrl": "URL de referencia",
+    "referenceUrlPlaceholder": "https://youtube.com/... o enlace de la canción",
+    "send": "Enviar Sugerencia",
+    "sending": "Enviando...",
+    "success": "¡Sugerencia enviada correctamente!",
+    "error": "Error al enviar la sugerencia",
+    "loginRequired": "Inicia sesión para sugerir",
+    "loginDescription": "Necesitas iniciar sesión con Discord para enviar sugerencias",
+    "rewardBanner": "¡Puedes ganar tu sugerencia como recompensa si es implementada! 🎁",
+    "sendingAs": "Enviando como",
+    "addName": "Por favor, añade un nombre",
+    "addDescription": "Por favor, añade una descripción"
   }
 }

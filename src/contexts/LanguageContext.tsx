@@ -90,6 +90,34 @@ interface Translations {
   feedbackError: string;
   feedbackPrivacy: string;
 
+  // Suggestions
+  suggestionButton: string;
+  suggestionTitle: string;
+  suggestionType: string;
+  suggestionTypeFrame: string;
+  suggestionTypeBackground: string;
+  suggestionTypeMusic: string;
+  suggestionTypeTitle: string;
+  suggestionName: string;
+  suggestionNamePlaceholder: string;
+  suggestionDescription: string;
+  suggestionDescriptionPlaceholder: string;
+  suggestionImageUrl: string;
+  suggestionImageUrlPlaceholder: string;
+  suggestionImageUrlHint: string;
+  suggestionReferenceUrl: string;
+  suggestionReferenceUrlPlaceholder: string;
+  suggestionSend: string;
+  suggestionSending: string;
+  suggestionSuccess: string;
+  suggestionError: string;
+  suggestionLoginRequired: string;
+  suggestionLoginDescription: string;
+  suggestionRewardBanner: string;
+  suggestionSendingAs: string;
+  suggestionAddName: string;
+  suggestionAddDescription: string;
+
   // Additional UI elements
   close: string;
   loading: string;
@@ -821,7 +849,35 @@ const translations: Record<Language, Translations> = {
     crossDeviceDetected: '¡Jugaste en otro dispositivo!',
     crossDeviceDescription: 'Se detectó progreso reciente desde otro navegador o dispositivo.',
     loadRecentData: 'Cargar datos recientes',
-    keepLocalData: 'Mantener datos actuales'
+    keepLocalData: 'Mantener datos actuales',
+
+    // Suggestions
+    suggestionButton: 'Sugerir',
+    suggestionTitle: '✨ Sugerir Contenido',
+    suggestionType: '¿Qué quieres sugerir?',
+    suggestionTypeFrame: 'Marco',
+    suggestionTypeBackground: 'Fondo',
+    suggestionTypeMusic: 'Música',
+    suggestionTypeTitle: 'Título',
+    suggestionName: 'Nombre',
+    suggestionNamePlaceholder: 'Ej: Marco de Jibanyan dorado',
+    suggestionDescription: 'Descripción / Razón',
+    suggestionDescriptionPlaceholder: '¿Por qué debería añadirse? ¿Qué lo hace especial?',
+    suggestionImageUrl: 'URL de imagen',
+    suggestionImageUrlPlaceholder: 'https://imgur.com/... o enlace directo',
+    suggestionImageUrlHint: 'Sube tu imagen a Imgur o Discord y pega el enlace',
+    suggestionReferenceUrl: 'URL de referencia',
+    suggestionReferenceUrlPlaceholder: 'https://youtube.com/... o enlace de la canción',
+    suggestionSend: 'Enviar Sugerencia',
+    suggestionSending: 'Enviando...',
+    suggestionSuccess: '¡Sugerencia enviada correctamente!',
+    suggestionError: 'Error al enviar la sugerencia',
+    suggestionLoginRequired: 'Inicia sesión para sugerir',
+    suggestionLoginDescription: 'Necesitas iniciar sesión con Discord para enviar sugerencias',
+    suggestionRewardBanner: '¡Puedes ganar tu sugerencia como recompensa si es implementada! 🎁',
+    suggestionSendingAs: 'Enviando como',
+    suggestionAddName: 'Por favor, añade un nombre',
+    suggestionAddDescription: 'Por favor, añade una descripción'
   },
   en: {
     appTitle: 'Yo-kaidle',
@@ -1225,7 +1281,35 @@ const translations: Record<Language, Translations> = {
     crossDeviceDetected: 'You played on another device!',
     crossDeviceDescription: 'Recent progress detected from another browser or device.',
     loadRecentData: 'Load recent data',
-    keepLocalData: 'Keep current data'
+    keepLocalData: 'Keep current data',
+
+    // Suggestions
+    suggestionButton: 'Suggest',
+    suggestionTitle: '✨ Suggest Content',
+    suggestionType: 'What do you want to suggest?',
+    suggestionTypeFrame: 'Frame',
+    suggestionTypeBackground: 'Background',
+    suggestionTypeMusic: 'Music',
+    suggestionTypeTitle: 'Title',
+    suggestionName: 'Name',
+    suggestionNamePlaceholder: 'E.g.: Golden Jibanyan Frame',
+    suggestionDescription: 'Description / Reason',
+    suggestionDescriptionPlaceholder: 'Why should it be added? What makes it special?',
+    suggestionImageUrl: 'Image URL',
+    suggestionImageUrlPlaceholder: 'https://imgur.com/... or direct link',
+    suggestionImageUrlHint: 'Upload your image to Imgur or Discord and paste the link',
+    suggestionReferenceUrl: 'Reference URL',
+    suggestionReferenceUrlPlaceholder: 'https://youtube.com/... or song link',
+    suggestionSend: 'Send Suggestion',
+    suggestionSending: 'Sending...',
+    suggestionSuccess: 'Suggestion sent successfully!',
+    suggestionError: 'Error sending suggestion',
+    suggestionLoginRequired: 'Log in to suggest',
+    suggestionLoginDescription: 'You need to log in with Discord to send suggestions',
+    suggestionRewardBanner: 'You can earn your suggestion as a reward if it gets implemented! 🎁',
+    suggestionSendingAs: 'Sending as',
+    suggestionAddName: 'Please add a name',
+    suggestionAddDescription: 'Please add a description'
   },
   it: {
     appTitle: 'Yo-kaidle',
@@ -1635,7 +1719,35 @@ const translations: Record<Language, Translations> = {
     crossDeviceDetected: 'Hai giocato su un altro dispositivo!',
     crossDeviceDescription: 'Rilevato progresso recente da un altro browser o dispositivo.',
     loadRecentData: 'Carica dati recenti',
-    keepLocalData: 'Mantieni dati attuali'
+    keepLocalData: 'Mantieni dati attuali',
+
+    // Suggestions
+    suggestionButton: 'Suggerisci',
+    suggestionTitle: '✨ Suggerisci Contenuto',
+    suggestionType: 'Cosa vuoi suggerire?',
+    suggestionTypeFrame: 'Cornice',
+    suggestionTypeBackground: 'Sfondo',
+    suggestionTypeMusic: 'Musica',
+    suggestionTypeTitle: 'Titolo',
+    suggestionName: 'Nome',
+    suggestionNamePlaceholder: 'Es: Cornice dorata di Jibanyan',
+    suggestionDescription: 'Descrizione / Motivo',
+    suggestionDescriptionPlaceholder: 'Perché dovrebbe essere aggiunto? Cosa lo rende speciale?',
+    suggestionImageUrl: 'URL immagine',
+    suggestionImageUrlPlaceholder: 'https://imgur.com/... o link diretto',
+    suggestionImageUrlHint: 'Carica la tua immagine su Imgur o Discord e incolla il link',
+    suggestionReferenceUrl: 'URL di riferimento',
+    suggestionReferenceUrlPlaceholder: 'https://youtube.com/... o link della canzone',
+    suggestionSend: 'Invia Suggerimento',
+    suggestionSending: 'Invio in corso...',
+    suggestionSuccess: 'Suggerimento inviato con successo!',
+    suggestionError: "Errore nell'invio del suggerimento",
+    suggestionLoginRequired: 'Accedi per suggerire',
+    suggestionLoginDescription: 'Devi accedere con Discord per inviare suggerimenti',
+    suggestionRewardBanner: 'Puoi vincere il tuo suggerimento come ricompensa se viene implementato! 🎁',
+    suggestionSendingAs: 'Inviando come',
+    suggestionAddName: 'Per favore, aggiungi un nome',
+    suggestionAddDescription: 'Per favore, aggiungi una descrizione'
   }
 };
 

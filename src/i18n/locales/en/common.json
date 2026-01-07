@@ -89,5 +89,33 @@
     "success": "Thank you for your feedback! 💪",
     "error": "Error sending feedback",
     "privacy": "Your data will be sent securely. We will not share your information."
+  },
+  "suggestions": {
+    "button": "Suggest",
+    "title": "✨ Suggest Content",
+    "type": "What do you want to suggest?",
+    "typeFrame": "Frame",
+    "typeBackground": "Background",
+    "typeMusic": "Music",
+    "typeTitle": "Title",
+    "name": "Name",
+    "namePlaceholder": "E.g.: Golden Jibanyan Frame",
+    "description": "Description / Reason",
+    "descriptionPlaceholder": "Why should it be added? What makes it special?",
+    "imageUrl": "Image URL",
+    "imageUrlPlaceholder": "https://imgur.com/... or direct link",
+    "imageUrlHint": "Upload your image to Imgur or Discord and paste the link",
+    "referenceUrl": "Reference URL",
+    "referenceUrlPlaceholder": "https://youtube.com/... or song link",
+    "send": "Send Suggestion",
+    "sending": "Sending...",
+    "success": "Suggestion sent successfully!",
+    "error": "Error sending suggestion",
+    "loginRequired": "Log in to suggest",
+    "loginDescription": "You need to log in with Discord to send suggestions",
+    "rewardBanner": "You can earn your suggestion as a reward if it gets implemented! 🎁",
+    "sendingAs": "Sending as",
+    "addName": "Please add a name",
+    "addDescription": "Please add a description"
   }
 }
