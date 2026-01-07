@@ -410,6 +410,12 @@ interface Translations {
   lastSynced: string;
   uploadingData: string;
   downloadingData: string;
+
+  // Cross-Device Sync
+  crossDeviceDetected: string;
+  crossDeviceDescription: string;
+  loadRecentData: string;
+  keepLocalData: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -809,7 +815,13 @@ const translations: Record<Language, Translations> = {
     gamesPlayedCount: 'Partidas jugadas',
     lastSynced: 'Última sincronización',
     uploadingData: 'Subiendo datos...',
-    downloadingData: 'Descargando datos...'
+    downloadingData: 'Descargando datos...',
+
+    // Cross-Device Sync
+    crossDeviceDetected: '¡Jugaste en otro dispositivo!',
+    crossDeviceDescription: 'Se detectó progreso reciente desde otro navegador o dispositivo.',
+    loadRecentData: 'Cargar datos recientes',
+    keepLocalData: 'Mantener datos actuales'
   },
   en: {
     appTitle: 'Yo-kaidle',
@@ -1207,7 +1219,13 @@ const translations: Record<Language, Translations> = {
     gamesPlayedCount: 'Games played',
     lastSynced: 'Last synced',
     uploadingData: 'Uploading data...',
-    downloadingData: 'Downloading data...'
+    downloadingData: 'Downloading data...',
+
+    // Cross-Device Sync
+    crossDeviceDetected: 'You played on another device!',
+    crossDeviceDescription: 'Recent progress detected from another browser or device.',
+    loadRecentData: 'Load recent data',
+    keepLocalData: 'Keep current data'
   },
   it: {
     appTitle: 'Yo-kaidle',
@@ -1611,7 +1629,13 @@ const translations: Record<Language, Translations> = {
     gamesPlayedCount: 'Partite giocate',
     lastSynced: 'Ultima sincronizzazione',
     uploadingData: 'Caricamento dati...',
-    downloadingData: 'Scaricamento dati...'
+    downloadingData: 'Scaricamento dati...',
+
+    // Cross-Device Sync
+    crossDeviceDetected: 'Hai giocato su un altro dispositivo!',
+    crossDeviceDescription: 'Rilevato progresso recente da un altro browser o dispositivo.',
+    loadRecentData: 'Carica dati recenti',
+    keepLocalData: 'Mantieni dati attuali'
   }
 };
 

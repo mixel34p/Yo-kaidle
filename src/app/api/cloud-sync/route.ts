@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
         const { data, error } = await supabase
             .from('user_cloud_data')
-            .select('data, last_synced, created_at')
+            .select('data, last_synced, created_at, session_id')
             .eq('id', userId)
             .single();
 
@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
             data: data?.data || null,
             lastSynced: data?.last_synced || null,
             createdAt: data?.created_at || null,
+            sessionId: data?.session_id || null,
             hasCloudData: !!data
         });
 
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { userId, data } = body;
+        const { userId, data, sessionId } = body;
 
         if (!userId) {
             return NextResponse.json(
@@ -77,12 +78,17 @@ export async function POST(request: NextRequest) {
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-        const cloudData = {
+        const cloudData: any = {
             id: userId,
             data: data,
             last_synced: new Date().toISOString(),
             updated_at: new Date().toISOString()
         };
+
+        // Include session_id if provided
+        if (sessionId) {
+            cloudData.session_id = sessionId;
+        }
 
         const { error } = await supabase
             .from('user_cloud_data')
@@ -112,7 +118,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             message: 'Cloud data saved successfully',
-            lastSynced: cloudData.last_synced
+            lastSynced: cloudData.last_synced,
+            sessionId: cloudData.session_id
         });
 
     } catch (error) {
@@ -123,3 +130,4 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+

@@ -1,15 +1,16 @@
 import { Yokai, GuessResult, GameState, GameMode } from '@/types/yokai';
 import { triggerSocialStatsSync } from '@/hooks/useSocialStats';
+import { triggerSync } from '@/utils/cloudSyncManager';
 
 export function compareYokai(dailyYokai: Yokai, guessedYokai: Yokai): GuessResult {
   const isCorrect = dailyYokai.id === guessedYokai.id;
-  
+
   // SOLUCIÓN PARA LA COMIDA FAVORITA: Obtener los valores directamente de los objetos
   // y asegurar que ambos Yokai tengan valores válidos para la comida favorita
   let foodResult: 'correct' | 'incorrect' = 'incorrect';
-  
+
   // Debug logs removed for cleaner console output
-  
+
   // Asegurar que ambos valores estén definidos antes de compararlos
   if (dailyYokai.favoriteFood && guessedYokai.favoriteFood) {
     foodResult = (dailyYokai.favoriteFood === guessedYokai.favoriteFood) ? 'correct' : 'incorrect';
@@ -18,16 +19,16 @@ export function compareYokai(dailyYokai: Yokai, guessedYokai: Yokai): GuessResul
   return {
     isCorrect,
     tribe: dailyYokai.tribe === guessedYokai.tribe ? 'correct' : 'incorrect',
-    rank: dailyYokai.rank === guessedYokai.rank 
-      ? 'correct' 
+    rank: dailyYokai.rank === guessedYokai.rank
+      ? 'correct'
       : getRankComparison(dailyYokai.rank, guessedYokai.rank),
     element: dailyYokai.element === guessedYokai.element ? 'correct' : 'incorrect',
     game: dailyYokai.game === guessedYokai.game ? 'correct' : 'incorrect',
-    weight: dailyYokai.weight === guessedYokai.weight 
-      ? 'correct' 
+    weight: dailyYokai.weight === guessedYokai.weight
+      ? 'correct'
       : dailyYokai.weight > guessedYokai.weight ? 'higher' : 'lower',
-    medalNumber: dailyYokai.medalNumber === guessedYokai.medalNumber 
-      ? 'correct' 
+    medalNumber: dailyYokai.medalNumber === guessedYokai.medalNumber
+      ? 'correct'
       : dailyYokai.medalNumber > guessedYokai.medalNumber ? 'higher' : 'lower',
     favoriteFood: foodResult,
   };
@@ -37,11 +38,11 @@ function getRankComparison(dailyRank: string, guessRank: string): 'higher' | 'lo
   const ranks = ['E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
   const dailyRankIndex = ranks.indexOf(dailyRank);
   const guessRankIndex = ranks.indexOf(guessRank);
-  
+
   if (dailyRankIndex === -1 || guessRankIndex === -1) {
     return 'incorrect';
   }
-  
+
   if (dailyRankIndex > guessRankIndex) {
     return 'higher';
   } else {
@@ -81,6 +82,9 @@ export function saveGameToLocalStorage(gameState: GameState): void {
     // También guardamos el último estado para cada modo por separado
     const modeKey = `yokaidle_${gameState.gameMode}_state`;
     localStorage.setItem(modeKey, JSON.stringify(gameState));
+
+    // Trigger cloud sync if user is authenticated and synced
+    triggerSync();
   }
 }
 
@@ -90,11 +94,11 @@ export function loadGameFromLocalStorage(mode: GameMode = 'daily'): GameState | 
     // Intentamos cargar primero el estado específico del modo seleccionado
     const modeKey = `yokaidle_${mode}_state`;
     const savedMode = localStorage.getItem(modeKey);
-    
+
     if (savedMode) {
       return JSON.parse(savedMode);
     }
-    
+
     // Si no hay estado específico para el modo, intentamos cargar el estado general
     // (para compatibilidad con versiones anteriores)
     const saved = localStorage.getItem('yokaidleGameState');
@@ -140,7 +144,7 @@ export function createNewInfiniteGame(currentDate: string, randomYokai: any, sav
       }
     };
   }
-  
+
   // Estado completamente nuevo
   return {
     currentDate,

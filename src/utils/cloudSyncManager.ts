@@ -21,6 +21,7 @@ export const SYNC_KEYS = [
 ] as const;
 
 const SYNC_STATUS_KEY = 'yokaidle_cloud_sync_status';
+const SESSION_ID_KEY = 'yokaidle_session_id';
 
 export interface SyncStatus {
     isSynced: boolean;
@@ -38,6 +39,14 @@ export interface CloudDataStats {
     totalPoints: number;
     gamesPlayed: number;
     lastSyncedAt: string | null;
+}
+
+export interface CrossDeviceCheckResult {
+    needsSync: boolean;
+    reason: 'different_session' | 'data_mismatch' | null;
+    cloudSessionId: string | null;
+    localSessionId: string | null;
+    lastSynced: string | null;
 }
 
 /**
@@ -134,11 +143,12 @@ export function applyCloudData(cloudData: CloudData): void {
 export async function uploadToCloud(userId: string): Promise<boolean> {
     try {
         const localData = getLocalData();
+        const sessionId = getSessionId();
 
         const response = await fetch('/api/cloud-sync', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, data: localData })
+            body: JSON.stringify({ userId, data: localData, sessionId })
         });
 
         if (!response.ok) {
@@ -271,12 +281,17 @@ export function getLocalDataStats(): CloudDataStats {
  * Call this after localStorage changes when user is authenticated and synced
  */
 let syncDebounceTimer: NodeJS.Timeout | null = null;
+let periodicSyncInterval: NodeJS.Timeout | null = null;
+let currentUserId: string | null = null;
 
-export function triggerSync(userId: string): void {
+export function triggerSync(userId?: string): void {
+    const effectiveUserId = userId || currentUserId;
+    if (!effectiveUserId) return;
+
     const syncStatus = getSyncStatus();
 
     // Only sync if user is marked as synced
-    if (!syncStatus.isSynced || syncStatus.userId !== userId) {
+    if (!syncStatus.isSynced || syncStatus.userId !== effectiveUserId) {
         return;
     }
 
@@ -287,6 +302,148 @@ export function triggerSync(userId: string): void {
 
     syncDebounceTimer = setTimeout(async () => {
         console.log('[CloudSync] Background sync triggered');
-        await uploadToCloud(userId);
+        await uploadToCloud(effectiveUserId);
     }, 2000); // Wait 2 seconds after last change before syncing
+}
+
+/**
+ * Start periodic sync (every 5 minutes)
+ */
+export function startPeriodicSync(userId: string): void {
+    currentUserId = userId;
+
+    // Clear any existing interval
+    if (periodicSyncInterval) {
+        clearInterval(periodicSyncInterval);
+    }
+
+    // Sync every 5 minutes
+    periodicSyncInterval = setInterval(() => {
+        const syncStatus = getSyncStatus();
+        if (syncStatus.isSynced && syncStatus.userId === userId) {
+            console.log('[CloudSync] Periodic sync triggered');
+            uploadToCloud(userId);
+        }
+    }, 5 * 60 * 1000); // 5 minutes
+
+    console.log('[CloudSync] Periodic sync started (every 5 minutes)');
+}
+
+/**
+ * Stop periodic sync
+ */
+export function stopPeriodicSync(): void {
+    if (periodicSyncInterval) {
+        clearInterval(periodicSyncInterval);
+        periodicSyncInterval = null;
+    }
+    currentUserId = null;
+    console.log('[CloudSync] Periodic sync stopped');
+}
+
+/**
+ * Get current user ID (for use in other modules)
+ */
+export function getCurrentSyncUserId(): string | null {
+    return currentUserId;
+}
+
+/**
+ * Generate a unique session ID for this browser/device
+ */
+function generateSessionId(): string {
+    return `${Date.now().toString(36)}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Get or create session ID for this browser
+ */
+export function getSessionId(): string {
+    if (typeof window === 'undefined') return '';
+
+    let sessionId = localStorage.getItem(SESSION_ID_KEY);
+    if (!sessionId) {
+        sessionId = generateSessionId();
+        localStorage.setItem(SESSION_ID_KEY, sessionId);
+    }
+    return sessionId;
+}
+
+/**
+ * Check if user played on a different device
+ */
+export async function checkCrossDeviceSync(userId: string): Promise<CrossDeviceCheckResult> {
+    try {
+        const localSessionId = getSessionId();
+        const syncStatus = getSyncStatus();
+
+        // Only check if user is already synced
+        if (!syncStatus.isSynced) {
+            return {
+                needsSync: false,
+                reason: null,
+                cloudSessionId: null,
+                localSessionId,
+                lastSynced: null
+            };
+        }
+
+        const response = await fetch(`/api/cloud-sync?userId=${userId}`);
+        if (!response.ok) {
+            return {
+                needsSync: false,
+                reason: null,
+                cloudSessionId: null,
+                localSessionId,
+                lastSynced: null
+            };
+        }
+
+        const result = await response.json();
+
+        // No cloud data
+        if (!result.hasCloudData) {
+            return {
+                needsSync: false,
+                reason: null,
+                cloudSessionId: null,
+                localSessionId,
+                lastSynced: null
+            };
+        }
+
+        const cloudSessionId = result.sessionId;
+
+        // Check if session is different
+        if (cloudSessionId && cloudSessionId !== localSessionId) {
+            console.log('[CloudSync] Different session detected:', {
+                cloudSessionId,
+                localSessionId
+            });
+            return {
+                needsSync: true,
+                reason: 'different_session',
+                cloudSessionId,
+                localSessionId,
+                lastSynced: result.lastSynced
+            };
+        }
+
+        return {
+            needsSync: false,
+            reason: null,
+            cloudSessionId,
+            localSessionId,
+            lastSynced: result.lastSynced
+        };
+    } catch (error) {
+        console.error('[CloudSync] Cross-device check error:', error);
+        return {
+            needsSync: false,
+            reason: null,
+            cloudSessionId: null,
+            localSessionId: getSessionId(),
+            lastSynced: null
+        };
+    }
 }

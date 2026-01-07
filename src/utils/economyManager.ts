@@ -1,6 +1,8 @@
 // Sistema de economía global para Yo-kaidle
 // Gestiona los puntos del usuario que se pueden ganar de logros y usar en la tienda
 
+import { triggerSync } from '@/utils/cloudSyncManager';
+
 const ECONOMY_KEY = 'yokaidle_economy';
 
 export interface EconomyData {
@@ -49,6 +51,8 @@ export function saveEconomy(data: EconomyData): void {
   try {
     data.lastUpdated = new Date().toISOString();
     localStorage.setItem(ECONOMY_KEY, JSON.stringify(data));
+    // Trigger cloud sync
+    triggerSync();
   } catch (error) {
     console.error('Error saving economy data:', error);
   }
@@ -79,16 +83,16 @@ export function addPoints(amount: number, source: string, description: string): 
 // Gastar puntos del usuario
 export function spendPoints(amount: number, source: string, description: string): EconomyData | null {
   const economy = loadEconomy();
-  
+
   if (economy.points < amount) {
     return null; // No hay suficientes puntos
   }
-  
+
   economy.points -= amount;
   economy.totalSpent = (economy.totalSpent || 0) + amount;
 
   saveEconomy(economy);
-  
+
   // Registrar la transacción
   logTransaction({
     id: generateTransactionId(),
@@ -98,7 +102,7 @@ export function spendPoints(amount: number, source: string, description: string)
     description,
     timestamp: new Date().toISOString()
   });
-  
+
   return economy;
 }
 
@@ -123,14 +127,14 @@ function logTransaction(transaction: PointsTransaction): void {
     const historyKey = 'yokaidle_transactions';
     const saved = localStorage.getItem(historyKey);
     const history: PointsTransaction[] = saved ? JSON.parse(saved) : [];
-    
+
     history.push(transaction);
-    
+
     // Mantener solo las últimas 100 transacciones
     if (history.length > 100) {
       history.splice(0, history.length - 100);
     }
-    
+
     localStorage.setItem(historyKey, JSON.stringify(history));
   } catch (error) {
     console.error('Error logging transaction:', error);
@@ -185,11 +189,11 @@ export function getEconomyStats(): {
 } {
   const economy = loadEconomy();
   const history = getTransactionHistory();
-  
+
   const totalSpent = history
     .filter(t => t.type === 'spend')
     .reduce((sum, t) => sum + t.amount, 0);
-  
+
   return {
     currentPoints: economy.points,
     totalEarned: economy.totalEarned,

@@ -7,17 +7,26 @@ import { User, LogOut, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import AvatarWithFrame from '@/components/AvatarWithFrame';
 import CloudSyncPrompt from '@/components/CloudSyncPrompt';
+import CrossDeviceSyncPrompt from '@/components/CrossDeviceSyncPrompt';
 import { useUserCustomization } from '@/hooks/useUserCustomization';
-import { getSyncStatus, clearSyncStatus } from '@/utils/cloudSyncManager';
+import {
+  getSyncStatus,
+  clearSyncStatus,
+  startPeriodicSync,
+  stopPeriodicSync,
+  checkCrossDeviceSync
+} from '@/utils/cloudSyncManager';
 
 export default function SocialAvatar() {
   const { user, profile, signOut } = useSocialAuth();
   const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showSyncPrompt, setShowSyncPrompt] = useState(false);
+  const [showCrossDevicePrompt, setShowCrossDevicePrompt] = useState(false);
+  const [crossDeviceLastSynced, setCrossDeviceLastSynced] = useState<string | null>(null);
   const { getCurrentFrameDetails } = useUserCustomization(user?.id);
 
-  // Check if user needs initial sync on first login
+  // Check if user needs initial sync on first login AND check for cross-device sync
   useEffect(() => {
     if (user && profile) {
       const syncStatus = getSyncStatus();
@@ -28,8 +37,26 @@ export default function SocialAvatar() {
           setShowSyncPrompt(true);
         }, 1000);
         return () => clearTimeout(timer);
+      } else {
+        // User is synced, check for cross-device play
+        const checkCrossDevice = async () => {
+          const result = await checkCrossDeviceSync(user.id);
+          if (result.needsSync) {
+            setCrossDeviceLastSynced(result.lastSynced);
+            setShowCrossDevicePrompt(true);
+          } else {
+            // No cross-device detected, start periodic sync
+            startPeriodicSync(user.id);
+          }
+        };
+        checkCrossDevice();
       }
     }
+
+    // Cleanup: stop periodic sync on unmount or user logout
+    return () => {
+      stopPeriodicSync();
+    };
   }, [user, profile]);
 
   // Close menu when clicking outside
@@ -210,7 +237,19 @@ export default function SocialAvatar() {
         isOpen={showSyncPrompt}
         onClose={() => setShowSyncPrompt(false)}
       />
+
+      {/* Cross-Device Sync Prompt Modal */}
+      {user && (
+        <CrossDeviceSyncPrompt
+          isOpen={showCrossDevicePrompt}
+          onClose={() => {
+            setShowCrossDevicePrompt(false);
+            startPeriodicSync(user.id);
+          }}
+          userId={user.id}
+          lastSynced={crossDeviceLastSynced}
+        />
+      )}
     </>
   );
 }
-
