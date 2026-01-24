@@ -1,76 +1,57 @@
-# Yo-kaidle
+<div align="center">
+  <img src="public/images/logo/logo.png" alt="Yo-kaidle Logo" width="200" />
+  <h1>Yo-kaidle</h1>
+  <p><strong>A daily Yo-kai guessing game inspired by Wordle.</strong></p>
+  <p>Test your knowledge of the Yo-kai Watch universe! Guess the daily Yo-kai using clues about their Tribe, Rank, Element, Attribute, and more.</p>
+  
+  <br />
 
-Un juego de adivinanzas diarias basado en el universo de Yo-kai Watch, inspirado en Wordle. Cada día, los jugadores intentan adivinar un Yo-kai utilizando pistas relacionadas con sus características, como tribu, rango, elemento, altura, peso y número en el Medallium.
+  <a href="https://yo-kaidle.vercel.app">
+    <img src="https://img.shields.io/badge/PLAY%20NOW-Yo--kaidle-blue?style=for-the-badge&logo=vercel" alt="Play Now" />
+  </a>
 
-## Características
+  <br />
+  <br />
+</div>
 
-- Un Yo-kai diario para adivinar
-- Pistas visuales que indican si las características son correctas o cómo se comparan con el Yo-kai objetivo
-- Seguimiento de estadísticas (racha actual, racha máxima, porcentaje de victorias, etc.)
-- Interfaz intuitiva y atractiva inspirada en el estilo de Yo-kai Watch
+---
 
-## Tecnologías utilizadas
+## 👻 About the Game
 
-- Next.js para el frontend
-- TypeScript para seguridad de tipos
-- Tailwind CSS para estilos
-- Supabase como backend para almacenar la información de los Yo-kai
+Yo-kaidle brings the addictive mechanics of daily guessing games to the colorful world of Yo-kai Watch. Every day offers a new challenge to figure out which Yo-kai is hiding behind the mystery.
 
-## Configuración del proyecto
+Whether you're a seasoned Yo-kai Watch veteran who knows every tribe matchup or just discovered these spirited creatures, there's fun to be had testing your knowledge against the Medallium.
 
-### Requisitos previos
+## 🎮 Game Modes
 
-- Node.js (v14 o superior)
-- Cuenta de Supabase (gratuita)
+### 📅 Daily Challenge
+The classic mode. One Yo-kai, one attempt per day. Everyone in the world gets the same Yo-kai, so you can share your results and compete with friends to see who solved it in fewer tries.
 
-### Pasos para la configuración
+### ♾️ Infinite Mode
+Addicted to the loop? Infinite Mode helps you practice your knowledge without limits. Play as many games as you want and try to build the highest streak possible!
 
-1. Clona este repositorio
-2. Instala las dependencias:
-   ```
-   npm install
-   ```
-3. Crea un archivo `.env.local` basado en `.env.local.example` y añade tus credenciales de Supabase
-4. Crea una base de datos en Supabase con la tabla `yokai` que contenga los siguientes campos:
-   - id (int, primary key)
-   - name (text)
-   - tribe (text)
-   - rank (text)
-   - element (text)
-   - medalNumber (int)
-   - game (text)
-   - imageUrl (text)
-5. Inicia el servidor de desarrollo:
-   ```
-   npm run dev
-   ```
+## ✨ Features
 
-## Estructura de Supabase
+- **Smart Clues**: Every guess gives you vital info. Green means you got it right, yellow means you're close (like same attribute or higher rank), and red means keep looking.
+- **Social Features**: Add friends, compare profiles, and see who knows more about Yo-kai!
+- **Detailed Stats**: We track everything—win rates, streaks, and your favorite Yo-kai.
+- **PWA Support**: Install it on your phone! It works offline and feels just like a native app.
+- **Multi-language**: Fully localized in English, Spanish, and Italian.
 
-Para que la aplicación funcione correctamente, necesitarás configurar Supabase con la siguiente estructura:
+## 🛠️ Built With
 
-1. Crea una tabla `yokai` con los campos mencionados anteriormente
-2. Importa datos de Yo-kai o crea algunos manualmente para pruebas
+This project was built with love using modern web technologies:
 
-## Desarrollo
+- **Next.js** & **TypeScript** for the core logic.
+- **Tailwind CSS** for the beautiful UI.
+- **Framer Motion** for those smooth animations.
+- **Supabase** handling all our data and authentication.
 
-Para añadir más características o realizar modificaciones:
+## 👥 Credits
 
-```
-npm run dev
-```
+Created with ❤️ by **Mixel**
+With help from **Union Earth**
 
-## Despliegue
+---
 
-Para construir la aplicación para producción:
-
-```
-npm run build
-npm run start
-```
-
-También puedes desplegar fácilmente en Vercel, Netlify o cualquier otro servicio compatible con Next.js.
-
-## Licencia
-
-[MIT](LICENSE)
+*Verified by the Yo-kai Watch... wait, wrong franchise.*
