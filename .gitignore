@@ -37,6 +37,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Excluded folders (deleted from history)
+/supabase
+/docs
+/scripts
+.env.example
+PWA_ASSETS_NEEDED.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
