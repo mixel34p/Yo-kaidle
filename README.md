@@ -66,7 +66,7 @@
   </tr>
   <tr>
     <td width="50" align="center"><img src="public/icons/menu/shop.png" width="40" /></td>
-    <td><strong>Shop & Rewards</strong>: <i>(Coming Soon)</i> Earn points and unlock rewards.</td>
+    <td><strong>Shop & Rewards</strong>: Earn points and unlock rewards.</td>
   </tr>
 </table>
 
