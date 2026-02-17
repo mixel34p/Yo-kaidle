@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
 interface UserProfile {
@@ -45,38 +45,23 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
   const [loading, setLoading] = useState(true);
   const isLoadingProfile = React.useRef(false); // Semáforo para evitar llamadas concurrentes
 
-  // Sincronizar avatar directamente desde Discord API usando el provider_token
-  const syncDiscordAvatar = async (providerToken: string, userId: string) => {
+  // Sincronizar avatar desde Discord API usando el bot token (server-side)
+  const syncDiscordAvatar = async (discordId: string, userId: string, currentAvatarUrl: string | null) => {
     try {
-      console.log('🔄 Fetching current Discord avatar via API...');
-      const response = await fetch('https://discord.com/api/users/@me', {
-        headers: { Authorization: `Bearer ${providerToken}` }
-      });
+      console.log('🔄 Checking Discord avatar via API...');
+      const response = await fetch(`/api/discord-avatar?discordId=${discordId}`);
 
       if (!response.ok) {
-        console.error('❌ Discord API error:', response.status);
+        console.error('❌ Discord avatar API error:', response.status);
         return;
       }
 
-      const discordUser = await response.json();
-      const discordId = discordUser.id;
-      const avatarHash = discordUser.avatar;
+      const { avatarUrl: freshAvatarUrl } = await response.json();
 
-      if (!avatarHash || !discordId) return;
+      if (!freshAvatarUrl) return;
 
-      // Construir la URL del avatar desde el CDN de Discord
-      const ext = avatarHash.startsWith('a_') ? 'gif' : 'webp';
-      const freshAvatarUrl = `https://cdn.discordapp.com/avatars/${discordId}/${avatarHash}.${ext}?size=256`;
-
-      // Obtener el avatar actual de la BD
-      const { data: currentProfile } = await supabase
-        .from('user_profiles')
-        .select('avatar_url')
-        .eq('id', userId)
-        .single();
-
-      if (currentProfile && currentProfile.avatar_url !== freshAvatarUrl) {
-        console.log('🔄 Avatar changed! Updating...', { old: currentProfile.avatar_url, new: freshAvatarUrl });
+      if (currentAvatarUrl !== freshAvatarUrl) {
+        console.log('🔄 Avatar changed! Updating...', { old: currentAvatarUrl, new: freshAvatarUrl });
         const { error: updateError } = await supabase
           .from('user_profiles')
           .update({ avatar_url: freshAvatarUrl })
@@ -97,7 +82,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
   };
 
   // Cargar perfil de usuario
-  const loadUserProfile = async (currentUser: User, providerToken?: string | null) => {
+  const loadUserProfile = async (currentUser: User) => {
     // Si ya se está cargando el perfil, no hacer nada para evitar condiciones de carrera
     if (isLoadingProfile.current) {
       console.log('⏳ Profile load already in progress, skipping duplicate call');
@@ -128,10 +113,9 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       // Competición entre carga y timeout
       const data = await Promise.race([loadPromise(), timeoutPromise]) as UserProfile;
 
-      // Si tenemos provider_token (login fresco), sincronizar avatar directamente con Discord API
-      if (providerToken) {
-        // Sincronización en segundo plano, no bloquea la carga del perfil
-        syncDiscordAvatar(providerToken, currentUser.id);
+      // Sincronizar avatar con Discord en segundo plano (no bloquea la carga)
+      if (data.discord_id) {
+        syncDiscordAvatar(data.discord_id, currentUser.id, data.avatar_url);
       }
 
       setProfile(data);
@@ -198,9 +182,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       setUser(session?.user ?? null);
 
       if (session?.user) {
-        // En SIGNED_IN, el provider_token está disponible con datos frescos de Discord
-        const providerToken = event === 'SIGNED_IN' ? session.provider_token : null;
-        await loadUserProfile(session.user, providerToken);
+        await loadUserProfile(session.user);
       } else {
         setProfile(null);
       }
