@@ -45,8 +45,59 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
   const [loading, setLoading] = useState(true);
   const isLoadingProfile = React.useRef(false); // Semáforo para evitar llamadas concurrentes
 
+  // Sincronizar avatar directamente desde Discord API usando el provider_token
+  const syncDiscordAvatar = async (providerToken: string, userId: string) => {
+    try {
+      console.log('🔄 Fetching current Discord avatar via API...');
+      const response = await fetch('https://discord.com/api/users/@me', {
+        headers: { Authorization: `Bearer ${providerToken}` }
+      });
+
+      if (!response.ok) {
+        console.error('❌ Discord API error:', response.status);
+        return;
+      }
+
+      const discordUser = await response.json();
+      const discordId = discordUser.id;
+      const avatarHash = discordUser.avatar;
+
+      if (!avatarHash || !discordId) return;
+
+      // Construir la URL del avatar desde el CDN de Discord
+      const ext = avatarHash.startsWith('a_') ? 'gif' : 'webp';
+      const freshAvatarUrl = `https://cdn.discordapp.com/avatars/${discordId}/${avatarHash}.${ext}?size=256`;
+
+      // Obtener el avatar actual de la BD
+      const { data: currentProfile } = await supabase
+        .from('user_profiles')
+        .select('avatar_url')
+        .eq('id', userId)
+        .single();
+
+      if (currentProfile && currentProfile.avatar_url !== freshAvatarUrl) {
+        console.log('🔄 Avatar changed! Updating...', { old: currentProfile.avatar_url, new: freshAvatarUrl });
+        const { error: updateError } = await supabase
+          .from('user_profiles')
+          .update({ avatar_url: freshAvatarUrl })
+          .eq('id', userId);
+
+        if (!updateError) {
+          console.log('✅ Discord avatar synced successfully');
+          setProfile(prev => prev ? { ...prev, avatar_url: freshAvatarUrl } : null);
+        } else {
+          console.error('❌ Error updating avatar in DB:', updateError);
+        }
+      } else {
+        console.log('✅ Discord avatar is already up to date');
+      }
+    } catch (error) {
+      console.error('❌ Error syncing Discord avatar:', error);
+    }
+  };
+
   // Cargar perfil de usuario
-  const loadUserProfile = async (currentUser: User) => {
+  const loadUserProfile = async (currentUser: User, providerToken?: string | null) => {
     // Si ya se está cargando el perfil, no hacer nada para evitar condiciones de carrera
     if (isLoadingProfile.current) {
       console.log('⏳ Profile load already in progress, skipping duplicate call');
@@ -59,12 +110,6 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
     try {
       // Promesa de carga de datos
       const loadPromise = async () => {
-        // Refrescar sesión para obtener user_metadata actualizado de Discord (avatar, nombre, etc.)
-        const { data: refreshData } = await supabase.auth.refreshSession();
-        if (refreshData?.user) {
-          currentUser = refreshData.user;
-        }
-
         const { data, error } = await supabase
           .from('user_profiles')
           .select('*')
@@ -77,31 +122,16 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
 
       // Promesa de timeout (5 segundos)
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile load timed out')), 8000);
+        setTimeout(() => reject(new Error('Profile load timed out')), 5000);
       });
 
       // Competición entre carga y timeout
       const data = await Promise.race([loadPromise(), timeoutPromise]) as UserProfile;
 
-      // Sincronizar avatar si ha cambiado en Discord
-      const newAvatarUrl = currentUser.user_metadata?.avatar_url;
-      if (newAvatarUrl && data.avatar_url !== newAvatarUrl) {
-        console.log('🔄 Syncing Discord avatar...');
-        // Esta operación es secundaria, no bloqueamos si falla
-        supabase
-          .from('user_profiles')
-          .update({ avatar_url: newAvatarUrl })
-          .eq('id', currentUser.id)
-          .then(({ error: updateError }) => {
-            if (!updateError) {
-              console.log('✅ Avatar synced successfully');
-              setProfile(prev => prev ? { ...prev, avatar_url: newAvatarUrl } : null);
-            } else {
-              console.error('❌ Error syncing avatar:', updateError);
-            }
-          });
-
-        data.avatar_url = newAvatarUrl; // Actualizar localmente inmediatamente
+      // Si tenemos provider_token (login fresco), sincronizar avatar directamente con Discord API
+      if (providerToken) {
+        // Sincronización en segundo plano, no bloquea la carga del perfil
+        syncDiscordAvatar(providerToken, currentUser.id);
       }
 
       setProfile(data);
@@ -168,7 +198,9 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       setUser(session?.user ?? null);
 
       if (session?.user) {
-        await loadUserProfile(session.user);
+        // En SIGNED_IN, el provider_token está disponible con datos frescos de Discord
+        const providerToken = event === 'SIGNED_IN' ? session.provider_token : null;
+        await loadUserProfile(session.user, providerToken);
       } else {
         setProfile(null);
       }
