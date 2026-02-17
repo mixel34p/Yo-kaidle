@@ -59,6 +59,12 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
     try {
       // Promesa de carga de datos
       const loadPromise = async () => {
+        // Refrescar sesión para obtener user_metadata actualizado de Discord (avatar, nombre, etc.)
+        const { data: refreshData } = await supabase.auth.refreshSession();
+        if (refreshData?.user) {
+          currentUser = refreshData.user;
+        }
+
         const { data, error } = await supabase
           .from('user_profiles')
           .select('*')
@@ -71,7 +77,7 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
 
       // Promesa de timeout (5 segundos)
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile load timed out')), 5000);
+        setTimeout(() => reject(new Error('Profile load timed out')), 8000);
       });
 
       // Competición entre carga y timeout
