@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
     try {
@@ -32,8 +33,7 @@ export async function GET(request: NextRequest) {
             headers: {
                 Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
             },
-            // Cache por 5 minutos para no abusar de la API de Discord
-            next: { revalidate: 300 }
+            cache: 'no-store'
         });
 
         if (!response.ok) {

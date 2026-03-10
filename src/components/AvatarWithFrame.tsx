@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from 'lucide-react';
 import { getFrameById } from '@/utils/framesManager';
 
@@ -55,16 +55,22 @@ export default function AvatarWithFrame({
 }: AvatarWithFrameProps) {
   const frameData = getFrameById(frameId);
   const sizeConf = sizeConfig[size];
+  const [hasImageError, setHasImageError] = useState(false);
+
+  useEffect(() => {
+    setHasImageError(false);
+  }, [avatarUrl]);
 
   return (
     <div className={`${sizeConf.container} relative ${className}`}>
       {/* Avatar background circle */}
       <div className={`${sizeConf.container} absolute inset-0 rounded-full bg-blue-600/50 flex items-center justify-center overflow-hidden`}>
-        {avatarUrl ? (
+        {avatarUrl && !hasImageError ? (
           <img
             src={avatarUrl}
             alt={alt}
             className="w-full h-full object-cover"
+            onError={() => setHasImageError(true)}
           />
         ) : (
           <User size={sizeConf.userIcon} className="text-white/70" />
