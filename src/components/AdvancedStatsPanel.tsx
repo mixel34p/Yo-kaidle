@@ -37,14 +37,14 @@ const AdvancedStatsPanel: React.FC<AdvancedStatsPanelProps> = ({ stats, classNam
 
       {/* Tabs */}
       <div className="flex border-b border-gray-200 overflow-x-auto">
-        {[
+        {([
           { id: 'overview', label: t.overview, icon: '📈' },
           { id: 'tribes', label: t.tribes, icon: '👥' },
           { id: 'games', label: t.games, icon: '🎮' }
-        ].map(tab => (
+        ] as const).map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id)}
             className={`flex items-center space-x-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab.id
                 ? 'border-b-2 border-blue-500 text-blue-600 bg-blue-50'
                 : 'text-gray-600 hover:text-gray-800'

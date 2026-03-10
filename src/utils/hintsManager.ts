@@ -159,7 +159,7 @@ export function canUseHint(hintType: HintType, currentState: GameHintsState): {
 }
 
 // Usar una ayuda
-export function useHint(
+export function applyHint(
   hintType: HintType, 
   targetYokai: Yokai, 
   currentState: GameHintsState

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { YokaiCircle, CircleProgress } from '@/types/circles';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getCircleName, getCircleDescription, claimCircleReward, hasClaimableCircleReward, isCircleRewardClaimed } from '@/utils/circlesManager';
+import { getCircleName, getCircleDescription, claimCircleReward, isCircleRewardClaimed } from '@/utils/circlesManager';
 import { CheckCircle, Circle } from 'lucide-react';
 import { getAllYokai } from '@/lib/supabase';
 import { Yokai } from '@/types/yokai';

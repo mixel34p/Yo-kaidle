@@ -18,7 +18,7 @@ type TabType = 'yokai' | 'title' | 'badges' | 'frame' | 'banner';
 
 export default function CustomizeProfilePage() {
   const router = useRouter();
-  const { t, language, getYokaiName } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useSocialAuth();
   const {
     customization,
@@ -176,7 +176,7 @@ export default function CustomizeProfilePage() {
             {favoriteYokai && (
               <p className="text-blue-300 text-sm flex items-center gap-1">
                 <Star size={14} />
-                {getYokaiName({ name: favoriteYokai.name } as any)}
+                {favoriteYokai.name}
               </p>
             )}
           </div>
@@ -288,11 +288,11 @@ export default function CustomizeProfilePage() {
                     <div className="w-16 h-16 mx-auto mb-2 rounded-lg overflow-hidden bg-blue-600/50 border border-blue-400/30">
                       <img
                         src={yokai.image}
-                        alt={getYokaiName({ name: yokai.name } as any)}
+                        alt={yokai.name}
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <p className="text-white text-xs text-center truncate font-medium mb-1">{getYokaiName({ name: yokai.name } as any)}</p>
+                    <p className="text-white text-xs text-center truncate font-medium mb-1">{yokai.name}</p>
 
                     {/* Tribu y Rango con iconos */}
                     <div className="flex items-center justify-center gap-2 text-xs">

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Yokai } from '@/types/yokai';
+import { Yokai, GuessResult } from '@/types/yokai';
 import YokaiRow from './YokaiRow';
 
 interface AttemptsTimelapseProps {
@@ -22,7 +22,7 @@ const AttemptsTimelapse: React.FC<AttemptsTimelapseProps> = ({
   
   // Función para comparar Yokai y obtener resultados
   const compareYokai = (targetYokai: Yokai, guessedYokai: Yokai) => {
-    const result: any = {
+    const result: GuessResult = {
       isCorrect: targetYokai.id === guessedYokai.id
     };
     

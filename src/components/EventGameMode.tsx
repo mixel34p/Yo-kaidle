@@ -35,6 +35,13 @@ export default function EventGameMode({ event, onClose }: EventGameModeProps) {
   };
 
   const t = texts[language as keyof typeof texts] || texts.es;
+  const progressUnit = (() => {
+    const unit = event.progress_unit;
+    if (typeof unit === 'string') {
+      return unit;
+    }
+    return unit[language] || unit.es || Object.values(unit)[0] || 'Yo-kai';
+  })();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 relative overflow-hidden">
@@ -81,7 +88,7 @@ export default function EventGameMode({ event, onClose }: EventGameModeProps) {
               {event.description[language] || event.description.es}
             </p>
             <div className="text-white/60">
-              <p>Objetivo: {event.total_progress_required} {(event as any).progress_unit?.[language] || 'Yo-kai descubiertos'}</p>
+              <p>Objetivo: {event.total_progress_required} {progressUnit || 'Yo-kai descubiertos'}</p>
             </div>
           </div>
         </div>
@@ -120,7 +127,7 @@ export default function EventGameMode({ event, onClose }: EventGameModeProps) {
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-bold text-white">
-                    {milestone.progress_required} {(event as any).progress_unit?.[language] || 'Yo-kai'}
+                    {milestone.progress_required} {progressUnit || 'Yo-kai'}
                   </span>
                 </div>
                 <h4 className="font-semibold text-white mb-2">

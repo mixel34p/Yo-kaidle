@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { EventConfiguration } from '@/types/events';
+import type { EventConfiguration, EventMilestone, EventReward } from '@/types/events';
 
 interface EventLayoutProps {
   event: EventConfiguration;
@@ -113,7 +113,7 @@ export function EventProgressBar({ current, total, color, label }: EventProgress
 
 // Milestone card component
 interface EventMilestoneCardProps {
-  milestone: any;
+  milestone: EventMilestone;
   isCompleted: boolean;
   isCurrent: boolean;
   language: string;
@@ -185,7 +185,7 @@ export function EventMilestoneCard({
           <p className="text-white/60 text-xs font-semibold uppercase tracking-wide">
             Recompensas:
           </p>
-          {milestone.rewards.map((reward: any) => (
+          {milestone.rewards.map((reward: EventReward) => (
             <div key={reward.id} className="flex items-center gap-2 text-sm">
               <span className="text-lg">{reward.icon}</span>
               <span className="text-white/80">

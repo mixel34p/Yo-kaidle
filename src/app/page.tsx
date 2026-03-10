@@ -9,10 +9,10 @@ import Confetti from '@/components/Confetti';
 import GameOverMessage from '@/components/GameOverMessage';
 import MotivationalHint from '@/components/MotivationalHint';
 import GameRules from '@/components/GameRules';
-import { Yokai, GameState, GameMode, Game } from '@/types/yokai';
+import { Yokai, GameState, GameMode, Game, GuessResult } from '@/types/yokai';
 import { normalizeYokai } from '@/utils/gameLogic';
 import { getDailyYokai, getRandomYokai } from '@/lib/supabase';
-import { compareYokai, getTodayDateString, formatDateForDisplay, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
+import { compareYokai, getTodayDateString, saveGameToLocalStorage, loadGameFromLocalStorage, createNewInfiniteGame } from '@/utils/gameLogic';
 import GameModeSelector from '@/components/GameModeSelector';
 import GameSourceSelector from '@/components/GameSourceSelector';
 import TribeRestrictionsSelector from '@/components/TribeRestrictionsSelector';
@@ -40,14 +40,14 @@ import { getActiveEvents, getEventFilterForRandomYokai } from '@/utils/eventMana
 
 import {
   loadHintsState,
-  saveHintsState,
-  useHint,
+  applyHint,
   GameHintsState,
   HintType
 } from '@/utils/hintsManager';
 
 
 const MAX_GUESSES = 6;
+type GuessEntry = { yokai: Yokai; result: GuessResult };
 
 // Lista de todos los juegos disponibles obtenidos de los tipos
 const AVAILABLE_GAMES: Game[] = [
@@ -182,7 +182,7 @@ function HomeContent() {
 
     if (!targetYokai) return;
 
-    const result = useHint(hintType, targetYokai, hintsState);
+    const result = applyHint(hintType, targetYokai, hintsState);
 
     if (result.success && result.newState) {
       setHintsState(result.newState);
@@ -321,7 +321,7 @@ function HomeContent() {
     }
   });
 
-  const [guessResults, setGuessResults] = useState<any[]>([]);
+  const [guessResults, setGuessResults] = useState<GuessEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [showStats, setShowStats] = useState(false);

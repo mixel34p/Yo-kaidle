@@ -28,6 +28,7 @@ import FramePreview from '@/components/FramePreview';
 import { getFrameName, getFrameById } from '@/utils/framesManager';
 import { getBackgroundName, getBackgroundById } from '@/utils/backgroundsManager';
 import { getTrackName, getTrackById } from '@/utils/jukeboxManager';
+import type { ShopItem } from '@/utils/shopManager';
 
 type TabType = 'shop' | 'codes';
 
@@ -120,7 +121,7 @@ const shopTexts = {
 
 // Componente para las cards de artículos
 interface ItemCardProps {
-  item: any;
+  item: ShopItem;
   onPurchase: (itemId: number, itemName: string) => void;
   canAfford: (price: number) => boolean;
   isAuthenticated: boolean;

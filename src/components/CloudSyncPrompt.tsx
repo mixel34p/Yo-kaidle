@@ -5,23 +5,20 @@ import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { X, Cloud, HardDrive, RefreshCw, Check, AlertCircle } from 'lucide-react';
 import {
-    getSyncStatus,
     fetchCloudData,
     getCloudDataStats,
     getLocalDataStats,
     uploadToCloud,
     downloadFromCloud,
-    clearSyncStatus,
     CloudDataStats
 } from '@/utils/cloudSyncManager';
 
 interface CloudSyncPromptProps {
     isOpen: boolean;
     onClose: () => void;
-    isResync?: boolean;
 }
 
-export default function CloudSyncPrompt({ isOpen, onClose, isResync = false }: CloudSyncPromptProps) {
+export default function CloudSyncPrompt({ isOpen, onClose }: CloudSyncPromptProps) {
     const { user } = useSocialAuth();
     const { t } = useLanguage();
     const [loading, setLoading] = useState(true);
@@ -117,13 +114,6 @@ export default function CloudSyncPrompt({ isOpen, onClose, isResync = false }: C
             setSyncError(t.syncError);
         } finally {
             setSyncing(false);
-        }
-    };
-
-    const handleResync = () => {
-        if (user) {
-            clearSyncStatus();
-            loadData();
         }
     };
 

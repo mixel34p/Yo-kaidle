@@ -78,9 +78,15 @@ export async function POST(request: NextRequest) {
 
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-        const cloudData: any = {
+        const cloudData: {
+            id: string;
+            data: Record<string, unknown>;
+            last_synced: string;
+            updated_at: string;
+            session_id?: string;
+        } = {
             id: userId,
-            data: data,
+            data: data as Record<string, unknown>,
             last_synced: new Date().toISOString(),
             updated_at: new Date().toISOString()
         };
@@ -130,4 +136,3 @@ export async function POST(request: NextRequest) {
         );
     }
 }
-

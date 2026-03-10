@@ -2,20 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { YokaiCircle, CircleProgress, CircleCategory, CircleDifficulty } from '@/types/circles';
+import { YokaiCircle, CircleProgress, CircleStats } from '@/types/circles';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   getAllCircles,
   loadCirclesData,
   updateCirclesProgress,
-  getCircleStats,
-  getCirclesByCategory,
-  getCirclesByDifficulty
+  getCircleStats
 } from '@/utils/circlesManager';
 import { getCurrentPoints } from '@/utils/economyManager';
 import { loadMedallium } from '@/utils/medalliumManager';
 import CircleCard from './CircleCard';
-import { Trophy, Target } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 
 type FilterType = 'all' | 'completed' | 'incomplete';
 
@@ -25,7 +23,7 @@ const CirclesPanel: React.FC = () => {
   const [circlesProgress, setCirclesProgress] = useState<Record<string, CircleProgress>>({});
   const [filteredCircles, setFilteredCircles] = useState<YokaiCircle[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('all');
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<CircleStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPoints, setCurrentPoints] = useState<number>(0);
 

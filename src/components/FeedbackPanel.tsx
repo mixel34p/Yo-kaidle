@@ -137,8 +137,6 @@ export default function FeedbackPanel() {
   };
 
   const currentType = feedbackTypeConfig[formData.feedbackType];
-  const TypeIcon = currentType.icon;
-
   return (
     <>
       {/* Botón en el footer - Estilo Yo-kai Watch */}

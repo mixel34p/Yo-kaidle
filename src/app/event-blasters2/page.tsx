@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trophy, Zap, Target } from 'lucide-react';
+import { ArrowLeft, Trophy, Target } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getEventById, getEventFilterForRandomYokai } from '@/utils/eventManager';
 import { getRandomYokai } from '@/lib/supabase';
-import type { EventConfiguration } from '@/types/events';
+import type { EventConfiguration, EventMilestone, EventReward } from '@/types/events';
 import type { Yokai, GuessResult } from '@/types/yokai';
-import { gameLogos, tribeIcons, rankIcons, elementIcons, tribeTranslations, elementTranslations } from '@/types/yokai';
+import { gameLogos, tribeIcons, rankIcons, elementIcons } from '@/types/yokai';
 import { compareYokai, normalizeYokai } from '@/utils/gameLogic';
 import YokaiGrid from '@/components/YokaiGrid';
 import YokaiSearch from '@/components/YokaiSearch';
@@ -20,7 +20,7 @@ import { unlockTitle } from '@/utils/titlesManager';
 
 export default function EventBlasters2Page() {
   const router = useRouter();
-  const { language, t, getYokaiName, getTribeTranslation, getElementTranslation } = useLanguage();
+  const { language, t, getYokaiName } = useLanguage();
   const eventId = 'blasters2'; // Hardcoded para esta página
 
   // Estado del evento
@@ -37,7 +37,7 @@ export default function EventBlasters2Page() {
   const [message, setMessage] = useState('');
   const [openedChests, setOpenedChests] = useState<string[]>([]);
   const [showChestModal, setShowChestModal] = useState(false);
-  const [currentChest, setCurrentChest] = useState<any>(null);
+  const [currentChest, setCurrentChest] = useState<EventMilestone | null>(null);
   const maxGuesses = 6;
 
   // Cargar progreso del localStorage al iniciar
@@ -196,7 +196,7 @@ export default function EventBlasters2Page() {
     if (!currentChest) return;
 
     // Aplicar recompensas reales
-    currentChest.rewards.forEach((reward: any) => {
+    currentChest.rewards.forEach((reward: EventReward) => {
       switch (reward.type) {
         case 'points':
           if (reward.amount) {
@@ -244,11 +244,11 @@ export default function EventBlasters2Page() {
     setTimeout(() => setMessage(''), 3000);
   };
 
-  const isChestAvailable = (milestone: any) => {
+  const isChestAvailable = (milestone: EventMilestone) => {
     return progress >= milestone.progress_required && !openedChests.includes(milestone.id);
   };
 
-  const isChestOpened = (milestone: any) => {
+  const isChestOpened = (milestone: EventMilestone) => {
     return openedChests.includes(milestone.id);
   };
 
@@ -836,7 +836,7 @@ export default function EventBlasters2Page() {
               <div className="bg-amber-800/30 rounded-xl p-4 mb-6 border border-amber-600/50">
                 <h5 className="text-amber-300 font-bold mb-3">🎁 Recompensas:</h5>
                 <div className="space-y-2">
-                  {currentChest.rewards.map((reward: any) => (
+                  {currentChest.rewards.map((reward: EventReward) => (
                     <div key={reward.id} className="flex items-center justify-center gap-2 text-amber-100">
                       {reward.type === 'points' ? (
                         <img

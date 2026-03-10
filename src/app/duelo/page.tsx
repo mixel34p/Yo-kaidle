@@ -7,7 +7,6 @@ import { getRandomYokai } from '@/lib/supabase';
 import { 
   createDuelRoom, 
   joinDuelRoom, 
-  updateRoomActivity, 
   getRoomByCode,
   subscribeToRoom,
   getAIGuess,
@@ -333,8 +332,8 @@ export default function DueloPage() {
         console.log('Estado recibido:', onlineState);
         
         // Necesitamos convertir los IDs de Yo-kai en objetos completos
-        let player1Guesses = [...duelState.player1Guesses];
-        let player2Guesses = [...duelState.player2Guesses];
+        const player1Guesses = [...duelState.player1Guesses];
+        const player2Guesses = [...duelState.player2Guesses];
         
         // Solo actualizamos si hay cambios en las adivinanzas
         if (onlineState.player1Guesses.length !== player1Guesses.length) {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Achievement, getUnlockedAchievements, getLockedAchievements, getAchievementStats, getAchievementName, getAchievementDescription, claimAchievementReward, hasClaimableReward, isRewardClaimed } from '@/utils/achievementSystem';
+import { Achievement, getUnlockedAchievements, getLockedAchievements, getAchievementStats, getAchievementName, getAchievementDescription, claimAchievementReward, isRewardClaimed } from '@/utils/achievementSystem';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCurrentPoints } from '@/utils/economyManager';
 import { AVAILABLE_BACKGROUNDS, getBackgroundName } from '@/utils/backgroundsManager';
@@ -86,7 +86,6 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentPoints, setCurrentPoints] = useState<number>(0);
   const [refreshKey, setRefreshKey] = useState<number>(0);
-  const [claimingAchievements, setClaimingAchievements] = useState<Set<string>>(new Set());
   
   const allUnlockedAchievements = getUnlockedAchievements();
   const allLockedAchievements = getLockedAchievements();
@@ -132,14 +131,6 @@ const AchievementsPanel: React.FC<AchievementsPanelProps> = ({ className = '' })
   const filterAchievements = (achievements: Achievement[]) => {
     if (selectedCategory === 'all') return achievements;
     return achievements.filter(achievement => achievement.category === selectedCategory);
-  };
-  
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
   };
   
   return (

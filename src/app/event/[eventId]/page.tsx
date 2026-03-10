@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Trophy, Star, Zap, Target, Gift } from 'lucide-react';
+import { ArrowLeft, Target } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getEventById, getEventFilterForRandomYokai } from '@/utils/eventManager';
 import { getRandomYokai } from '@/lib/supabase';
@@ -241,7 +241,7 @@ export default function EventPage() {
 
             {/* Milestones */}
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {event.milestones.map((milestone, index) => {
+              {event.milestones.map((milestone) => {
                 const isCompleted = progress >= milestone.progress_required;
                 const isCurrent = nextMilestone?.id === milestone.id;
 

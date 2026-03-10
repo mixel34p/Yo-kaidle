@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { motion } from 'framer-motion';
-import { MessageSquare, Trash2, Check, Clock } from 'lucide-react';
+import { MessageSquare, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface Feedback {

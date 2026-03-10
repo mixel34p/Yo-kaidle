@@ -18,7 +18,7 @@ import MedalliumCard from '@/components/MedalliumCard';
 import { getAllYokai } from '@/lib/supabase';
 import { Search, Grid, List, Heart, Filter, SlidersHorizontal, ArrowDownAZ, Hash, ChevronDown, X, RefreshCw } from 'lucide-react';
 import { checkAchievements } from '@/utils/achievementSystem';
-import { calculateAdvancedStats } from '@/utils/advancedStats';
+import { calculateAdvancedStats, type AdvancedMedalliumStats } from '@/utils/advancedStats';
 import AchievementsPanel from '@/components/AchievementsPanel';
 import AdvancedStatsPanel from '@/components/AdvancedStatsPanel';
 import CirclesPanel from '@/components/CirclesPanel';
@@ -53,15 +53,13 @@ export default function Medallium() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [unlockDates, setUnlockDates] = useState<UnlockDates>({});
-  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
 
   // Estados para nuevos paneles
   const [showAchievements, setShowAchievements] = useState(false);
   const [showAdvancedStats, setShowAdvancedStats] = useState(false);
   const [showCircles, setShowCircles] = useState(false);
-  const [allYokai, setAllYokai] = useState<Yokai[]>([]);
-  const [advancedStats, setAdvancedStats] = useState<any>(null);
+  const [advancedStats, setAdvancedStats] = useState<AdvancedMedalliumStats | null>(null);
 
   // Hook para traducciones
   const { t, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
@@ -101,8 +99,6 @@ export default function Medallium() {
       try {
         // Cargar todos los Yo-kai de la base de datos para obtener el total
         const allYokaiData = await getAllYokai();
-        setAllYokai(allYokaiData);
-
         // Cargar los Yo-kai desbloqueados del medallium
         const medallium = loadMedallium();
 
@@ -557,7 +553,7 @@ export default function Medallium() {
                         <option value="">{t.allElements}</option>
                         {Object.keys(elementIcons).map((element) => (
                           <option key={element} value={element}>
-                            {getElementTranslation(element as any)}
+                            {getElementTranslation(element as Element)}
                           </option>
                         ))}
                       </select>

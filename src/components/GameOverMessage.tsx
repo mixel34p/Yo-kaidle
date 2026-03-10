@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Yokai, tribeIcons, elementColors, elementIcons, rankIcons, gameLogos, GameMode, tribeTranslations, elementTranslations, foodTranslations, foodIcons } from '@/types/yokai';
+import { Yokai, elementIcons, foodIcons, GameMode, GuessResult } from '@/types/yokai';
 import NextYokaiTimer from './NextYokaiTimer';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -33,7 +33,6 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   pointsEarned = 0
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'error'>('idle');
   const [showShareScreen, setShowShareScreen] = useState(false);
   const [isSharing, setIsSharing] = useState(false); // Para evitar múltiples operaciones de compartir simultáneas
@@ -85,9 +84,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
     // Mostrar la ventana con una pequeña animación de entrada
     const timer = setTimeout(() => {
       setIsVisible(true);
-      if (won) {
-        setShowConfetti(true);
-      }
+      
     }, 500);
     
     return () => clearTimeout(timer);
@@ -132,7 +129,7 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   
   // Función para comparar dos Yokais y determinar el resultado
   const compareYokai = (targetYokai: Yokai, guessedYokai: Yokai) => {
-    const result: any = {
+    const result: GuessResult = {
       isCorrect: targetYokai.id === guessedYokai.id
     };
     

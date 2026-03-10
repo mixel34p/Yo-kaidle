@@ -8,6 +8,7 @@ import { useFriends } from '@/hooks/useFriends';
 import { Users, Search, UserPlus, ArrowLeft, Check, X, Trash2, User } from 'lucide-react';
 
 type TabType = 'friends' | 'requests' | 'search';
+type SearchUserResult = { id: string; username: string; avatar_url: string | null };
 
 export default function FriendsPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function FriendsPage() {
 
   const [activeTab, setActiveTab] = useState<TabType>('friends');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResult, setSearchResult] = useState<any>(null);
+  const [searchResult, setSearchResult] = useState<SearchUserResult | null>(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -77,9 +78,10 @@ export default function FriendsPage() {
       setSearchResult(null);
       setSearchQuery('');
       // Mostrar mensaje de éxito (podrías usar un toast aquí)
-    } catch (error: any) {
+    } catch (error) {
       console.error('Send request error:', error);
-      if (error.message.includes('Already')) {
+      const message = error instanceof Error ? error.message : '';
+      if (message.includes('Already')) {
         setSearchError(t.alreadyFriends);
       } else {
         setSearchError('Error sending request');

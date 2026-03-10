@@ -46,7 +46,7 @@ export interface EventConfiguration {
 
   // Progress configuration
   total_progress_required: number;
-  progress_unit: string; // e.g., "Yo-kai discovered", "battles won"
+  progress_unit: string | Record<string, string>;
 
   // Game configuration
   game_mode: 'infinite' | 'daily' | 'special';

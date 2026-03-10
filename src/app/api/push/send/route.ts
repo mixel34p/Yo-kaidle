@@ -127,11 +127,15 @@ export async function POST(request: Request) {
                 try {
                     await webpush.sendNotification(pushSubscription, payload);
                     return { success: true, endpoint: sub.endpoint };
-                } catch (error: any) {
-                    console.error(`[API Push Send] Failed to send to ${sub.endpoint}:`, error.message);
+                } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    const statusCode = typeof error === 'object' && error !== null && 'statusCode' in error
+                        ? (error as { statusCode?: number }).statusCode
+                        : undefined;
 
-                    // If subscription is invalid (410 Gone or 404), mark as inactive
-                    if (error.statusCode === 410 || error.statusCode === 404) {
+                    console.error(`[API Push Send] Failed to send to ${sub.endpoint}:`, errorMessage);
+
+                    if (statusCode === 410 || statusCode === 404) {
                         await supabase
                             .from('push_subscriptions')
                             .update({ is_active: false })
