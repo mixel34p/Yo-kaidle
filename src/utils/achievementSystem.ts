@@ -1019,7 +1019,7 @@ function updateLegacyAchievements() {
 
       // Actualizar al nuevo formato
       achievement.condition = (context: AchievementContext) => {
-        const legacyCondition = originalCondition as (medallium: MedalliumData, allYokai: Yokai[]) => boolean;
+        const legacyCondition = originalCondition as unknown as (medallium: MedalliumData, allYokai: Yokai[]) => boolean;
         return legacyCondition(context.medallium, context.allYokai);
       };
     }

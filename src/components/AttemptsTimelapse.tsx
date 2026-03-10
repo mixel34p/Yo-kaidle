@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Yokai, GuessResult } from '@/types/yokai';
+import { Yokai } from '@/types/yokai';
 import { compareYokai } from '@/utils/gameLogic';
 import YokaiRow from './YokaiRow';
 
@@ -83,7 +83,6 @@ const AttemptsTimelapse: React.FC<AttemptsTimelapseProps> = ({
               <YokaiRow 
                 yokai={yokai}
                 result={compareYokai(dailyYokai, yokai)}
-                guessIndex={index}
                 isNewRow={index === visibleGuesses.length - 1}
               />
             </div>

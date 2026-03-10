@@ -207,7 +207,12 @@ export function EventList({ className = '' }: { className?: string }) {
             {/* Progress indicator could go here */}
             <div className="mt-3 flex items-center gap-2 text-sm text-white/60">
               <Trophy size={14} />
-              <span>0 / {event.total_progress_required} {event.progress_unit}</span>
+              <span>
+                0 / {event.total_progress_required}{' '}
+                {typeof event.progress_unit === 'string'
+                  ? event.progress_unit
+                  : event.progress_unit[language] || event.progress_unit.es}
+              </span>
             </div>
           </div>
         ))}

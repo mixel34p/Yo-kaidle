@@ -402,7 +402,7 @@ export function applyBackgroundToDOM(background: Background): void {
 
   Object.entries(background.style).forEach(([property, value]) => {
     if (value) {
-      (body.style as Record<string, string>)[property] = value;
+      (body.style as unknown as Record<string, string>)[property] = value;
     }
   });
 

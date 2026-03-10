@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Yokai, elementIcons, foodIcons, GameMode, GuessResult } from '@/types/yokai';
+import { Yokai, elementIcons, foodIcons, GameMode } from '@/types/yokai';
 import NextYokaiTimer from './NextYokaiTimer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { compareYokai } from '@/utils/gameLogic';
 
 interface GameOverMessageProps {
   dailyYokai: Yokai;
@@ -127,46 +128,6 @@ const GameOverMessage: React.FC<GameOverMessageProps> = ({
   
 
   
-  // Función para comparar dos Yokais y determinar el resultado
-  const compareYokai = (targetYokai: Yokai, guessedYokai: Yokai) => {
-    const result: GuessResult = {
-      isCorrect: targetYokai.id === guessedYokai.id
-    };
-    
-    // Verificar tribu
-    result.tribe = targetYokai.tribe === guessedYokai.tribe ? 'correct' : 'incorrect';
-    
-    // Verificar rango (A, B, C, etc.)
-    if (targetYokai.rank === guessedYokai.rank) {
-      result.rank = 'correct';
-    } else {
-      // Convertir rango a valor numérico para comparar
-      const rankValues: { [key: string]: number } = {
-        'S': 6, 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1
-      };
-      
-      const targetRankValue = rankValues[targetYokai.rank] || 0;
-      const guessedRankValue = rankValues[guessedYokai.rank] || 0;
-      
-      if (guessedRankValue > targetRankValue) {
-        result.rank = 'lower'; // El rango adivinado es mayor (S es mayor que A)
-      } else {
-        result.rank = 'higher'; // El rango adivinado es menor
-      }
-    }
-    
-    // Verificar elemento
-    result.element = targetYokai.element === guessedYokai.element ? 'correct' : 'incorrect';
-    
-    // Verificar comida favorita
-    result.favoriteFood = targetYokai.favoriteFood === guessedYokai.favoriteFood ? 'correct' : 'incorrect';
-    
-    // Verificar juego
-    result.game = targetYokai.game === guessedYokai.game ? 'correct' : 'incorrect';
-    
-    return result;
-  };
-
   // Crear el mensaje a compartir
   const createShareMessage = () => {
     // Determinar si mostrar el nombre del Yo-kai (solo en modo infinito)

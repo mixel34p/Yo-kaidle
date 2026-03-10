@@ -61,7 +61,8 @@ export default function DuelSetupScreen({ onStartDuel }: DuelSetupScreenProps) {
       
       // Todo correcto, continuar con el duelo
       setIsJoining(false);
-      onStartDuel('online', player1Name.trim(), room.host_name, undefined, roomCode.trim().toUpperCase());
+      const hostName = typeof room.host_name === 'string' ? room.host_name : 'Anfitrión';
+      onStartDuel('online', player1Name.trim(), hostName, undefined, roomCode.trim().toUpperCase());
       
     } catch (error) {
       console.error('Error al unirse a la sala:', error);

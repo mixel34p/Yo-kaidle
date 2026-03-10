@@ -35,6 +35,7 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({ profile, isOwnProfile, theme, friendButton }: ProfileHeaderProps) {
   const { t, language } = useLanguage();
   const {
+    customization,
     getFavoriteYokaiDetails,
     getCurrentTitleDetails,
     getCurrentFrameDetails,
