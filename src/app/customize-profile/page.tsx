@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
@@ -41,9 +41,13 @@ export default function CustomizeProfilePage() {
   const [activeTab, setActiveTab] = useState<TabType>('yokai');
   const [saving, setSaving] = useState(false);
 
-  // Redirigir si no está autenticado
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user, router]);
+
   if (!user) {
-    router.push('/');
     return null;
   }
 

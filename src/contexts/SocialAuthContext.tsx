@@ -113,12 +113,25 @@ export function SocialAuthProvider({ children }: { children: React.ReactNode }) 
       // Competición entre carga y timeout
       const data = await Promise.race([loadPromise(), timeoutPromise]) as UserProfile;
 
-      // Sincronizar avatar con Discord en segundo plano (no bloquea la carga)
-      if (data.discord_id) {
-        syncDiscordAvatar(data.discord_id, currentUser.id, data.avatar_url);
+      const metadataAvatarUrl = typeof currentUser.user_metadata?.avatar_url === 'string'
+        ? currentUser.user_metadata.avatar_url
+        : null;
+      const nextProfile = metadataAvatarUrl && metadataAvatarUrl !== data.avatar_url
+        ? { ...data, avatar_url: metadataAvatarUrl }
+        : data;
+
+      if (metadataAvatarUrl && metadataAvatarUrl !== data.avatar_url) {
+        void supabase
+          .from('user_profiles')
+          .update({ avatar_url: metadataAvatarUrl })
+          .eq('id', currentUser.id);
       }
 
-      setProfile(data);
+      if (nextProfile.discord_id) {
+        syncDiscordAvatar(nextProfile.discord_id, currentUser.id, nextProfile.avatar_url);
+      }
+
+      setProfile(nextProfile);
     } catch (error) {
       console.error('Error in loadUserProfile:', error);
       // No lanzamos error para que la UI pueda continuar aunque falle el perfil
