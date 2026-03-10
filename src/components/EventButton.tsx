@@ -16,40 +16,6 @@ export default function EventButton({ className = '' }: EventButtonProps) {
   const { language } = useLanguage();
   const { activeEvents, loading } = useActiveEvents();
   const router = useRouter();
-  const [selectedEvent, setSelectedEvent] = useState<EventConfiguration | null>(null);
-
-  // Translations
-  const texts = {
-    es: {
-      events: 'Eventos',
-      specialEvent: 'Evento Especial',
-      noActiveEvents: 'No hay eventos activos',
-      loading: 'Cargando...',
-      participate: 'Participar',
-      inProgress: 'En Progreso',
-      completed: 'Completado'
-    },
-    en: {
-      events: 'Events',
-      specialEvent: 'Special Event',
-      noActiveEvents: 'No active events',
-      loading: 'Loading...',
-      participate: 'Participate',
-      inProgress: 'In Progress',
-      completed: 'Completed'
-    },
-    it: {
-      events: 'Eventi',
-      specialEvent: 'Evento Speciale',
-      noActiveEvents: 'Nessun evento attivo',
-      loading: 'Caricamento...',
-      participate: 'Partecipa',
-      inProgress: 'In Corso',
-      completed: 'Completato'
-    }
-  };
-
-  const t = texts[language as keyof typeof texts] || texts.es;
 
   // Don't show button if no active events
   if (loading || activeEvents.length === 0) {

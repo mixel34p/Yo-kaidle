@@ -13,7 +13,7 @@ import {
 import { getCurrentPoints } from '@/utils/economyManager';
 import { loadMedallium } from '@/utils/medalliumManager';
 import CircleCard from './CircleCard';
-import { Trophy } from 'lucide-react';
+import { Trophy, Target } from 'lucide-react';
 
 type FilterType = 'all' | 'completed' | 'incomplete';
 

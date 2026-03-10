@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Target } from 'lucide-react';
+import { ArrowLeft, Target, Star, Zap } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getEventById, getEventFilterForRandomYokai } from '@/utils/eventManager';
 import { getRandomYokai } from '@/lib/supabase';

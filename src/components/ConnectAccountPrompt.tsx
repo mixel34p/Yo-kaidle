@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { X, LogIn } from 'lucide-react';
+import { X } from 'lucide-react';
 
 export default function ConnectAccountPrompt() {
     const [isVisible, setIsVisible] = useState(false);

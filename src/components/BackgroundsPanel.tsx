@@ -52,12 +52,6 @@ const BackgroundsPanel: React.FC<BackgroundsPanelProps> = ({ isOpen, onClose }) 
     }
   };
 
-  // Refrescar fondos desbloqueados
-  const refreshUnlockedBackgrounds = () => {
-    const unlocked = getUnlockedBackgrounds();
-    setUnlockedBackgrounds(unlocked);
-  };
-
   if (!isOpen) return null;
 
   return (

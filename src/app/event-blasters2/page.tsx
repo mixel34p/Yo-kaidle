@@ -8,7 +8,7 @@ import { getEventById, getEventFilterForRandomYokai } from '@/utils/eventManager
 import { getRandomYokai } from '@/lib/supabase';
 import type { EventConfiguration, EventMilestone, EventReward } from '@/types/events';
 import type { Yokai, GuessResult } from '@/types/yokai';
-import { gameLogos, tribeIcons, rankIcons, elementIcons } from '@/types/yokai';
+import { tribeIcons, rankIcons, elementIcons } from '@/types/yokai';
 import { compareYokai, normalizeYokai } from '@/utils/gameLogic';
 import YokaiGrid from '@/components/YokaiGrid';
 import YokaiSearch from '@/components/YokaiSearch';
@@ -302,8 +302,6 @@ export default function EventBlasters2Page() {
   if (!event) {
     return null;
   }
-
-  const nextMilestone = getNextMilestone();
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-sky-400 via-sky-300 to-yellow-400">

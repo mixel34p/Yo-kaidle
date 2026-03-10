@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DuelOpponent, AIDifficulty } from '@/types/yokai';
-import { generateRoomCode, joinDuelRoom, getRoomByCode } from '@/lib/duelSupabase';
+import { generateRoomCode, getRoomByCode } from '@/lib/duelSupabase';
 
 interface DuelSetupScreenProps {
   onStartDuel: (
