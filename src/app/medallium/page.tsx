@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Yokai, Tribe, Game, Element, Rank, tribeTranslations, tribeIcons, gameLogos, rankIcons, foodIcons, elementIcons, elementTranslations } from '@/types/yokai';
+import { Yokai, Tribe, Game, Element, Rank, tribeIcons, gameLogos, rankIcons, foodIcons, elementIcons } from '@/types/yokai';
 import {
   loadMedallium,
-  getUnlockedYokaiArray,
   filterByTribe,
   filterByGame,
   sortByMedalNumber,
@@ -15,7 +15,6 @@ import {
   calculateMedalliumStats
 } from '@/utils/medalliumManager';
 import MedalliumCard from '@/components/MedalliumCard';
-import MedalliumDetail from '@/components/MedalliumDetail';
 import { getAllYokai } from '@/lib/supabase';
 import { Search, Grid, List, Heart, Filter, SlidersHorizontal, ArrowDownAZ, Hash, ChevronDown, X, RefreshCw } from 'lucide-react';
 import { checkAchievements } from '@/utils/achievementSystem';
@@ -31,15 +30,12 @@ type FilterOption = string | null;
 type ViewMode = 'grid' | 'list';
 type UnlockDates = Record<string, string>; // Mapeo de ID de Yo-kai a fecha de desbloqueo
 
-// Importamos MedalliumData desde medalliumManager
-import { MedalliumData } from '@/utils/medalliumManager';
 
 export default function Medallium() {
   // Estados para Yo-kai y filtrado
   const [unlockedYokai, setUnlockedYokai] = useState<Yokai[]>([]);
   const [filteredYokai, setFilteredYokai] = useState<Yokai[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalYokai, setTotalYokai] = useState(0);
   const [sortBy, setSortBy] = useState<SortOption>('number');
   const [tribeFilter, setTribeFilter] = useState<FilterOption>(null);
   const [gameFilter, setGameFilter] = useState<FilterOption>(null);
@@ -140,7 +136,6 @@ export default function Medallium() {
         const uniqueTribes = Array.from(new Set(allYokaiData.map(y => y.tribe))) as Tribe[];
         const uniqueGames = Array.from(new Set(allYokaiData.map(y => y.game))) as Game[];
 
-        setTotalYokai(allYokaiData.length);
         setUnlockedYokai(unlocked);
         setFilteredYokai(sortByMedalNumber(unlocked));
         setTribes(uniqueTribes);
@@ -540,7 +535,7 @@ export default function Medallium() {
                       </select>
                       <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 pointer-events-none">
                         {tribeFilter && tribeIcons[tribeFilter as Tribe] ? (
-                          <img src={tribeIcons[tribeFilter as Tribe]} alt="" className="w-6 h-6" />
+                          <Image src={tribeIcons[tribeFilter as Tribe]} alt="" width={24} height={24} className="w-6 h-6" />
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
@@ -568,7 +563,7 @@ export default function Medallium() {
                       </select>
                       <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 pointer-events-none">
                         {elementFilter && elementIcons[elementFilter as Element] ? (
-                          <img src={elementIcons[elementFilter as Element]} alt="" className="w-6 h-6" />
+                          <Image src={elementIcons[elementFilter as Element]} alt="" width={24} height={24} className="w-6 h-6" />
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
@@ -598,7 +593,7 @@ export default function Medallium() {
                       </select>
                       <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 pointer-events-none">
                         {rankFilter && rankIcons[rankFilter as Rank] ? (
-                          <img src={rankIcons[rankFilter as Rank]} alt="" className="w-6 h-6" />
+                          <Image src={rankIcons[rankFilter as Rank]} alt="" width={24} height={24} className="w-6 h-6" />
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -626,7 +621,7 @@ export default function Medallium() {
                       </select>
                       <div className="absolute left-0 top-0 h-full flex items-center justify-center w-10 pointer-events-none">
                         {gameFilter && gameLogos[gameFilter as Game] ? (
-                          <img src={gameLogos[gameFilter as Game]} alt="" className="w-6 h-6" />
+                          <Image src={gameLogos[gameFilter as Game]} alt="" width={24} height={24} className="w-6 h-6" />
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
@@ -738,10 +733,12 @@ export default function Medallium() {
               </div>
 
               {/* Imagen del Yo-kai */}
-              <img
+              <Image
                 src={selectedYokai.imageurl || selectedYokai.image_url || selectedYokai.img || selectedYokai.image || '/images/yokai-placeholder.png'}
                 alt={getYokaiName(selectedYokai)}
-                className="w-full h-full object-contain drop-shadow-lg p-2"
+                fill
+                sizes="(max-width: 768px) 100vw, 420px"
+                className="object-contain drop-shadow-lg p-2"
               />
 
               {/* Botón de cerrar */}
@@ -767,7 +764,7 @@ export default function Medallium() {
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-1">{getYokaiName(selectedYokai)}</h2>
                   <div className="flex items-center">
-                    <img src={tribeIcons[selectedYokai.tribe]} alt={selectedYokai.tribe} className="w-6 h-6 mr-2" />
+                    <Image src={tribeIcons[selectedYokai.tribe]} alt={selectedYokai.tribe} width={24} height={24} className="w-6 h-6 mr-2" />
                     <span className="text-gray-600 font-medium">{getTribeTranslation(selectedYokai.tribe)}</span>
                   </div>
                 </div>
@@ -779,9 +776,11 @@ export default function Medallium() {
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.rank}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img
+                    <Image
                       src={rankIcons[selectedYokai.rank]}
                       alt={`${t.rank} ${selectedYokai.rank}`}
+                      width={40}
+                      height={40}
                       className="w-full h-full object-contain drop-shadow-md"
                     />
                   </div>
@@ -791,9 +790,11 @@ export default function Medallium() {
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.element}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img
+                    <Image
                       src={elementIcons[selectedYokai.element]}
                       alt={getElementTranslation(selectedYokai.element)}
+                      width={40}
+                      height={40}
                       className="w-full h-full object-contain drop-shadow-md"
                       onError={(e) => {
                         // Fallback a un icono genérico
@@ -819,9 +820,11 @@ export default function Medallium() {
                 <div className="bg-blue-50 p-3 rounded-lg flex flex-col items-center justify-center shadow-sm">
                   <div className="text-xs text-blue-600 mb-2">{t.food}</div>
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <img
+                    <Image
                       src={foodIcons[selectedYokai.favoriteFood]}
                       alt={getFoodTranslation(selectedYokai.favoriteFood)}
+                      width={40}
+                      height={40}
                       className="w-full h-full object-contain drop-shadow-md"
                       onError={(e) => {
                         // Fallback a un icono genérico
@@ -844,7 +847,7 @@ export default function Medallium() {
               {/* Juego de origen */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg shadow-sm">
                 <div className="flex items-center">
-                  <img src={gameLogos[selectedYokai.game]} alt={selectedYokai.game} className="w-10 h-10 mr-3 bg-white p-1 rounded-full shadow-inner" />
+                  <Image src={gameLogos[selectedYokai.game]} alt={selectedYokai.game} width={40} height={40} className="w-10 h-10 mr-3 bg-white p-1 rounded-full shadow-inner" />
                   <div>
                     <div className="text-xs text-blue-600">{t.game}</div>
                     <div className="font-medium text-blue-900">{selectedYokai.game}</div>

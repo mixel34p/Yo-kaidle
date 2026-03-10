@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
@@ -247,9 +248,11 @@ export default function LeaderboardsPage() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-2xl sm:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-          <img
+          <Image
             src="/icons/social/leaderboards.png"
             alt="Leaderboards"
+            width={32}
+            height={32}
             className="w-6 h-6 sm:w-8 sm:h-8"
           />
           {t.globalLeaderboards}
@@ -321,9 +324,11 @@ export default function LeaderboardsPage() {
                 <div className="flex-shrink-0 w-8 sm:w-12 text-center">
                   {index < 3 ? (
                     <div className="flex items-center justify-center">
-                      <img
+                      <Image
                         src={`/icons/leaderboard/${index + 1}.png`}
                         alt={`Position ${index + 1}`}
+                        width={32}
+                        height={32}
                         className="w-6 h-6 sm:w-8 sm:h-8"
                       />
                     </div>
