@@ -170,12 +170,6 @@ export default function EventBlasters2Page() {
     return Math.min((progress / event.total_progress_required) * 100, 100);
   };
 
-  // Obtener siguiente milestone
-  const getNextMilestone = () => {
-    if (!event) return null;
-    return event.milestones.find(m => m.progress_required > progress);
-  };
-
   // Funciones para manejar cofres
   const checkForNewChests = (newProgress: number) => {
     if (!event) return;

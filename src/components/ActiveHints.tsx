@@ -11,7 +11,7 @@ interface ActiveHintsProps {
 }
 
 const ActiveHints: React.FC<ActiveHintsProps> = ({ hintsState }) => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   // Obtener traducciones para las características reveladas
   const getTribeTranslation = (tribe: string) => {

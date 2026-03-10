@@ -334,7 +334,7 @@ export default function ShopPage() {
       } else {
         setNotification({ type: 'error', message: result.error || 'Error al comprar' });
       }
-    } catch (error) {
+    } catch {
       setNotification({ type: 'error', message: 'Error inesperado' });
     } finally {
       setPurchaseLoading(null);
@@ -369,7 +369,7 @@ export default function ShopPage() {
       } else {
         setNotification({ type: 'error', message: result.error || 'Error al canjear código' });
       }
-    } catch (error) {
+    } catch {
       setNotification({ type: 'error', message: 'Error inesperado' });
     }
   };
