@@ -535,16 +535,18 @@ function HomeContent() {
           } else {
             // Continuar con el juego infinito guardado (sin importar el estado)
             setGameState(savedGame);
-            setGuessResults(savedGame.guesses.map((yokai: Yokai) => {
-              // Normalizar tanto el Yo-kai adivinado como el objetivo
-              const normalizedYokai = normalizeYokai(yokai);
-              const targetYokai = savedGame.infiniteYokai;
-              const normalizedTargetYokai = targetYokai ? normalizeYokai(targetYokai as Yokai) : null;
-              return {
-                yokai: normalizedYokai,
-                result: normalizedTargetYokai ? compareYokai(normalizedTargetYokai, normalizedYokai) : null
-              };
-            }));
+            const targetYokai = savedGame.infiniteYokai;
+            const normalizedTargetYokai = targetYokai ? normalizeYokai(targetYokai as Yokai) : null;
+            const restoredResults = normalizedTargetYokai
+              ? savedGame.guesses.map((yokai: Yokai) => {
+                  const normalizedYokai = normalizeYokai(yokai);
+                  return {
+                    yokai: normalizedYokai,
+                    result: compareYokai(normalizedTargetYokai, normalizedYokai)
+                  };
+                })
+              : [];
+            setGuessResults(restoredResults);
             // Mostrar Game Over si el estado no es 'playing'
             if (savedGame.gameStatus !== 'playing') {
               setShowGameOver(true);

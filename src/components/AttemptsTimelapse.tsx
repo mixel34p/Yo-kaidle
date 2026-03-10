@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Yokai, GuessResult } from '@/types/yokai';
+import { compareYokai } from '@/utils/gameLogic';
 import YokaiRow from './YokaiRow';
 
 interface AttemptsTimelapseProps {
@@ -20,45 +21,6 @@ const AttemptsTimelapse: React.FC<AttemptsTimelapseProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Función para comparar Yokai y obtener resultados
-  const compareYokai = (targetYokai: Yokai, guessedYokai: Yokai) => {
-    const result: GuessResult = {
-      isCorrect: targetYokai.id === guessedYokai.id
-    };
-    
-    // Verificar tribu
-    result.tribe = targetYokai.tribe === guessedYokai.tribe ? 'correct' : 'incorrect';
-    
-    // Verificar rango (A, B, C, etc.)
-    if (targetYokai.rank === guessedYokai.rank) {
-      result.rank = 'correct';
-    } else {
-      // Convertir rango a valor numérico para comparar
-      const rankValues: { [key: string]: number } = {
-        'S': 6, 'A': 5, 'B': 4, 'C': 3, 'D': 2, 'E': 1
-      };
-      
-      const targetRankValue = rankValues[targetYokai.rank] || 0;
-      const guessedRankValue = rankValues[guessedYokai.rank] || 0;
-      
-      if (guessedRankValue > targetRankValue) {
-        result.rank = 'lower'; // El rango adivinado es mayor (S es mayor que A)
-      } else {
-        result.rank = 'higher'; // El rango adivinado es menor
-      }
-    }
-    
-    // Verificar elemento
-    result.element = targetYokai.element === guessedYokai.element ? 'correct' : 'incorrect';
-    
-    // Verificar comida favorita
-    result.favoriteFood = targetYokai.favoriteFood === guessedYokai.favoriteFood ? 'correct' : 'incorrect';
-    
-    // Verificar juego
-    result.game = targetYokai.game === guessedYokai.game ? 'correct' : 'incorrect';
-    
-    return result;
-  };
   
   // Iniciar/reanudar la reproducción
   const playTimelapse = () => {

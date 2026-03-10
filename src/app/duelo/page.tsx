@@ -313,11 +313,12 @@ export default function DueloPage() {
       }
       
       // Si eres el anfitrión y hay un invitado, actualizar el nombre del invitado
-      if (duelState.isHost && room.guest_name && duelState.player2Name === 'Esperando...') {
+      const guestName = typeof room.guest_name === 'string' ? room.guest_name : null;
+      if (duelState.isHost && guestName && duelState.player2Name === 'Esperando...') {
         const updatedDuelState = {
           ...duelState,
-          player2Name: room.guest_name,
-          lastAction: `${room.guest_name} se ha unido a la sala`,
+          player2Name: guestName,
+          lastAction: `${guestName} se ha unido a la sala`,
           lastUpdated: new Date().toISOString()
         };
         
@@ -403,10 +404,11 @@ export default function DueloPage() {
       }
       
       // Si no hay estado online, al menos actualizamos la última acción
-      if (room.last_action && room.last_action !== duelState.lastAction) {
+      const roomLastAction = typeof room.last_action === 'string' ? room.last_action : null;
+      if (roomLastAction && roomLastAction !== duelState.lastAction) {
         const updatedDuelState = {
           ...duelState,
-          lastAction: room.last_action,
+          lastAction: roomLastAction,
           lastUpdated: new Date().toISOString()
         };
         

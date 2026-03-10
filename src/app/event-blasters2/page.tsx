@@ -14,6 +14,7 @@ import YokaiGrid from '@/components/YokaiGrid';
 import YokaiSearch from '@/components/YokaiSearch';
 import { addPoints } from '@/utils/economyManager';
 import { unlockBackground } from '@/utils/backgroundsManager';
+import type { BackgroundId } from '@/utils/backgroundsManager';
 import { unlockFrame } from '@/utils/framesManager';
 import { unlockTrack } from '@/utils/jukeboxManager';
 import { unlockTitle } from '@/utils/titlesManager';
@@ -203,7 +204,7 @@ export default function EventBlasters2Page() {
           break;
         case 'background':
           if (reward.item_id) {
-            unlockBackground(reward.item_id);
+            unlockBackground(reward.item_id as BackgroundId);
           }
           break;
         case 'frame':
