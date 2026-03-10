@@ -6,7 +6,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Play, Heart, Plus } from 'lucide-react';
 import {
   Track,
-  MusicCategory,
   MusicGame,
   AVAILABLE_TRACKS,
   JukeboxState,
@@ -31,7 +30,6 @@ interface MusicLibraryProps {
 
 const MusicLibrary: React.FC<MusicLibraryProps> = ({
   onPlayTrack,
-  onAddToQueue,
   onAddToPlaylist,
   className = ''
 }) => {

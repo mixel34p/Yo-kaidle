@@ -4,27 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { User, LogOut, Settings, RefreshCw } from 'lucide-react';
-import AvatarWithFrame from '@/components/AvatarWithFrame';
 
 export default function UserAvatar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // Verificar si los contextos están disponibles
-  let user, profile, signOut, language;
-
-  try {
-    const authContext = useSocialAuth();
-    const langContext = useLanguage();
-
-    user = authContext?.user;
-    profile = authContext?.profile;
-    signOut = authContext?.signOut;
-    language = langContext?.language;
-  } catch (error) {
-    console.error('Error accessing contexts:', error);
-    return <div className="text-red-500 text-xs">Auth Error</div>;
-  }
+  const { user, profile, signOut } = useSocialAuth();
+  const { language } = useLanguage();
 
   // Close menu when clicking outside
   useEffect(() => {

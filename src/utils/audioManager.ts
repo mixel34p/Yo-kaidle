@@ -1,7 +1,7 @@
 // Gestor de audio para el sistema de jukebox
 // Maneja la reproducción, pausa, volumen y eventos de audio
 
-import { Track, RepeatMode } from './jukeboxManager';
+import { Track } from './jukeboxManager';
 
 export class AudioManager {
   private audio: HTMLAudioElement | null = null;

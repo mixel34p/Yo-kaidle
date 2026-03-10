@@ -4,8 +4,6 @@
  * TODO: Re-enable full Web Push once SW issues are resolved
  */
 
-import { supabase } from '@/lib/supabase';
-
 /**
  * Check if push notifications are supported in this browser
  */

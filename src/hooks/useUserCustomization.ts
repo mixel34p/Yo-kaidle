@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase, cleanWikiImageUrl } from '@/lib/supabase';
-import { getAllFramesWithStatus, getFrameName, getFrameDescription } from '@/utils/framesManager';
+import { getAllFramesWithStatus, getFrameName } from '@/utils/framesManager';
 import { getAllTitlesWithStatus, getTitleName as getTitleNameFromManager, getTitleDescription as getTitleDescriptionFromManager } from '@/utils/titlesManager';
 import { AVAILABLE_BACKGROUNDS, BackgroundId } from '@/utils/backgroundsManager';
 

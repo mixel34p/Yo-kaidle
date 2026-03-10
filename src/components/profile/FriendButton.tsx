@@ -16,12 +16,11 @@ interface ProfileTheme {
 
 interface FriendButtonProps {
   targetUserId: string;
-  targetUsername: string;
   theme: ProfileTheme;
   compact?: boolean;
 }
 
-export default function FriendButton({ targetUserId, targetUsername, theme, compact = false }: FriendButtonProps) {
+export default function FriendButton({ targetUserId, theme, compact = false }: FriendButtonProps) {
   const { t } = useLanguage();
   const { user } = useSocialAuth();
   const router = useRouter();

@@ -4,10 +4,8 @@
 // =====================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import type {
   EventConfiguration,
-  EventStatus
 } from '@/types/events';
 import {
   getActiveEvents,

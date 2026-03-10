@@ -147,7 +147,7 @@ export function useSocialStats() {
 }
 
 // Helper function para disparar eventos de cambio de localStorage
-export function triggerStatsSync(key: string, value: any) {
+export function triggerStatsSync(key: string, value: unknown) {
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('localStorageChange', {
       detail: { key, value }

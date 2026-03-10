@@ -158,7 +158,6 @@ export default function SuggestionPanel() {
     };
 
     const currentType = suggestionTypeConfig[formData.suggestionType];
-    const TypeIcon = currentType.icon;
     const isAuthenticated = user && profile && !authLoading;
 
     if (!mounted) return null;

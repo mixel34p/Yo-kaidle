@@ -18,7 +18,7 @@ const YokaiSilhouette: React.FC<YokaiSilhouetteProps> = ({
   showName = true,
   size = 'medium' 
 }) => {
-  const { getYokaiName, getTribeTranslation } = useLanguage();
+  const { getYokaiName } = useLanguage();
   const [imageError, setImageError] = useState(false);
 
   // Obtener tamaños según el prop size

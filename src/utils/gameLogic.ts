@@ -1,5 +1,4 @@
 import { Yokai, GuessResult, GameState, GameMode } from '@/types/yokai';
-import { triggerSocialStatsSync } from '@/hooks/useSocialStats';
 import { triggerSync } from '@/utils/cloudSyncManager';
 
 export function compareYokai(dailyYokai: Yokai, guessedYokai: Yokai): GuessResult {
@@ -66,10 +65,12 @@ export function formatDateForDisplay(dateString: string): string {
 }
 
 // Normaliza el objeto Yokai para asegurar que tenga la propiedad favoriteFood
-export function normalizeYokai(yokai: any): Yokai {
+type YokaiInput = Partial<Yokai> & { favorite_food?: Yokai['favoriteFood'] };
+
+export function normalizeYokai(yokai: YokaiInput): Yokai {
   return {
-    ...yokai,
-    favoriteFood: yokai.favoriteFood || yokai.favorite_food || '',
+    ...(yokai as Yokai),
+    favoriteFood: yokai.favoriteFood || yokai.favorite_food || 'None',
   };
 }
 
@@ -110,7 +111,7 @@ export function loadGameFromLocalStorage(mode: GameMode = 'daily'): GameState | 
 }
 
 // Funcion para inicializar un nuevo estado de juego para modo infinito
-export function createNewInfiniteGame(currentDate: string, randomYokai: any, savedState: GameState | null): GameState {
+export function createNewInfiniteGame(currentDate: string, randomYokai: Yokai, savedState: GameState | null): GameState {
   // Si hay un estado guardado, mantenemos las estadísticas pero reiniciamos el juego actual
   if (savedState) {
     return {

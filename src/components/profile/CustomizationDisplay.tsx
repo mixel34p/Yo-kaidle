@@ -11,7 +11,6 @@ interface CustomizationDisplayProps {
 
 export default function CustomizationDisplay({ userId, compact = false }: CustomizationDisplayProps) {
   const {
-    customization,
     loading,
     getFavoriteYokaiDetails,
     getCurrentTitleDetails,

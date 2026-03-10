@@ -9,6 +9,11 @@ import type {
   EventStatus
 } from '@/types/events';
 
+type EventConfigWithFilters = EventConfiguration & {
+  game_filter?: string[];
+  fallback_games?: string[];
+};
+
 // =====================================================
 // CONFIGURACIÓN DE EVENTOS DESDE JSON
 // =====================================================
@@ -165,12 +170,12 @@ export function isEventActive(eventId: string): Promise<boolean> {
 
 export function getEventGameFilter(event: EventConfiguration): string[] {
   // Usar game_filter del JSON, con fallback si no hay juegos de Blasters
-  return (event as any).game_filter || [];
+  return (event as EventConfigWithFilters).game_filter || [];
 }
 
 export function getEventFallbackGames(event: EventConfiguration): string[] {
   // Usar fallback_games del JSON
-  return (event as any).fallback_games || [];
+  return (event as EventConfigWithFilters).fallback_games || [];
 }
 
 export async function getEventFilterForRandomYokai(event: EventConfiguration) {

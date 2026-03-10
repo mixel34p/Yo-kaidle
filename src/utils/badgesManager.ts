@@ -1,5 +1,7 @@
 'use client';
 
+import { GameState } from '@/types/yokai';
+
 export interface BadgeData {
   id: string;
   name_es: string;
@@ -12,6 +14,10 @@ export interface BadgeData {
 export interface BadgesState {
   unlockedBadges: Record<string, BadgeData>;
   lastUpdated: string;
+}
+
+interface MedalliumStatsSummary {
+  unlockedCount?: number;
 }
 
 // Insignias disponibles
@@ -202,7 +208,10 @@ export function getAllBadgesWithStatus(): (BadgeData & { unlocked: boolean })[] 
 }
 
 // Actualizar insignias basado en estadísticas del juego
-export function updateBadgesFromStats(gameState: any, medalliumStats: any): string[] {
+export function updateBadgesFromStats(
+  gameState: Partial<GameState> | null | undefined,
+  medalliumStats: MedalliumStatsSummary | null | undefined
+): string[] {
   const newlyUnlocked: string[] = [];
   
   // Obtener estadísticas

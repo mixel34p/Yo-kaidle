@@ -24,7 +24,6 @@ interface PlaylistManagerProps {
 
 const PlaylistManager: React.FC<PlaylistManagerProps> = ({
   onPlayTrack,
-  onAddToQueue,
   className = ''
 }) => {
   const { language } = useLanguage();

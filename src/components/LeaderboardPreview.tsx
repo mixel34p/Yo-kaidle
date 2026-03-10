@@ -4,7 +4,7 @@ import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLeaderboards } from '@/hooks/useLeaderboards';
-import { Trophy, Star, Flame, User } from 'lucide-react';
+import { Trophy, Star, Flame } from 'lucide-react';
 import Link from 'next/link';
 import AvatarWithFrame from '@/components/AvatarWithFrame';
 

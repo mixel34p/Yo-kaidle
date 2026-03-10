@@ -1,17 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getCurrentPoints } from '@/utils/economyManager';
 import { 
   AVAILABLE_HINTS, 
   GameHintsState, 
   HintType, 
   canUseHint, 
   getHintName, 
-  getHintDescription,
-  getHintById
+  getHintDescription
 } from '@/utils/hintsManager';
 import { X, HelpCircle } from 'lucide-react';
 
@@ -31,7 +29,6 @@ const HintsPanel: React.FC<HintsPanelProps> = ({
   gameFinished
 }) => {
   const { t, language } = useLanguage();
-  const [currentPoints, setCurrentPoints] = useState<number>(0);
 
   // Funciones de traducción (copiadas de ActiveHints)
   const getTribeTranslation = (tribe: string) => {
@@ -65,10 +62,6 @@ const HintsPanel: React.FC<HintsPanelProps> = ({
   };
 
   // Cargar puntos actuales
-  useEffect(() => {
-    setCurrentPoints(getCurrentPoints());
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (

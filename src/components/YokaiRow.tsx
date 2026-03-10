@@ -3,13 +3,12 @@
 import React from 'react';
 import { cleanWikiImageUrl } from '@/lib/supabase';
 import YokaiCell from './YokaiCell';
-import { Yokai, GuessResult, tribeTranslations, tribeIcons, elementTranslations, elementColors, elementIcons, gameLogos, rankIcons, rankColors, foodTranslations, foodIcons } from '@/types/yokai';
+import { Yokai, GuessResult, tribeTranslations, tribeIcons, elementTranslations, elementIcons, gameLogos, rankIcons, foodTranslations, foodIcons } from '@/types/yokai';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiRowProps {
   yokai: Yokai;
   result?: GuessResult;
-  guessIndex?: number;
   foodIconTimestamp?: number;
   isNewRow?: boolean; // Indica si es la última fila añadida (para animación)
 }
@@ -40,14 +39,14 @@ function getYokaiImageUrl(yokai: Yokai): string {
   return cleanWikiImageUrl(url);
 }
 
-const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIconTimestamp = Date.now(), isNewRow = false }) => {
+const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, foodIconTimestamp = Date.now(), isNewRow = false }) => {
   const { getYokaiName } = useLanguage();
 
   // Imprimir valores para diagnosticar el problema con la comida favorita
   // Mostrar esta información cuando sea una fila del Wordle (con resultado)
   if (result) {
     // Soporta tanto favoriteFood (camelCase) como favorite_food (snake_case)
-    const original = (yokai.favoriteFood || (yokai as any).favorite_food) as string;
+    const original = (yokai.favoriteFood || (yokai as { favorite_food?: string }).favorite_food) as string;
     const normalized = normalizeFoodKey(original);
     const exactMatch = VALID_FOODS.includes(normalized);
     // Buscar sugerencia solo si original es string válido
@@ -161,7 +160,7 @@ const YokaiRow: React.FC<YokaiRowProps> = ({ yokai, result, guessIndex, foodIcon
 
       {/* Comida Favorita del Yo-kai */}
       {(() => {
-        const foodValue = yokai.favoriteFood || (yokai as any).favorite_food || 'None';
+        const foodValue = yokai.favoriteFood || (yokai as { favorite_food?: string }).favorite_food || 'None';
         const normalizedFood = normalizeFoodKey(foodValue);
         return (
           <YokaiCell

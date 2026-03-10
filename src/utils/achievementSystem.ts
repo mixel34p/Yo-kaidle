@@ -1,5 +1,5 @@
 import { MedalliumData } from './medalliumManager';
-import { Yokai, Tribe, Game, GameState } from '@/types/yokai';
+import { Yokai, GameState } from '@/types/yokai';
 import { Language } from '@/contexts/LanguageContext';
 import { addPoints, EconomyData, loadEconomy } from './economyManager';
 import { unlockBackground, BackgroundId } from './backgroundsManager';
@@ -1019,7 +1019,8 @@ function updateLegacyAchievements() {
 
       // Actualizar al nuevo formato
       achievement.condition = (context: AchievementContext) => {
-        return (originalCondition as any)(context.medallium, context.allYokai);
+        const legacyCondition = originalCondition as (medallium: MedalliumData, allYokai: Yokai[]) => boolean;
+        return legacyCondition(context.medallium, context.allYokai);
       };
     }
   });

@@ -1,5 +1,15 @@
 import { supabase } from './supabase';
+import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { Yokai, DuelState, DuelOpponent, DuelTurn, DuelResult, AIDifficulty } from '@/types/yokai';
+
+type CreateDuelParams = {
+  target_yokai_id: number;
+  opponent_type: DuelOpponent;
+  player1_name: string;
+  player2_name: string;
+  ai_difficulty?: AIDifficulty;
+  room_code?: string;
+};
 
 /**
  * Crear un nuevo duelo en la base de datos
@@ -20,7 +30,7 @@ export async function createDuelInDB(
     }
     
     // Prepare the parameters for the RPC call
-    const params: any = {
+    const params: CreateDuelParams = {
       target_yokai_id: targetYokai.id,
       opponent_type: opponentType,
       player1_name: player1Name,
@@ -141,8 +151,8 @@ export async function getDuelById(duelId: string): Promise<DuelState | null> {
       currentTurn: duelData.game_status === 'playing' 
         ? (duelData.current_turn || 'player1') as DuelTurn 
         : 'player1',
-      player1Guesses: player1Guesses.map((guess: any) => guess.yokai),
-      player2Guesses: player2Guesses.map((guess: any) => guess.yokai),
+      player1Guesses: player1Guesses.map((guess: { yokai: Yokai }) => guess.yokai),
+      player2Guesses: player2Guesses.map((guess: { yokai: Yokai }) => guess.yokai),
       maxGuesses: 6,
       gameStatus: duelData.game_status,
       player1Name: duelData.player1_name,
@@ -173,7 +183,9 @@ export async function updateDuelStatus(
       return false;
     }
     
-    const updateData: any = { game_status: gameStatus };
+    const updateData: { game_status: typeof gameStatus; current_turn?: DuelTurn; last_action?: string } = {
+      game_status: gameStatus
+    };
     
     if (currentTurn) {
       updateData.current_turn = currentTurn;
@@ -525,7 +537,7 @@ export async function getOnlineDuelState(roomCode: string): Promise<{
 /**
  * Obtiene información de una sala por su código
  */
-export async function getRoomByCode(roomCode: string): Promise<any | null> {
+export async function getRoomByCode(roomCode: string): Promise<Record<string, unknown> | null> {
   try {
     if (!supabase || typeof supabase.from !== 'function') {
       console.warn('Supabase no está disponible, no se podrá obtener la sala');
@@ -553,7 +565,10 @@ export async function getRoomByCode(roomCode: string): Promise<any | null> {
 /**
  * Escucha cambios en una sala específica
  */
-export function subscribeToRoom(roomCode: string, callback: (payload: any) => void): (() => void) | null {
+export function subscribeToRoom(
+  roomCode: string,
+  callback: (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => void
+): (() => void) | null {
   try {
     if (!supabase || typeof supabase.channel !== 'function') {
       console.warn('Supabase no está disponible, no se podrá suscribir a la sala');
@@ -583,7 +598,10 @@ export function subscribeToRoom(roomCode: string, callback: (payload: any) => vo
 /**
  * Escucha cambios en los intentos de un duelo específico
  */
-export function subscribeToDuelGuesses(duelId: string, callback: (payload: any) => void): (() => void) | null {
+export function subscribeToDuelGuesses(
+  duelId: string,
+  callback: (payload: RealtimePostgresChangesPayload<Record<string, unknown>>) => void
+): (() => void) | null {
   try {
     if (!supabase || typeof supabase.channel !== 'function') {
       console.warn('Supabase no está disponible, no se podrá suscribir a los intentos del duelo');

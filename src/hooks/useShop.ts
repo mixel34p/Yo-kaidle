@@ -37,20 +37,23 @@ export interface UseShopReturn {
   redeemCode: (code: string) => Promise<RedemptionResult>;
 
   // Historial
-  userPurchases: any[];
-  userRedemptions: any[];
+  userPurchases: UserPurchase[];
+  userRedemptions: UserRedemption[];
 
   // Utilidades
   refreshShop: () => Promise<void>;
   refreshPoints: () => void;
 }
 
+type UserPurchase = Record<string, unknown>;
+type UserRedemption = Record<string, unknown>;
+
 export function useShop(userId?: string): UseShopReturn {
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
   const [featuredItems, setFeaturedItems] = useState<ShopItem[]>([]);
   const [userPoints, setUserPoints] = useState(0);
-  const [userPurchases, setUserPurchases] = useState<any[]>([]);
-  const [userRedemptions, setUserRedemptions] = useState<any[]>([]);
+  const [userPurchases, setUserPurchases] = useState<UserPurchase[]>([]);
+  const [userRedemptions, setUserRedemptions] = useState<UserRedemption[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

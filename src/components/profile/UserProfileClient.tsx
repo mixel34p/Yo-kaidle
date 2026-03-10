@@ -174,7 +174,6 @@ export default function UserProfileClient({ username }: UserProfileClientProps) 
           friendButton={!isOwnProfile ? (
             <FriendButton
               targetUserId={profile.id}
-              targetUsername={profile.username}
               theme={profileTheme}
               compact={true}
             />

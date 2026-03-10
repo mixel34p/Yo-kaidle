@@ -22,6 +22,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
     // Durante el build de Next.js, interceptaremos las llamadas relevantes
     // @ts-expect-error - Hacemos override de métodos para el build
     supabase.from = (table: string) => {
+      void table;
       return {
         select: () => {
           const builder = {
@@ -66,26 +67,27 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Función para normalizar datos de Yo-kai (convertir de snake_case a camelCase)
-function normalizeYokaiData(rawYokai: any): Yokai {
-  if (!rawYokai) return {} as Yokai;
+function normalizeYokaiData(rawYokai: unknown): Yokai {
+  if (!rawYokai || typeof rawYokai !== 'object') return {} as Yokai;
+  const source = rawYokai as Record<string, unknown>;
 
   // Crear un nuevo objeto Yokai con mapeo explícito de propiedades
   const yokai: Yokai = {
-    id: rawYokai.id || 0,
-    name: rawYokai.name || 'Unknown Yo-kai',
-    tribe: rawYokai.tribe || 'Mysterious',
-    rank: rawYokai.rank || 'E',
-    element: rawYokai.element || 'None',
-    game: rawYokai.game || 'Yo-kai Watch 1',
-    weight: rawYokai.weight || 0,
-    medalNumber: rawYokai.medalnumber || rawYokai.medal_number || 0,
-    favoriteFood: rawYokai.favorite_food || 'None',
-    imageurl: rawYokai.imageurl || rawYokai.image_url || rawYokai.img || rawYokai.image || ''
+    id: (source.id as number) || 0,
+    name: (source.name as string) || 'Unknown Yo-kai',
+    tribe: (source.tribe as Yokai['tribe']) || 'Mysterious',
+    rank: (source.rank as Yokai['rank']) || 'E',
+    element: (source.element as Yokai['element']) || 'None',
+    game: (source.game as Yokai['game']) || 'Yo-kai Watch 1',
+    weight: (source.weight as number) || 0,
+    medalNumber: (source.medalnumber as number) || (source.medal_number as number) || 0,
+    favoriteFood: (source.favorite_food as Yokai['favoriteFood']) || 'None',
+    imageurl: (source.imageurl as string) || (source.image_url as string) || (source.img as string) || (source.image as string) || ''
   };
 
   // Si no existe el campo "imageurl", pero sí existe "img", lo copiamos
-  if (!yokai.imageurl && rawYokai.img) {
-    yokai.imageurl = rawYokai.img;
+  if (!yokai.imageurl && source.img) {
+    yokai.imageurl = source.img as string;
   }
 
   // Si la imagen viene de wikia, limpiarla

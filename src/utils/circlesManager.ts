@@ -5,7 +5,8 @@ import {
   CircleStats,
   CircleCheckResult,
   CircleCategory,
-  CircleDifficulty
+  CircleDifficulty,
+  CircleReward
 } from '@/types/circles';
 import { MedalliumData } from './medalliumManager';
 import { Yokai } from '@/types/yokai';
@@ -55,7 +56,7 @@ export function getCircleDescription(circle: YokaiCircle, language: Language): s
 }
 
 // Verificar si una recompensa es válida
-function hasValidReward(reward: any): boolean {
+function hasValidReward(reward?: CircleReward | null): boolean {
   if (!reward) return false;
   
   return !!(
@@ -69,7 +70,7 @@ function hasValidReward(reward: any): boolean {
 }
 
 // Verificar si una recompensa específica existe en el sistema
-export function validateRewardExists(reward: any): {
+export function validateRewardExists(reward?: CircleReward | null): {
   isValid: boolean;
   missingItems: string[];
   errors: string[];
@@ -478,16 +479,18 @@ export function getCirclesByDifficulty(difficulty: CircleDifficulty): YokaiCircl
 // === SISTEMA DE RECOMPENSAS DE CÍRCULOS ===
 
 // Obtener información detallada de una recompensa para preview
-export function getRewardPreview(reward: any, language: Language = 'es'): {
+type RewardPreview = {
   type: string;
   id: string;
   name: string;
   description: string;
   icon: string;
-}[] {
+};
+
+export function getRewardPreview(reward: CircleReward | null | undefined, language: Language = 'es'): RewardPreview[] {
   if (!reward) return [];
   
-  const rewards: any[] = [];
+  const rewards: RewardPreview[] = [];
   
   // Puntos
   if (reward.points && reward.points > 0) {

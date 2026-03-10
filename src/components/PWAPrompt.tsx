@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { requestNotificationPermission, showTestNotification } from './NotificationManager';
-import { isSubscribedToPush } from '@/utils/pushManager';
 import { X } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -16,8 +15,6 @@ export default function PWAPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false); // DESHABILITADO
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [installPromptDismissed, setInstallPromptDismissed] = useState(false);
-  const [notificationPromptDismissed, setNotificationPromptDismissed] = useState(false);
   useEffect(() => {
     console.log('[PWAPrompt] useEffect running!');
     // Versión del sistema de notificaciones - incrementar para resetear el prompt
@@ -32,8 +29,6 @@ export default function PWAPrompt() {
 
     // Verificar si los prompts fueron previamente cerrados
     const installDismissed = localStorage.getItem('pwa-install-dismissed') === 'true';
-
-    setInstallPromptDismissed(installDismissed);
 
     // PROMPT DE NOTIFICACIONES DESHABILITADO
     // El estado inicial es false, así que nunca se mostrará
@@ -75,7 +70,6 @@ export default function PWAPrompt() {
 
   const handleDismissInstall = () => {
     setShowInstallPrompt(false);
-    setInstallPromptDismissed(true);
     localStorage.setItem('pwa-install-dismissed', 'true');
     setDeferredPrompt(null);
   };
@@ -108,7 +102,6 @@ export default function PWAPrompt() {
 
   const handleDismissNotification = () => {
     setShowNotificationPrompt(false);
-    setNotificationPromptDismissed(true);
     localStorage.setItem('pwa-notification-dismissed', 'true');
   };
 

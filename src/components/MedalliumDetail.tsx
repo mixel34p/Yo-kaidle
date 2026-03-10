@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Yokai, tribeIcons, elementIcons, rankIcons, foodIcons, tribeTranslations, elementTranslations, foodTranslations } from '@/types/yokai';
-import { X, Heart, Star, Zap, Apple, User, Map, Info } from 'lucide-react';
+import { Yokai, tribeIcons, rankIcons, foodIcons } from '@/types/yokai';
+import { X, Heart, Map } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MedalliumDetailProps {
@@ -21,7 +21,7 @@ const MedalliumDetail: React.FC<MedalliumDetailProps> = ({
   isFavorite = false,
   onToggleFavorite
 }) => {
-  const { t, getYokaiName, getTribeTranslation, getElementTranslation, getFoodTranslation } = useLanguage();
+  const { t, getYokaiName, getTribeTranslation, getFoodTranslation } = useLanguage();
 
   const handleFavoriteClick = () => {
     if (onToggleFavorite) {

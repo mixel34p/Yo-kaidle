@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Yokai, tribeTranslations } from '@/types/yokai';
+import { Yokai } from '@/types/yokai';
 import { cleanWikiImageUrl } from '@/lib/supabase';
 import { getAllYokai } from '@/lib/supabase';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -25,7 +25,6 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({
   placeholder = "Busca un Yo-kai..."
 }) => {
   const { t, language, getTribeTranslation, getYokaiName } = useLanguage();
-  const [isMobileKeyboardOpen, setIsMobileKeyboardOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [yokaiList, setYokaiList] = useState<Yokai[]>([]);
   const [filteredYokai, setFilteredYokai] = useState<Yokai[]>([]);
@@ -39,7 +38,7 @@ const YokaiSearch: React.FC<YokaiSearchProps> = ({
         const data = await getAllYokai();
         setYokaiList(data);
         setIsLoading(false);
-      } catch (err) {
+      } catch {
         setError('Error al cargar la lista de Yo-kai');
         setIsLoading(false);
       }

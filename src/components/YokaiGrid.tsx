@@ -1,10 +1,10 @@
 import React from 'react';
 import YokaiRow from './YokaiRow';
-import { Yokai } from '@/types/yokai';
+import { Yokai, GuessResult } from '@/types/yokai';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiGridProps {
-  guesses: any[]; // Array de objetos con el Yo-kai adivinado y su resultado
+  guesses: { yokai: Yokai; result?: GuessResult }[]; // Array de objetos con el Yo-kai adivinado y su resultado
   maxGuesses: number;
   foodIconTimestamp?: number; // Timestamp para forzar recarga de iconos de comida
 }
@@ -31,7 +31,6 @@ const YokaiGrid: React.FC<YokaiGridProps> = ({ guesses, maxGuesses, foodIconTime
             key={index + '-' + guess.yokai.id + '-' + (guess.result?.favoriteFood || 'none') + '-' + foodIconTimestamp}
             yokai={guess.yokai} 
             result={guess.result} 
-            guessIndex={index}
             foodIconTimestamp={foodIconTimestamp}
             isNewRow={index === guesses.length - 1} // Marcar la última fila como nueva para animación
           />

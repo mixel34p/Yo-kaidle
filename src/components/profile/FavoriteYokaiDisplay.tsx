@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Star, Sparkles } from 'lucide-react';
-import { tribeIcons, rankIcons, type Tribe, type Rank } from '@/types/yokai';
+import { tribeIcons, rankIcons, type Tribe, type Rank, type Yokai } from '@/types/yokai';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface YokaiDetails {
@@ -22,7 +22,7 @@ export default function FavoriteYokaiDisplay({ yokai, compact = false }: Favorit
   const { getYokaiName } = useLanguage();
 
   // Crear un objeto Yokai temporal para la traducción
-  const yokaiForTranslation = { name: yokai.name } as any;
+  const yokaiForTranslation = { name: yokai.name } as Yokai;
   if (compact) {
     return (
       <div className="flex items-center gap-3 bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-xl p-3 border border-purple-500/40 shadow-lg backdrop-blur-sm">

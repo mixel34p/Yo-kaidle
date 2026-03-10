@@ -1,4 +1,4 @@
-import { Game, Tribe } from '@/types/yokai';
+import { Game } from '@/types/yokai';
 
 const GAME_SOURCES_KEY = 'yokaidle_game_sources';
 const TRIBE_RESTRICTIONS_KEY = 'yokaidle_tribe_restrictions';

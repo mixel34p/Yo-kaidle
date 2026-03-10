@@ -30,7 +30,7 @@ export interface SyncStatus {
 }
 
 export interface CloudData {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface CloudDataStats {
@@ -125,9 +125,12 @@ export function getLocalData(): CloudData {
 export function applyCloudData(cloudData: CloudData): void {
     if (typeof window === 'undefined') return;
 
+    const isSyncKey = (value: string): value is (typeof SYNC_KEYS)[number] =>
+        (SYNC_KEYS as readonly string[]).includes(value);
+
     for (const [key, value] of Object.entries(cloudData)) {
         try {
-            if (SYNC_KEYS.includes(key as any)) {
+            if (isSyncKey(key)) {
                 const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
                 localStorage.setItem(key, stringValue);
             }
@@ -247,26 +250,32 @@ export function getCloudDataStats(data: CloudData | null): CloudDataStats {
     let gamesPlayed = 0;
 
     // Count medallium entries
-    if (data.yokaidle_medallium) {
-        const medallium = data.yokaidle_medallium;
-        yokaiUnlocked = Object.keys(medallium.collected || medallium || {}).length;
+    if (data.yokaidle_medallium && typeof data.yokaidle_medallium === 'object') {
+        const medallium = data.yokaidle_medallium as Record<string, unknown>;
+        const collected = typeof medallium.collected === 'object' && medallium.collected
+            ? (medallium.collected as Record<string, unknown>)
+            : medallium;
+        yokaiUnlocked = Object.keys(collected || {}).length;
     }
 
     // Count achievements
-    if (data.yokaidle_achievements) {
-        const achievements = data.yokaidle_achievements;
-        achievementsCount = Object.values(achievements).filter((a: any) => a?.unlocked).length;
+    if (data.yokaidle_achievements && typeof data.yokaidle_achievements === 'object') {
+        const achievements = data.yokaidle_achievements as Record<string, { unlocked?: boolean }>;
+        achievementsCount = Object.values(achievements).filter(value => value?.unlocked).length;
     }
 
     // Get total points
-    if (data.yokaidle_economy) {
-        const economy = data.yokaidle_economy;
+    if (data.yokaidle_economy && typeof data.yokaidle_economy === 'object') {
+        const economy = data.yokaidle_economy as { totalEarned?: number; points?: number };
         totalPoints = economy.totalEarned || economy.points || 0;
     }
 
     // Get games played
-    if (data.yokaidleGameState) {
-        const gameState = data.yokaidleGameState;
+    if (data.yokaidleGameState && typeof data.yokaidleGameState === 'object') {
+        const gameState = data.yokaidleGameState as {
+            dailyStats?: { totalPlayed?: number };
+            infiniteStats?: { totalPlayed?: number };
+        };
         gamesPlayed = (gameState.dailyStats?.totalPlayed || 0) +
             (gameState.infiniteStats?.totalPlayed || 0);
     }

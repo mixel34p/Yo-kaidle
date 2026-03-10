@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { elementColors, elementIcons } from '@/types/yokai';
+import { elementIcons } from '@/types/yokai';
 import WikiaImage from './WikiaImage';
 
 type CellStatus = 'correct' | 'partial' | 'incorrect' | 'default' | 'higher' | 'lower';
@@ -32,7 +32,6 @@ const YokaiCell: React.FC<YokaiCellProps> = ({
   isFood = false,
   isYokai = false,
   elementColor,
-  guessIndex,
   animationDelay
 }) => {
   // Imprimir en consola para depuración

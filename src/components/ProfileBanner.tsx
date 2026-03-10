@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Background, AVAILABLE_BACKGROUNDS, BackgroundId } from '@/utils/backgroundsManager';
+import { AVAILABLE_BACKGROUNDS, BackgroundId } from '@/utils/backgroundsManager';
 
 interface ProfileBannerProps {
   backgroundId?: string;

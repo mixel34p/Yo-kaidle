@@ -1,5 +1,3 @@
-import { Yokai } from './yokai';
-
 // Tipo para un círculo de Yo-kai
 export interface YokaiCircle {
   id: string;

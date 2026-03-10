@@ -202,7 +202,7 @@ async function unlockItem(itemType: string, itemId: string): Promise<boolean> {
       case 'frame':
         return unlockFrame(itemId);
       case 'background':
-        return unlockBackground(itemId as any);
+        return unlockBackground(itemId as BackgroundId);
       case 'track':
         return unlockTrack(itemId);
       default:
@@ -319,7 +319,7 @@ async function applyPromoRewards(rewards: PromoCodeRewards): Promise<boolean> {
     // Desbloquear fondos
     if (rewards.backgrounds) {
       for (const backgroundId of rewards.backgrounds) {
-        unlockBackground(backgroundId as any);
+        unlockBackground(backgroundId as BackgroundId);
       }
     }
 

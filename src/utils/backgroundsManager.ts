@@ -402,14 +402,14 @@ export function applyBackgroundToDOM(background: Background): void {
 
   Object.entries(background.style).forEach(([property, value]) => {
     if (value) {
-      (body.style as any)[property] = value;
+      (body.style as Record<string, string>)[property] = value;
     }
   });
 
   body.className = body.className.replace(/bg-\w+/g, '');
   body.classList.add(`bg-${background.id}`);
 
-  body.offsetHeight;
+  void body.offsetHeight;
 
   console.log(`Fondo aplicado: ${background.name_es}`, background.style);
 }

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUserCustomization, getTitleName } from '@/hooks/useUserCustomization';
-import { User, Crown, Calendar, Settings } from 'lucide-react';
+import { Crown, Calendar, Settings } from 'lucide-react';
 import Link from 'next/link';
 import FavoriteYokaiDisplay from './FavoriteYokaiDisplay';
 import ProfileBadges from './ProfileBadges';
@@ -35,7 +35,6 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({ profile, isOwnProfile, theme, friendButton }: ProfileHeaderProps) {
   const { t, language } = useLanguage();
   const {
-    customization,
     getFavoriteYokaiDetails,
     getCurrentTitleDetails,
     getCurrentFrameDetails,
@@ -65,7 +64,6 @@ export default function ProfileHeader({ profile, isOwnProfile, theme, friendButt
   const currentBanner = getCurrentBannerDetails();
 
   const userTitle = currentTitle ? getTitleName(currentTitle, language) : null;
-  const defaultTitle = t.defaultTitle;
 
   return (
     <div className={`profile-header theme-${theme.primaryColor} layout-${theme.layout}`}>

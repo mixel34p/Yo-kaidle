@@ -5,7 +5,7 @@ import { loadMedallium } from '@/utils/medalliumManager';
 import { supabase } from '@/lib/supabase';
 import { loadGameFromLocalStorage } from '@/utils/gameLogic';
 import { getAllBadgesWithStatus, updateBadgesFromStats } from '@/utils/badgesManager';
-import { getAllFramesWithStatus, getFrameName, getFrameDescription } from '@/utils/framesManager';
+import { getAllFramesWithStatus } from '@/utils/framesManager';
 import { getAllTitlesWithStatus, getTitleName as getTitleNameFromManager, getTitleDescription as getTitleDescriptionFromManager } from '@/utils/titlesManager';
 import { getUnlockedBackgrounds, Background, BackgroundId, AVAILABLE_BACKGROUNDS } from '@/utils/backgroundsManager';
 
@@ -143,13 +143,21 @@ export function useProfileCustomization(userId?: string) {
       const unlocked: UnlockedYokai[] = [];
 
       if (medallium.unlockedYokai) {
-        Object.entries(medallium.unlockedYokai).forEach(([yokaiId, yokai]: [string, any]) => {
+        Object.entries(medallium.unlockedYokai).forEach(([yokaiId, yokai]) => {
+          const yokaiData = yokai as {
+            name?: string;
+            imageurl?: string;
+            image_url?: string;
+            img?: string;
+            tribe?: string;
+            rank?: string;
+          };
           unlocked.push({
             id: yokaiId,
-            name: yokai.name,
-            image: yokai.imageurl || yokai.image_url || yokai.img || `/images/yokai/${yokaiId}.png`,
-            tribe: yokai.tribe || 'Unknown',
-            rank: yokai.rank || 'E'
+            name: yokaiData.name || 'Unknown',
+            image: yokaiData.imageurl || yokaiData.image_url || yokaiData.img || `/images/yokai/${yokaiId}.png`,
+            tribe: yokaiData.tribe || 'Unknown',
+            rank: yokaiData.rank || 'E'
           });
         });
       }

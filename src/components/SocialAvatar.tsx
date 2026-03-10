@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSocialAuth } from '@/contexts/SocialAuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { User, LogOut, RefreshCw } from 'lucide-react';
+import { LogOut, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import AvatarWithFrame from '@/components/AvatarWithFrame';
 import CloudSyncPrompt from '@/components/CloudSyncPrompt';

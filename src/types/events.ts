@@ -116,7 +116,7 @@ export interface EventNotification {
   type: 'milestone_reached' | 'reward_earned' | 'event_started' | 'event_ending';
   title: Record<string, string>;
   message: Record<string, string>;
-  data?: any;
+  data?: Record<string, unknown>;
   read: boolean;
   created_at: string;
 }

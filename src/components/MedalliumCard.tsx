@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Yokai, tribeIcons, elementIcons, rankIcons, gameLogos } from '@/types/yokai';
-import { Maximize2, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface MedalliumCardProps {
@@ -55,8 +55,7 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
   isFavorite = false,
   onToggleFavorite
 }) => {
-  const { t, getYokaiName } = useLanguage();
-  const [isHovering, setIsHovering] = useState(false);
+  const { getYokaiName } = useLanguage();
 
   const handleClick = () => {
     if (!isLocked) {
@@ -81,9 +80,6 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
   const rankStyle = !isLocked && yokai.rank && rankColors[yokai.rank]
     ? rankColors[yokai.rank]
     : { bg: 'bg-gray-50', border: 'border-gray-200', shadow: 'shadow-gray-200', text: 'text-gray-600' };
-
-  // Usar tribu si existe, sino usar rango
-  const cardStyle = tribeStyle || rankStyle;
 
   // Combinar: fondo de tribu, borde de rango
   const cardBg = tribeStyle?.bg || rankStyle.bg;
@@ -123,8 +119,6 @@ const MedalliumCard: React.FC<MedalliumCardProps> = ({
       } : undefined}
       whileTap={!isLocked ? { scale: 0.98 } : undefined}
       onClick={handleClick}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
     >
       {/* Fondo decorativo para rangos altos */}
       {!isLocked && isHighRank && (
