@@ -15,7 +15,7 @@ module.exports = {
         neutral: '#457B9D',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'sans-serif'],
+        display: ['YokaiFont', 'var(--font-display)', 'sans-serif'],
         body: ['var(--font-body)', 'sans-serif'],
       },
       animation: {

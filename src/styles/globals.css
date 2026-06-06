@@ -10,13 +10,20 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --primary-color: #FF315B; /* Rojo vibrante de Yo-kai Watch */
-  --secondary-color: #0F5298; /* Azul principal de Yo-kai Watch */
-  --background-color: #1A3A8F; /* Azul oscuro para fondos */
-  --accent-color: #42C4FF; /* Azul claro acento */
-  --neutral-color: #2D5C9E; /* Azul medio */
-  --dark-blue: #082C70; /* Azul muy oscuro */
-  --gold-accent: #FFCD29; /* Dorado para acentos especiales */
+  --primary-color: #FF315B;
+  /* Rojo vibrante de Yo-kai Watch */
+  --secondary-color: #0F5298;
+  /* Azul principal de Yo-kai Watch */
+  --background-color: #1A3A8F;
+  /* Azul oscuro para fondos */
+  --accent-color: #42C4FF;
+  /* Azul claro acento */
+  --neutral-color: #2D5C9E;
+  /* Azul medio */
+  --dark-blue: #082C70;
+  /* Azul muy oscuro */
+  --gold-accent: #FFCD29;
+  /* Dorado para acentos especiales */
 }
 
 * {
@@ -31,6 +38,14 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
+}
+
+@font-face {
+  font-family: 'YokaiFont';
+  src: url('/fonts/yokai.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 .app-container {
@@ -69,13 +84,16 @@ body {
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE */
   padding-bottom: 4px;
 }
 
 .yokai-grid::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 /* ========================================
@@ -154,22 +172,22 @@ body {
     font-size: 0.65rem;
     padding: 0.2rem;
   }
-  
+
   .header-cell {
     font-size: 0.6rem;
     height: 35px;
     font-weight: 700;
   }
-  
+
   .yokai-grid {
     padding: 0 0.25rem;
   }
-  
+
   .yokai-row {
     gap: 0.15rem;
     margin-bottom: 0.25rem;
   }
-  
+
   .app-container {
     padding: 0.75rem;
     margin: 0.25rem;
@@ -186,12 +204,12 @@ body {
     font-size: 0.7rem;
     padding: 0.3rem;
   }
-  
+
   .header-cell {
     font-size: 0.65rem;
     height: 40px;
   }
-  
+
   .yokai-grid {
     padding: 0 0.5rem;
   }
@@ -206,17 +224,17 @@ body {
     font-size: 0.85rem;
     padding: 0.5rem;
   }
-  
+
   .header-cell {
     font-size: 0.8rem;
     height: 50px;
   }
-  
+
   .yokai-row {
     gap: 0.4rem;
     margin-bottom: 0.5rem;
   }
-  
+
   .yokai-grid {
     padding: 0 1rem;
   }
@@ -252,7 +270,8 @@ body {
    INDICADORES DIRECCIONALES
    ======================================== */
 
-.higher-indicator, .lower-indicator {
+.higher-indicator,
+.lower-indicator {
   position: absolute;
   top: -2px;
   right: -2px;
@@ -325,8 +344,13 @@ body {
 }
 
 @keyframes scrollIndicator {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(400%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(400%);
+  }
 }
 
 /* ========================================
@@ -346,18 +370,39 @@ body {
    ======================================== */
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(3px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 @keyframes popIn {
@@ -365,10 +410,12 @@ body {
     opacity: 0;
     transform: scale(0.8);
   }
+
   70% {
     opacity: 1;
     transform: scale(1.05);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -380,6 +427,7 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -391,6 +439,7 @@ body {
     opacity: 0;
     transform: rotateY(90deg);
   }
+
   100% {
     opacity: 1;
     transform: rotateY(0deg);
@@ -402,6 +451,7 @@ body {
     opacity: 0.5;
     transform: translateY(10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -428,12 +478,29 @@ body {
 }
 
 /* Delays para animaciones progresivas */
-.delay-cell-0 { animation-delay: 0s; }
-.delay-cell-1 { animation-delay: 0.2s; }
-.delay-cell-2 { animation-delay: 0.4s; }
-.delay-cell-3 { animation-delay: 0.6s; }
-.delay-cell-4 { animation-delay: 0.8s; }
-.delay-cell-5 { animation-delay: 1s; }
+.delay-cell-0 {
+  animation-delay: 0s;
+}
+
+.delay-cell-1 {
+  animation-delay: 0.2s;
+}
+
+.delay-cell-2 {
+  animation-delay: 0.4s;
+}
+
+.delay-cell-3 {
+  animation-delay: 0.6s;
+}
+
+.delay-cell-4 {
+  animation-delay: 0.8s;
+}
+
+.delay-cell-5 {
+  animation-delay: 1s;
+}
 
 /* ========================================
    COMPONENTES TAILWIND PERSONALIZADOS
@@ -444,7 +511,7 @@ body {
     @apply bg-primary text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors shadow-md;
     background: linear-gradient(145deg, var(--primary-color), #FF6384);
   }
-  
+
   .btn-secondary {
     @apply text-white font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition-colors shadow-md;
     background: linear-gradient(145deg, var(--secondary-color), #1E75D3);
@@ -506,19 +573,20 @@ body {
 
 /* Reducir el motion para usuarios que lo prefieren */
 @media (prefers-reduced-motion: reduce) {
+
   .yokai-cell,
   .scroll-arrow,
   .scroll-hint {
     animation: none;
     transition: none;
   }
-  
+
   .yokai-cell-correct,
   .yokai-cell-partial,
   .yokai-cell-incorrect {
     transform: none;
   }
-  
+
   .animate-pop,
   .animate-scaleIn,
   .animate-reveal,
